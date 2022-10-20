@@ -1,0 +1,859 @@
+[
+{
+  "name":"com.caucho.burlap.io.BurlapRemoteObject"
+},
+{
+  "name":"com.caucho.hessian.io.BigDecimalDeserializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.caucho.hessian.io.FileDeserializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.caucho.hessian.io.HessianRemote",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"com.caucho.hessian.io.HessianRemoteObject"
+},
+{
+  "name":"com.caucho.hessian.io.LocaleSerializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.caucho.hessian.io.ObjectNameDeserializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.caucho.hessian.io.RemoteSerializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.caucho.hessian.io.StringValueSerializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.DESedeCipher",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+ {
+    "name":"java.lang.Character",
+    "methods":[{"name":"isIdeographic","parameterTypes":["int"] }]
+ },
+ {
+    "name":"java.lang.Class",
+    "methods":[
+      {"name":"getFields","parameterTypes":[] },
+      {"name":"getMethods","parameterTypes":[] }
+    ]
+  }
+,
+  {
+    "name":"java.lang.Deprecated",
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"java.lang.Integer"
+  },
+  {
+    "name":"java.lang.Long"
+  },
+  {
+    "name":"java.lang.Object",
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"java.lang.Runnable"
+  },
+  {
+    "name":"java.lang.String",
+    "fields":[
+      {"name":"coder"},
+      {"name":"value"}
+    ]
+  },
+  {
+    "name":"java.lang.StringConcatHelper"
+  },
+  {
+    "name":"java.lang.System"
+  }
+,
+  {
+    "name":"java.lang.System$Logger$Level",
+    "methods":[{"name":"values","parameterTypes":[] }]
+  }
+,
+  {
+    "name":"java.util.logging.ConsoleHandler",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  }
+,
+  {
+    "name":"java.util.logging.SimpleFormatter",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  }
+,
+  {
+    "name":"java.lang.Thread",
+    "fields":[
+      {"name":"parkBlocker", "allowUnsafeAccess":true},
+      {"name":"threadLocalRandomSecondarySeed", "allowUnsafeAccess":true},
+      {"name":"tid", "allowUnsafeAccess":true}
+    ]
+  },
+  {
+    "name":"java.lang.annotation.Documented"
+  },
+  {
+    "name":"java.lang.annotation.Retention",
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"java.lang.annotation.RetentionPolicy",
+    "methods":[{"name":"values","parameterTypes":[] }]
+  },
+  {
+    "name":"java.lang.annotation.Target"
+  },
+  {
+    "name":"java.lang.invoke.BoundMethodHandle",
+    "methods":[{"name":"<init>","parameterTypes":["java.lang.invoke.MethodType","java.lang.invoke.LambdaForm"] }]
+  },
+  {
+    "name":"java.nio.ByteBuffer",
+    "methods":[{"name":"order","parameterTypes":["java.nio.ByteOrder"] }]
+  },
+  {
+    "name":"java.nio.ByteOrder",
+    "methods":[{"name":"nativeOrder","parameterTypes":[] }]
+  }
+,
+  {
+    "name":"java.nio.file.attribute.PosixFilePermission",
+    "methods":[{"name":"values","parameterTypes":[] }]
+  }
+,
+  {
+    "name":"java.security.SecureRandomParameters"
+  }
+,
+  {
+    "name":"java.util.Random",
+    "fields":[{"name":"seed", "allowUnsafeAccess":true}]
+  }
+,
+  {
+    "name":"com.sun.crypto.provider.HmacSHA1",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  }
+,
+  {
+    "name":"com.sun.security.sasl.gsskerb.JdkSASL",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  }
+,
+  {
+    "name":"java.net.Inet6Address",
+    "fields":[{"name":"holder6", "allowUnsafeAccess":true}]
+  }
+,
+  {
+    "name":"java.net.Inet6AddressImpl",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  }
+,
+  {
+    "name":"java.net.InetAddress",
+    "fields":[{"name":"holder", "allowUnsafeAccess":true}]
+  }
+,
+  {
+    "name":"java.net.InetSocketAddress",
+    "fields":[{"name":"holder", "allowUnsafeAccess":true}]
+  }
+,
+  {
+    "name" : "pi.service.model.DocumentoIdentidad",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.DocumentoTipo",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.FormaPago",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.Impuesto",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.Moneda",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.Serie",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.SucursalSerie",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.TipoCambio",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.Ubigeo",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.Utilidad",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.Almacen",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.Articulo",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.Ensamblador",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.Kardex",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.Linea",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.Marca",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.OrdenRegularizacion",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.OrdenRegularizacionDet",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.OrdenTraslado",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.OrdenTrasladoDet",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.PlantillaTransformacion",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.PlantillaTransformacionDet",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.Producto",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.StockProducto",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.Transformacion",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.TransformacionDet",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.TrasladoAlmacen",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.almacen.Unidad",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.efact.TxxxSituacion",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.empresa.Empresa",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.empresa.Sucursal",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.finanza.Banco",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.finanza.Caja",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.finanza.CuentaBancaria",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.finanza.Letra",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.finanza.Recibo",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.finanza.ReciboTipo",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.GuiaRemision",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.GuiaRemisionDet",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.ImportacionInicial",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.ImportacionInicialFarmacia",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.MotivoTraslado",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.OrdenCompra",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.OrdenCompraDet",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.OrdenEntradaSalida",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.OrdenEntradaSalidaDet",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.Proveedor",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.RequerimientoCompra",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.RequerimientoCompraDet",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.Transportista",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.TrasladoInternoCab",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.logistica.TrasladoInternoDet",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.persona.Direccion",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.persona.Persona",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.rrhh.Area",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.rrhh.Cargo",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.rrhh.CargoPermiso",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.rrhh.Empleado",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.rrhh.Permiso",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.venta.DocumentoPago",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.venta.DocumentoPagoDet",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.venta.NotaCredito",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.venta.OrdenVenta",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.venta.OrdenVentaDet",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.venta.OrdenVentaDocumentoPago",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.venta.OrdenVentaModel",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.venta.Proforma",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+,
+  {
+    "name" : "pi.service.model.venta.ProformaDet",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+
+]
