@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.json.JSONArray;
+import org.json.JSONArray; 
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 
@@ -19,7 +19,7 @@ public class Server {
     public static String DB_USR;
     public static String DB_PWD;
     public static String IP_SERVER = "154.53.32.33";
-    public static int DB_PORT = 7077;
+    public static int DB_PORT = 7077; 
     
     private static DocumentBuilderFactory DBF;
     public static String PATH_WEBAPPS = "/var/lib/tomcat9/webapps/";
