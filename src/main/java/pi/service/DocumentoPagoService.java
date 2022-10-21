@@ -3,6 +3,8 @@ package pi.service;
 import java.util.Date;
 import java.util.List;
 
+import pi.service.model.efact.ResumenDiario;
+import pi.service.model.efact.ResumenDiarioDet;
 import pi.service.model.venta.DocumentoPago;
 import pi.service.model.venta.DocumentoPagoDet;
 import pi.service.model.venta.NotaCredito;
@@ -41,6 +43,11 @@ public interface DocumentoPagoService {
 
     public void saveNotaCredito(String app, NotaCredito nc, List<NotaCreditoDet> listDets) throws Exception;
     public void updateNotaCredito(String app, NotaCredito nc) throws Exception;
+    // para los resumenes diarios
+    public List<ResumenDiario> listResumenes(String app, Date inicio, Date fin);
+    public List<ResumenDiarioDet> listDetallesResumen(String app, int rdId) throws Exception;
+    public ResumenDiario getLastResumenDiarioByDate(String app, Date fecha);
+    public void saveResumenByDocsPago(String app, List<DocumentoPago> docspago) throws Exception;
 
     public void anular(String app, DocumentoPago dp) throws Exception;
 }

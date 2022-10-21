@@ -13,9 +13,9 @@
  * limitations under the License.
  *******************************************************************************/
 package pi.service;
-import pi.service.model.Meta;
+import pi.service.model.MetaServer;
 
 public interface LoginService{
 
-	Meta login(String app, String user, String pass, int empresaId, int sucursalId) throws Exception;
+	MetaServer login(String app, String user, String pass, int empresaId, int sucursalId) throws Exception;
 }

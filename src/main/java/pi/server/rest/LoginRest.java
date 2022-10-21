@@ -8,7 +8,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import pi.server.factory.Services;
-import pi.service.model.Meta;
+import pi.service.model.MetaServer;
 import pi.service.model.empresa.Empresa;
 
 @Path("/pi/login")
@@ -22,7 +22,7 @@ public class LoginRest {
     @GET
     @Path("/login") 
     @Produces(MediaType.APPLICATION_JSON)
-    public Meta get(@QueryParam("app") String app,
+    public MetaServer get(@QueryParam("app") String app,
     @QueryParam("user") String user,
     @QueryParam("pass") String pass,
     @QueryParam("empresaId") int empresaId,

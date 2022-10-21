@@ -29,6 +29,8 @@ import org.apache.commons.codec.binary.Base64;
 
 public class Util {
 
+
+    public static String[] EVAS = { "127.0.0.1", "144.91.125.121", "127.0.0.1", "144.126.132.140", "154.53.32.33" };
     public static int waitCursorCount = 0;
     // public static DialogBox dbxWait;
 

@@ -20,7 +20,7 @@ import java.util.List;
 
 import pi.server.factory.Services;
 import pi.service.LoginService;
-import pi.service.model.Meta;
+import pi.service.model.MetaServer;
 import pi.service.model.rrhh.CargoPermiso;
 import pi.service.model.rrhh.Empleado;
 import pi.service.model.rrhh.Permiso;
@@ -34,7 +34,7 @@ import javax.servlet.annotation.WebServlet;
 public class LoginServiceImpl extends HessianServlet implements LoginService {
 
     @Override
-	public Meta login(String app, String user, String pass, int empresaId, int sucursalId) throws Exception {
+	public MetaServer login(String app, String user, String pass, int empresaId, int sucursalId) throws Exception {
 		Class table = Empleado.class;
 		String[] required = {
 			"persona","sucursal","cargo","empresa","empresa.direccion","empresa.direccion.persona","caja" 
@@ -66,7 +66,7 @@ public class LoginServiceImpl extends HessianServlet implements LoginService {
 			}
 		}
 
-		Meta meta = new Meta();
+		MetaServer meta = new MetaServer();
 		meta.sucursal = empleado.sucursal;
 		meta.empresa = empleado.empresa;
 		meta.empleado = empleado;

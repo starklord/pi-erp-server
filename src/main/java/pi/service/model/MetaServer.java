@@ -10,7 +10,7 @@ import pi.service.model.persona.Direccion;
 import pi.service.model.rrhh.Empleado;
 import pi.service.model.rrhh.Permiso;
 
-public class Meta implements Serializable {
+public class MetaServer implements Serializable {
 
     public Empresa empresa;
     public Sucursal sucursal;
@@ -23,6 +23,7 @@ public class Meta implements Serializable {
     public List<SucursalSerie> sucursalSeries;
     public List<Moneda> monedas;
     public List<Almacen> almacenes;
+    public String key;
     public String app;
     public String token;
     public Integer eva_server;
@@ -31,7 +32,7 @@ public class Meta implements Serializable {
     public String path_pdfs;
     public String path_temps;
 
-    public Meta() {
+    public MetaServer() {
     }
 
 }
