@@ -6,7 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-import pi.service.factory.Services;
+import pi.server.factory.Services;
 import pi.service.model.empresa.Sucursal;
 
 @Path("/pi/sucursal")

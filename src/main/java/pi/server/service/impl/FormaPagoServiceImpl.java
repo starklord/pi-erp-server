@@ -12,15 +12,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package pi.service;
+package pi.server.service.impl;
 
 import java.util.List;
-import pi.service.model.Impuesto;
+import pi.service.model.FormaPago;
+import pi.service.FormaPagoService;
+import pi.service.util.db.server.CRUD;
 
-public interface ImpuestoService{
+import com.caucho.hessian.server.HessianServlet;
+import javax.servlet.annotation.WebServlet;
+
+@WebServlet("pi/FormaPagoService")
+public class FormaPagoServiceImpl extends HessianServlet implements FormaPagoService {
 	
-	public List<Impuesto> list(String app);
-	public List<Impuesto> listActives(String app);
-	public void delete(String app, Impuesto impuesto) throws Exception;
-	public Impuesto saveOrUpdate(String app, boolean save, Impuesto impuesto) throws Exception;
+	private static final long serialVersionUID = 1L;
+	final static Class table = FormaPago.class;
+	
+
+	
+	@Override
+	public List<FormaPago> list(String app) throws Exception {
+		String filter = "where activo is true order by descripcion asc";
+		return CRUD.list(app,table, filter);
+	}
 }

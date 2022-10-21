@@ -12,15 +12,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package pi.service;
+package pi.server.service.impl;
 
 import java.util.List;
-import pi.service.model.Impuesto;
 
-public interface ImpuestoService{
+
+
+
+
+import pi.service.model.DocumentoIdentidad;
+import pi.service.DocumentoIdentidadService;
+import pi.service.util.db.server.CRUD;
+
+import com.caucho.hessian.server.HessianServlet;
+import javax.servlet.annotation.WebServlet;
+
+@WebServlet("pi/DocumentoIdentidadService")
+public class DocumentoIdentidadServiceImpl extends HessianServlet implements DocumentoIdentidadService {
 	
-	public List<Impuesto> list(String app);
-	public List<Impuesto> listActives(String app);
-	public void delete(String app, Impuesto impuesto) throws Exception;
-	public Impuesto saveOrUpdate(String app, boolean save, Impuesto impuesto) throws Exception;
+	public static Class table = DocumentoIdentidad.class;
+
+	@Override
+	public List<DocumentoIdentidad> list(String app) throws Exception {
+		return CRUD.list(app,table);
+	}
 }

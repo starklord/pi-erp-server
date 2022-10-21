@@ -12,15 +12,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package pi.service;
+package pi.server.service.impl;
 
 import java.util.List;
-import pi.service.model.Impuesto;
 
-public interface ImpuestoService{
+
+
+
+
+import pi.service.model.Ubigeo;
+import pi.service.UbigeoService;
+import pi.service.util.db.server.CRUD;
+
+//@WebServlet("/pi/UbigeoService")
+import com.caucho.hessian.server.HessianServlet;
+import javax.servlet.annotation.WebServlet;
+
+@WebServlet("pi/UbigeoService")
+public class UbigeoServiceImpl extends HessianServlet implements UbigeoService {
+
+	public static Class table = Ubigeo.class;
 	
-	public List<Impuesto> list(String app);
-	public List<Impuesto> listActives(String app);
-	public void delete(String app, Impuesto impuesto) throws Exception;
-	public Impuesto saveOrUpdate(String app, boolean save, Impuesto impuesto) throws Exception;
+	@Override
+	public List<Ubigeo> list(String app) throws Exception {
+		return CRUD.list(app,table);
+	}
 }
+

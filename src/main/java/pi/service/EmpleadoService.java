@@ -20,13 +20,13 @@ import pi.service.model.rrhh.Permiso;
 public interface EmpleadoService{
 	
 	public void cambiarClave(String app, int empleadoId, String claveActual, String claveNueva, String claveNuevaRep) throws Exception;
-	public List<Empleado> list(String app, int empresaId) throws Exception;
+	public List<Empleado> list(String app, int empresaId);
 	public List<Empleado> listUsuariosSistema(String app, int empresaId) throws Exception;
 	public List<Permiso> listPermisosSession(String app) throws Exception;
 	public Empleado save(String app, Empleado object) throws Exception;
 	public Empleado saveOrUpdate(String app, boolean save, Empleado object) throws Exception;
 	
-	public List<Empleado> listVendedores(String app, int empresaId) throws Exception;
+	public List<Empleado> listVendedores(String app, int empresaId);
 	public Empleado getByPin(String app, int pin) throws Exception;
 	
 }

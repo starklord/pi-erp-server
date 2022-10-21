@@ -4,18 +4,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.jboss.logmanager.handlers.SslTcpOutputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
-
-import io.vertx.core.json.JsonObject;
 
 
 public class Server {

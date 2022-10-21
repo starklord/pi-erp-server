@@ -6,7 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import pi.service.factory.Services;
+import pi.server.factory.Services;
 import pi.service.model.PiQuery;
 
 @Path("/pi/crud") 
