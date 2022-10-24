@@ -37,7 +37,7 @@ public class LoginServiceImpl extends HessianServlet implements LoginService {
 	public MetaServer login(String app, String user, String pass, int empresaId, int sucursalId) throws Exception {
 		Class table = Empleado.class;
 		String[] required = {
-			"persona","sucursal","cargo","empresa","empresa.direccion","empresa.direccion.persona","caja" 
+			"persona","sucursal","cargo","empresa","caja" 
 		};
 		String filter = "where usuario = '" + user + "' and clave = '" + Util.encrypt(pass) +"' and a.empresa = " +empresaId ;
 		List<Empleado> listEmpleados =  CRUD.list(app,table,required,filter);
@@ -67,7 +67,7 @@ public class LoginServiceImpl extends HessianServlet implements LoginService {
 		}
 
 		MetaServer meta = new MetaServer();
-		meta.sucursal = empleado.sucursal;
+		meta.sucursal = empleado.sucursal; 
 		meta.empresa = empleado.empresa;
 		meta.empleado = empleado;
 		meta.permisos = permisos;
@@ -77,6 +77,8 @@ public class LoginServiceImpl extends HessianServlet implements LoginService {
 		meta.sucursalSeries = Services.getSucursal().listSeries(app, meta.sucursal.id);
 		meta.monedas = Services.getMoneda().list(app);
 		meta.almacenes = Services.getAlmacen().listActives(app, meta.empresa.id);
+		meta.marcas = Services.getMarca().list(app, meta.empresa.id);
+		meta.lineas = Services.getLinea().list(app, meta.empresa.id);
 		meta.app = app;
         return meta;
     }

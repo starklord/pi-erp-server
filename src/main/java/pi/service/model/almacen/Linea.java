@@ -15,6 +15,15 @@ public class Linea implements Serializable {
 	public String abreviatura;
 	public Empresa empresa;
 	
+	public Linea(){
+
+	}
+
+	public Linea(int id, String nombre){
+		this.id = id;
+		this.nombre = nombre;
+	}
+
 	@Override
 	public String toString() {
 		return nombre;

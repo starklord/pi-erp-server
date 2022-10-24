@@ -16,14 +16,14 @@ public class EmpresaServiceImpl extends HessianServlet implements EmpresaService
 
 	@Override
 	public List<Empresa> list(String app) throws Exception {
-		String[] required = { "direccion", "direccion.persona" };
-		List<Empresa> list = CRUD.list(app,table, required);
+		String[] required = {"documento_tipo_xdefecto" };
+		List<Empresa> list = CRUD.list(app,table,required);
 		return list;
 	}
 
 	@Override
 	public Empresa get(String app) {
-		String[] required = { "direccion", "direccion.persona", "documento_tipo_xdefecto" };
+		String[] required = {"documento_tipo_xdefecto" };
 		Empresa empresa = null;
 		try {
 			List<Empresa> list = CRUD.list(app,table, required);
@@ -36,7 +36,7 @@ public class EmpresaServiceImpl extends HessianServlet implements EmpresaService
 
 	@Override
 	public List<Empresa> listActive(String app) throws Exception {
-		String[] required = { "direccion", "direccion.persona" };
+		String[] required = {"documento_tipo_xdefecto" };
 		List<Empresa> list = CRUD.list(app,table, required, "where a.activo is true");
 		return list;
 	}

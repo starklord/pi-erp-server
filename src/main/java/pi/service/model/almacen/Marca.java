@@ -1,7 +1,6 @@
 package pi.service.model.almacen;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import pi.service.db.client.TableDB;
 import pi.service.model.empresa.Empresa;
@@ -16,6 +15,15 @@ public class Marca implements Serializable {
 	public String nombre;
 	public String abreviatura;
 	public Empresa empresa;
+
+	public Marca(){
+
+	}
+
+	public Marca(int id, String nombre){
+		this.id = id;
+		this.nombre = nombre;
+	}
 	
 	
 	@Override

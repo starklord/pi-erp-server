@@ -25,10 +25,10 @@ import pi.service.model.auxiliar.MABCProducto;
 public interface ProductoService{
 	
 	public Producto getByCodigo(String app, String codigo) throws Exception;
-	public List<Producto> list(String app) throws Exception;
+	public List<Producto> list(String app);
 	public List<Producto> list(String app, int empresaId) throws Exception;
+	public List<Producto> list(String app, int marcaId, int lineaId,String ver, String txt);
 	public List<Producto> listActives(String app, int empresaId) throws Exception;
-	public List<Producto> listActives(String app, int empresaId, int marcaId, int lineaId, int buscarPor, String txt) throws Exception;
 	public void delete(String app, Producto object) throws Exception;
 	public void annul(String app, int productoId) throws Exception;
 	public Producto saveOrUpdate(String app, boolean save, Producto object) throws Exception;

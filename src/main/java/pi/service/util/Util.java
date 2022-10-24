@@ -45,6 +45,13 @@ public class Util {
     public static char TIPO_SISTEMA_DROGUERIA = 'D';
     public static char TIPO_SISTEMA_FARMACIA = 'F';
     public static char TIPO_SISTEMA_PARKING = 'p';
+
+
+    //para todas:
+    public static String TODAS_MARCAS = "Todas las Marcas";
+    public static String TODAS_LINEAS = "Todas las Lineas";
+    public static String OCULTAR_ANULADOS = "Ocultar Anulados";
+    public static String VER_ANULADOS = "Ver Anulados";
     // unidades:
     public static String UNIDAD_KG = "KG";
     public static String UNIDAD_LT = "LT";

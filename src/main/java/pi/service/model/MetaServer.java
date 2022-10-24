@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import pi.service.model.almacen.Almacen;
+import pi.service.model.almacen.Linea;
+import pi.service.model.almacen.Marca;
 import pi.service.model.empresa.Empresa;
 import pi.service.model.empresa.Sucursal;
 import pi.service.model.persona.Direccion;
@@ -23,6 +25,8 @@ public class MetaServer implements Serializable {
     public List<SucursalSerie> sucursalSeries;
     public List<Moneda> monedas;
     public List<Almacen> almacenes;
+    public List<Marca> marcas;
+    public List<Linea> lineas;
     public String key;
     public String app;
     public String token;

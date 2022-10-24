@@ -39,13 +39,7 @@ public class SucursalServiceImpl extends HessianServlet implements SucursalServi
 	public List<Sucursal> listActive(String app) {
 		List<Sucursal> list = new ArrayList<>();
 		try {
-			String[] required = {
-					"empresa",
-					"empresa.direccion",
-					"empresa.direccion.persona",
-					"direccion"
-			};
-			list = CRUD.list(app,Sucursal.class, required, " where a.activo is true");
+			list = CRUD.list(app,Sucursal.class, " where a.activo is true");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -56,13 +50,7 @@ public class SucursalServiceImpl extends HessianServlet implements SucursalServi
 	public List<Sucursal> list(String app, int empresaId) {
 		List<Sucursal> list = new ArrayList<>();
 		try {
-			String[] required = {
-					"empresa",
-					"empresa.direccion",
-					"empresa.direccion.persona",
-					"direccion"
-			};
-			list = CRUD.list(app,Sucursal.class, required, " where a.empresa = " + empresaId);
+			list = CRUD.list(app,Sucursal.class, " where a.empresa = " + empresaId);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

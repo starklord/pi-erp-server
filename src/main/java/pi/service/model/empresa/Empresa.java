@@ -18,7 +18,7 @@ public class Empresa implements Serializable {
 	public Boolean require_sales_pin;
 	public DocumentoTipo documento_tipo_xdefecto;
 	public String app_name;
-	public Character tipo_sistema = 'C';//Comercial,Drogueria,Farmacia
+	public Character tipo_sistema = 'C';//Comercial,Drogueria,Farmacia 
 
 	public Empresa(){
 		

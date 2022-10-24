@@ -16,7 +16,7 @@ public class Producto implements Serializable {
 	public String creador;
 	public Boolean activo;
 	public String codigo;
-	public int codigo_interno;
+	public Integer codigo_interno;
 	public String codigo_ubicacion;
 	public String nombre;
 	public String descripcion;
@@ -35,7 +35,7 @@ public class Producto implements Serializable {
 	public BigDecimal costo_ultima_compra;
 	public String codigo_barras1;
 	public String codigo_barras2;
-	public String procedencia;
+	public Character procedencia;
 	public String cod_dig;
 	public String registro_sanitario;
 	
@@ -49,7 +49,7 @@ public class Producto implements Serializable {
 	}
 
 	public String getCodigo(){
-		return codigo;
+		return Util.completeWithZeros(codigo,7);
 	}
 
 	public String getMarcaStr(){
@@ -89,11 +89,11 @@ public class Producto implements Serializable {
 	}
 
 	public String getProcedencia(){
-		return procedencia;
+		return procedencia=='N'?"Nacional":"Importado";
 	}
 
 	public String getCodigoDigemid(){
-		return cod_dig;
+		return Util.completeWithZeros(cod_dig,7);
 	}
 
 	public String getRegistroSanitario(){
