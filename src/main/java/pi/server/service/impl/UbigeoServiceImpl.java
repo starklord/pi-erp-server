@@ -22,7 +22,7 @@ import java.util.List;
 
 import pi.service.model.Ubigeo;
 import pi.service.UbigeoService;
-import pi.service.db.server.CRUD;
+import pi.server.db.server.CRUD;
 
 //@WebServlet("/pi/UbigeoService")
 import com.caucho.hessian.server.HessianServlet;

@@ -8,7 +8,7 @@ import pi.server.Server;
 import pi.server.db.Update;
 import pi.server.factory.Services;
 import pi.service.DocumentoPagoService;
-import pi.service.db.server.CRUD;
+import pi.server.db.server.CRUD;
 import pi.service.factory.Numbers;
 import pi.service.model.efact.ResumenDiario;
 import pi.service.model.efact.ResumenDiarioDet;

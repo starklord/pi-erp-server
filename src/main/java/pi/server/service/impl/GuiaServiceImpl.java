@@ -22,7 +22,7 @@ import pi.service.model.logistica.GuiaRemisionDet;
 import pi.service.model.logistica.MotivoTraslado;
 import pi.server.db.Update;
 import pi.service.GuiaService;
-import pi.service.db.server.CRUD;
+import pi.server.db.server.CRUD;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;

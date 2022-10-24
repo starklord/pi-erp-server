@@ -9,7 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import com.caucho.hessian.server.HessianServlet;
 
 import pi.service.ParkingService;
-import pi.service.db.server.CRUD;
+import pi.server.db.server.CRUD;
 import pi.service.model.parking.Ticket;
 
 @WebServlet("pi/ParkingService")

@@ -20,7 +20,7 @@ import java.util.List;
 
 import pi.server.factory.Services;
 import pi.service.LoginService;
-import pi.service.db.server.CRUD;
+import pi.server.db.server.CRUD;
 import pi.service.model.MetaServer;
 import pi.service.model.rrhh.CargoPermiso;
 import pi.service.model.rrhh.Empleado;

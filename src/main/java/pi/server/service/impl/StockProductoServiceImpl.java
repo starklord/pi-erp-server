@@ -17,7 +17,7 @@ import pi.service.model.logistica.OrdenCompraDet;
 import pi.service.factory.Numbers;
 import pi.server.db.Query;
 import pi.service.StockProductoService;
-import pi.service.db.server.CRUD;
+import pi.server.db.server.CRUD;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;

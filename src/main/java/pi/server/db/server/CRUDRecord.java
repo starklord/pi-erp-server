@@ -1,4 +1,4 @@
-package pi.service.db.server;
+package pi.server.db.server;
 
 import java.util.HashMap;
 import java.util.List;

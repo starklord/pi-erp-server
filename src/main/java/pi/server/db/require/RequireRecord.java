@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pi.service.db.require;
+package pi.server.db.require;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import pi.server.db.ObjectDB;
-import pi.service.db.server.CRUDRecord;
+import pi.server.db.server.CRUDRecord;
 
 /**
  * as

@@ -21,7 +21,7 @@ import pi.service.model.rrhh.CargoPermiso;
 import pi.service.model.rrhh.Empleado;
 import pi.service.model.rrhh.Permiso;
 import pi.service.EmpleadoService;
-import pi.service.db.server.CRUD;
+import pi.server.db.server.CRUD;
 import pi.service.util.Util;
 
 import com.caucho.hessian.server.HessianServlet;

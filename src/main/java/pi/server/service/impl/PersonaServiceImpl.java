@@ -21,7 +21,7 @@ import java.util.Scanner;
 
 import pi.server.db.Update;
 import pi.service.PersonaService;
-import pi.service.db.server.CRUD;
+import pi.server.db.server.CRUD;
 import pi.service.model.DocumentoIdentidad;
 import pi.service.model.persona.Direccion;
 import pi.service.model.persona.Persona;
