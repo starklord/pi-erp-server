@@ -3,10 +3,10 @@ package pi.service.model.venta;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import pi.service.db.client.TableDB;
 import pi.service.factory.Numbers;
 import pi.service.model.almacen.Producto;
 import pi.service.model.almacen.Unidad;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name = "venta.nota_credito_det")
 public class NotaCreditoDet implements Serializable {

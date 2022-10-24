@@ -1,4 +1,4 @@
-package pi.service.util.db.client;
+package pi.service.db.client;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

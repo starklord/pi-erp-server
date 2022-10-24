@@ -3,8 +3,8 @@ package pi.server.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import pi.service.model.almacen.Almacen;
-import pi.service.util.db.server.CRUD;
 import pi.service.AlmacenService;
+import pi.service.db.server.CRUD;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;
@@ -14,9 +14,15 @@ import javax.servlet.annotation.WebServlet;
 public class AlmacenServiceImpl extends HessianServlet implements AlmacenService {
 
 	@Override
-	public List<Almacen> list(String app, int empresaId) throws Exception {
-		String[] req={"sucursal","sucursal.empresa"};//hola
-		return CRUD.list(app, Almacen.class,req,"where c.id = " + empresaId);
+	public List<Almacen> list(String app, int empresaId) {
+		List<Almacen> list = new ArrayList<>(); 
+		try{
+			String[] req={"sucursal","sucursal.empresa"};
+		list = CRUD.list(app,Almacen.class,req,"where c.id = " + empresaId);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return list;
 	}
 	
 	@Override

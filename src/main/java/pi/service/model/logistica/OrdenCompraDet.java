@@ -4,10 +4,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import pi.service.factory.Numbers;
+import pi.service.db.client.TableDB;
 import pi.service.model.almacen.Almacen;
 import pi.service.model.almacen.Producto;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="logistica.orden_compra_det")
 public class OrdenCompraDet implements Serializable {
@@ -52,26 +51,4 @@ public class OrdenCompraDet implements Serializable {
 			return false;
 		return true;
 	}
-	
-	public String getCantidadFraccion() {
-		BigDecimal contenido = producto.contenido;
-		if(contenido.compareTo(BigDecimal.ONE)>0) {
-			double dCantidad = cantidad.doubleValue();
-			long cantE = (long) (dCantidad/contenido.doubleValue());
-			double cantF = dCantidad - (cantE*contenido.longValue());
-			
-			if(cantF<=0) {
-				return cantE+"";
-			}
-			if(cantE==0){
-				return "F"+cantF;
-			}
-			return cantE+"F"+cantF;
-			
-		}else {
-			return Numbers.getBD(contenido, 0).toString();
-		}
-	}
-	
-
 }

@@ -2,7 +2,7 @@ package pi.service.model.venta;
 
 import java.io.Serializable;
 
-import pi.service.util.db.client.TableDB;
+import pi.service.db.client.TableDB;
 
 @TableDB(name="venta.orden_venta_documento_pago")
 public class OrdenVentaDocumentoPago implements Serializable {

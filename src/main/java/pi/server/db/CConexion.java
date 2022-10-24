@@ -1,4 +1,4 @@
-package pi.service.util.db;
+package pi.server.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

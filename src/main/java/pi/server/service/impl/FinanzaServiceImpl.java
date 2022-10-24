@@ -12,11 +12,10 @@ import pi.service.model.logistica.OrdenCompra;
 import pi.service.model.venta.OrdenVenta;
 import pi.service.factory.Numbers;
 import pi.server.Server;
+import pi.server.db.Query;
+import pi.server.db.Update;
 import pi.service.FinanzaService;
-
-import pi.service.util.db.Query;
-import pi.service.util.db.Update;
-import pi.service.util.db.server.CRUD;
+import pi.service.db.server.CRUD;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;

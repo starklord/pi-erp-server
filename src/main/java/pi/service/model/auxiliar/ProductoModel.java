@@ -44,29 +44,5 @@ public class ProductoModel implements Serializable {
 			return false;
 		return true;
 	}
-	
-	public String getCantidadFraccion() {
-		BigDecimal contenido = producto.contenido;
-		if(contenido.compareTo(BigDecimal.ONE)>0) {
-			double dCantidad = stocks.get(0).stock.doubleValue();
-			long cantE = (long) (dCantidad/contenido.doubleValue());
-			double cantF = dCantidad - (cantE*contenido.longValue());
-			
-			if(cantF<=0) {
-				return cantE+"";
-			}
-			if(cantE==0){
-				return "F"+cantF;
-			}
-			return cantE+"F"+cantF;
-			
-		}else {
-			
-			return stocks.isEmpty()?"0":Numbers.getBD(stocks.get(0).stock, 0).toString();
-		}
-	}
-	
-	
-	
 
 }

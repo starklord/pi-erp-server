@@ -2,10 +2,10 @@ package pi.service.model.almacen;
 
 import java.io.Serializable;
 
+import pi.service.db.client.TableDB;
 import pi.service.model.empresa.Empresa;
 import pi.service.model.persona.Direccion;
 import pi.service.model.persona.Persona;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="logistica.ensamblador")
 public class Ensamblador implements Serializable {

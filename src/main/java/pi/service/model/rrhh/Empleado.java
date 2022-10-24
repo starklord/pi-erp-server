@@ -2,13 +2,13 @@ package pi.service.model.rrhh;
 
 import java.io.Serializable;
 
+import pi.service.db.client.FieldDB;
+import pi.service.db.client.TableDB;
 import pi.service.model.almacen.Almacen;
 import pi.service.model.empresa.Empresa;
 import pi.service.model.empresa.Sucursal;
 import pi.service.model.finanza.Caja;
 import pi.service.model.persona.Persona;
-import pi.service.util.db.client.FieldDB;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="rrhh.empleado")
 public class Empleado implements Serializable{

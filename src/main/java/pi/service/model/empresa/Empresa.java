@@ -2,9 +2,8 @@ package pi.service.model.empresa;
 
 import java.io.Serializable;
 
+import pi.service.db.client.TableDB;
 import pi.service.model.DocumentoTipo;
-import pi.service.model.persona.Direccion;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="empresa.empresa")
 public class Empresa implements Serializable {
@@ -12,18 +11,14 @@ public class Empresa implements Serializable {
 	public Integer id;
 	public String creador;
 	public Boolean activo;
-	public Direccion direccion;
 	public String commercial_name;
 	public String logo_enterprise;
-	public String logo_width;
 	public Boolean allow_buy_without_stock;
-	public Boolean show_medical_perspective;
-	public Boolean buy_fractionable; 
 	public Boolean is_fast_pos;
 	public Boolean require_sales_pin;
 	public DocumentoTipo documento_tipo_xdefecto;
 	public String app_name;
-	public String path_webapps;
+	public Character tipo_sistema = 'C';//Comercial,Drogueria,Farmacia
 
 	public Empresa(){
 		
@@ -31,7 +26,7 @@ public class Empresa implements Serializable {
 	
 	@Override
 	public String toString() {
-		return direccion.persona.toString();
+		return commercial_name;
 	}
 	
 	@Override

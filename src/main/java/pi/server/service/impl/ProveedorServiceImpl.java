@@ -7,9 +7,9 @@ import pi.service.model.empresa.Empresa;
 import pi.service.model.logistica.OrdenCompraDet;
 import pi.service.model.logistica.Proveedor;
 import pi.service.model.persona.Persona;
+import pi.server.db.Update;
 import pi.service.ProveedorService;
-import pi.service.util.db.Update;
-import pi.service.util.db.server.CRUD;
+import pi.service.db.server.CRUD;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;

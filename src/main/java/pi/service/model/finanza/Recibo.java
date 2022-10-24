@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import pi.service.db.client.FieldDB;
+import pi.service.db.client.TableDB;
 import pi.service.model.Moneda;
 import pi.service.model.empresa.Sucursal;
 import pi.service.model.logistica.OrdenCompra;
 import pi.service.model.rrhh.Area;
 import pi.service.model.venta.OrdenVenta;
-import pi.service.util.db.client.FieldDB;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="finanza.recibo")
 public class Recibo implements Serializable {

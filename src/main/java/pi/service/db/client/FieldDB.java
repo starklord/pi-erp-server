@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pi.service.util.db.client;
+package pi.service.db.client;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

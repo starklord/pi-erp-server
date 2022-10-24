@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import pi.service.db.client.TableDB;
 import pi.service.model.empresa.Empresa;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="logistica.transformacion")
 public class Transformacion implements Serializable {

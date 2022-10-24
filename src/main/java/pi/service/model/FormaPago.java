@@ -2,7 +2,8 @@ package pi.service.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import pi.service.util.db.client.TableDB;
+
+import pi.service.db.client.TableDB;
 
 @TableDB(name="forma_pago")
 public class FormaPago implements Serializable {

@@ -5,9 +5,8 @@ import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import pi.service.db.client.TableDB;
 import pi.service.model.DocumentoIdentidad;
-import pi.service.model.academico.Ciclo;
-import pi.service.util.db.client.TableDB;
 
 
 @TableDB(name = "persona.persona")
@@ -28,7 +27,6 @@ public class Persona implements Serializable {
     public String codigo;
     public String clave_portal;
     public Boolean es_agente_retencion;
-    public Ciclo ciclo;
     public Character area;// S B I
     public Character turno;//T M
     public Character tipo_cliente;//N P B

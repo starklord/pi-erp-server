@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import pi.service.db.client.TableDB;
 import pi.service.util.Util;
-import pi.service.util.db.client.TableDB;
 @TableDB(name="almacen.kardex")
 public class Kardex implements Serializable {
 	

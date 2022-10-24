@@ -2,7 +2,7 @@ package pi.service.model.finanza;
 
 import java.io.Serializable;
 
-import pi.service.util.db.client.TableDB;
+import pi.service.db.client.TableDB;
 
 @TableDB(name="finanza.cuenta_bancaria")
 public class CuentaBancaria implements Serializable {

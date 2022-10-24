@@ -3,8 +3,8 @@ package pi.service.model.efact;
 import java.io.Serializable;
 import java.util.Date;
 
+import pi.service.db.client.TableDB;
 import pi.service.util.Util;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="efact.resumen_diario")
 public class ResumenDiario implements Serializable {

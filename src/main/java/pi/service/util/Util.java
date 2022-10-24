@@ -40,6 +40,11 @@ public class Util {
     public static int MONEDA_SOLES_ID = 1;
     public static int MONEDA_DOLARES_ID = 2;
 
+    //para los tipos de sistema:
+    public static char TIPO_SISTEMA_COMERCIAL = 'C';
+    public static char TIPO_SISTEMA_DROGUERIA = 'D';
+    public static char TIPO_SISTEMA_FARMACIA = 'F';
+    public static char TIPO_SISTEMA_PARKING = 'p';
     // unidades:
     public static String UNIDAD_KG = "KG";
     public static String UNIDAD_LT = "LT";

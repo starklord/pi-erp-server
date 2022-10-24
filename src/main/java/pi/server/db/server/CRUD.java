@@ -1,11 +1,11 @@
-package pi.service.util.db.server;
+package pi.service.db.server;
 
 import java.util.List;
 
 import pi.App;
-import pi.service.util.db.CConexion;
-import pi.service.util.db.Update;
-import pi.service.util.db.require.Require;
+import pi.server.db.CConexion;
+import pi.server.db.Update;
+import pi.service.db.require.Require;
 
 public class CRUD {
 

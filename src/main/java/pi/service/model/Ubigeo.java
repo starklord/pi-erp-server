@@ -2,7 +2,7 @@ package pi.service.model;
 
 import java.io.Serializable;
 
-import pi.service.util.db.client.TableDB;
+import pi.service.db.client.TableDB;
 
 @TableDB(name="public.ubigeo")
 public class Ubigeo implements Serializable{

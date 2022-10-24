@@ -22,7 +22,7 @@ import com.caucho.hessian.server.HessianServlet;
 
 import pi.service.model.rrhh.Area;
 import pi.service.AreaService;
-import pi.service.util.db.server.CRUD;
+import pi.service.db.server.CRUD;
 
 @WebServlet("pi/AreaService")
 public class AreaServiceImpl extends HessianServlet implements AreaService {

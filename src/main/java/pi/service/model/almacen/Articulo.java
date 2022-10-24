@@ -1,9 +1,9 @@
 package pi.service.model.almacen;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import pi.service.model.empresa.Empresa;
-import pi.service.util.db.client.TableDB;
+import pi.service.db.client.TableDB;
 
 @TableDB(name="logistica.articulo")
 public class Articulo implements Serializable {
@@ -11,10 +11,12 @@ public class Articulo implements Serializable {
 	public Integer id;
 	public String creador;
 	public Boolean activo;
+	public Character estado;//K:OK P:Pendiente
 	public Producto producto;
-	public String serie;
 	public Almacen almacen;
-	public Empresa empresa;
+	public String serie;
+	public String lote;
+	public Date fecha_vencimiento;
 	
 	@Override
 	public String toString() {

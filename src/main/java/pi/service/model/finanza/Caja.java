@@ -2,10 +2,10 @@ package pi.service.model.finanza;
 
 import java.io.Serializable;
 
+import pi.service.db.client.FieldDB;
+import pi.service.db.client.TableDB;
 import pi.service.model.Moneda;
 import pi.service.model.empresa.Sucursal;
-import pi.service.util.db.client.FieldDB;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="finanza.caja")
 public class Caja implements Serializable {

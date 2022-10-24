@@ -2,8 +2,8 @@ package pi.service.model.efact;
 
 import java.io.Serializable;
 
+import pi.service.db.client.TableDB;
 import pi.service.model.venta.DocumentoPago;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="efact.resumen_diario_det")
 public class ResumenDiarioDet implements Serializable {

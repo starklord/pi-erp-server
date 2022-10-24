@@ -3,10 +3,10 @@ package pi.service.model.logistica;
 import java.io.Serializable;
 import java.util.Date;
 
+import pi.service.db.client.FieldDB;
+import pi.service.db.client.TableDB;
 import pi.service.model.empresa.Sucursal;
 import pi.service.model.persona.Persona;
-import pi.service.util.db.client.FieldDB;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="logistica.requerimiento_compra")
 public class RequerimientoCompra implements Serializable {

@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import pi.service.db.client.FieldDB;
+import pi.service.db.client.TableDB;
 import pi.service.model.Moneda;
 import pi.service.model.empresa.Empresa;
-import pi.service.util.db.client.FieldDB;
-import pi.service.util.db.client.TableDB;
 
 
 @TableDB(name="finanza.letra")

@@ -16,16 +16,14 @@ import pi.service.model.almacen.Articulo;
 import pi.service.model.almacen.Kardex;
 import pi.service.model.almacen.Linea;
 import pi.service.model.almacen.Marca;
-import pi.service.model.almacen.OrdenRegularizacion;
-import pi.service.model.almacen.OrdenRegularizacionDet;
 import pi.service.model.almacen.Producto;
 import pi.service.model.almacen.Unidad;
 import pi.service.model.auxiliar.MABCProducto;
 import pi.service.model.empresa.Empresa;
+import pi.server.db.Query;
+import pi.server.db.Update;
 import pi.service.ProductoService;
-import pi.service.util.db.Query;
-import pi.service.util.db.Update;
-import pi.service.util.db.server.CRUD;
+import pi.service.db.server.CRUD;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;
@@ -77,11 +75,10 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 	public Producto saveOrUpdate(String app, boolean save, Producto object) throws Exception {
 		try {
 			
-			int empresaId = object.empresa.id;
 			if (save) {
 				if(object.codigo.trim().isEmpty()) {
 					System.out.println("entrando a crear un codigo");
-					String filter = "where empresa = " + empresaId + " order by codigo_interno desc limit 1";
+					String filter = " order by codigo_interno desc limit 1";
 					List<Producto> list = CRUD.list(app,Producto.class, filter);
 					if (!list.isEmpty()) {
 						object.codigo_interno = list.get(0).codigo_interno+1;
@@ -145,229 +142,8 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 	public void importProductsFromTxt(String app) throws Exception {
 
 		readFileProductos(app);
-				// readFileKardexCorteInicial();
-//		String[] require = {
-//			"traslado_cab","producto"
-//		};
-//		try {
-//			List<TrasladoInternoDet> list = CRUD.list(app,TrasladoInternoDet.class, require, "where b.activo is true order by a.id asc");
-//			for(TrasladoInternoDet item : list) {
-//				CRUD.execute(app, "update almacen.kardex set fecha_vencimiento = '" + item.fecha_vencimiento.toString()+"'"
-//						+ ", lote ='" + item.lote+"' where tipo = 'T' and orden_id = " + item.traslado_cab.id+" and producto = " + item.producto.id);
-//			}
-//		}catch(Exception ex) {
-//			
-//		}
 	}
 	
-	private void readFileRegularizacionesPendientes(String app) throws Exception {
-		try {
-			
-			String iso = "ISO-8859-1";
-			String utf = "UTF-8";
-			File file = new File("D:/empresas/emmel/regularizaciones.txt");
-			Scanner scan = new Scanner(file, iso);
-			scan.useDelimiter("\n");
-			String text = "";
-			StockProductoServiceImpl stockService = new StockProductoServiceImpl();
-			OrdenRegularizacion orden = new OrdenRegularizacion();
-			orden.activo = true;
-			orden.almacen = new Almacen();
-			orden.almacen.id = 1;
-			orden.creador =  "root";
-			orden.fecha = new Date();
-			orden.movimiento = 'E';
-			orden.observaciones = "Regularizaciones material medico";
-			List<OrdenRegularizacionDet> detalles = new ArrayList<>();
-			while (scan.hasNext()) {
-				String line = scan.next();
-				Scanner scanLine = new Scanner(line);
-				scanLine.useDelimiter("\t");
-				//lectura de datos				
-				String strCodigo				= scanLine.next().trim();
-				String strFechaVencimiento 	= scanLine.next().trim();
-				String strLote 				= scanLine.next().trim();
-				String strCantidad			= scanLine.next().trim();
-				String strCantidadFraccion  = scanLine.next().trim();
-				System.out.println("codigo: "			+ strCodigo);
-				System.out.println("Fecha V: " 			+ strFechaVencimiento);
-				System.out.println("Lote: " 			+ strLote);
-				System.out.println("Cantidad: " 		+ strCantidad);
-				System.out.println("Cantidad Fraccion: "+ strCantidadFraccion);
-				
-				String codigo 					= strCodigo;
-			    Date fechaVencimiento 			= new SimpleDateFormat("dd-MM-yyyy").parse(strFechaVencimiento);
-			    String lote 					= strLote;
-				BigDecimal cantidad				= new BigDecimal(strCantidad);
-				BigDecimal cantidadFraccion		= new BigDecimal(strCantidadFraccion);
-				//fin lectura de datos
-				Producto producto = getByCodigo(app,codigo);
-				if(producto == null) {
-					System.out.println("Producto no encontrado: " + codigo);
-					continue;
-				}
-				OrdenRegularizacionDet det = new OrdenRegularizacionDet();
-				det.activo = true;
-				det.cantidad = cantidad;
-				det.cantidad_fraccion = cantidadFraccion;
-				det.creador="root";
-				det.fecha_vencimiento = fechaVencimiento;
-				det.lote = lote;
-				det.producto = producto;
-				detalles.add(det);
-				
-			}
-			
-			OrdenMovimientoServiceImpl ordenService = new OrdenMovimientoServiceImpl();
-			
-			ordenService.saveOrdenRegularizacion(app, true, orden, detalles);
-			System.out.println(text);
-			scan.close();
-			
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			
-			throw new Exception(ex.getMessage());
-
-		}
-	}
-
-	private void readFileKardexCorteInicial(String app) throws Exception {
-		try {
-			
-			String iso = "ISO-8859-1";
-			String utf = "UTF-8";
-			File file = new File("/Users/starklord/empresas/univet/corte_inventario_consunivet202206231325.txt");
-			Scanner scan = new Scanner(file, iso);
-			scan.useDelimiter("\n");
-			String text = "";
-			StockProductoServiceImpl stockService = new StockProductoServiceImpl();
-			while (scan.hasNext()) {
-				String line = scan.next();
-				Scanner scanLine = new Scanner(line);
-				scanLine.useDelimiter("\t");
-				//lectura de datos				
-				String codigo= scanLine.next().trim();
-				String strf = scanLine.next().trim();
-				String strLote = "-";
-				String strFecha = "2022-06-23";
-				System.out.println("s1: " + strf);
-				
-				//fin lectura de datos
-				BigDecimal fisico				= new BigDecimal(strf);
-				Producto producto = getByCodigo(app, codigo);
-				if(producto == null) {
-					continue;
-				}
-				Almacen alm1 = new Almacen();
-				alm1.id = 1;//tienda
-
-				saveKardexFromCorteInicial(app, alm1,producto, fisico, strFecha,strLote);
-			}
-			System.out.println(text);
-			scan.close();
-			
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			
-			throw new Exception(ex.getMessage());
-
-		}
-	}
-	
-	private void saveKardexFromCorteInicial(String app, Almacen almacen, Producto producto, BigDecimal fisico,String strFecha, String strLote) throws Exception {
-		ProductoServiceImpl productoService = new ProductoServiceImpl();
-		Kardex ok = productoService.getLastKardexFromProducto(app,producto.id, almacen.id);
-		Kardex nk= new Kardex();
-		nk.activo = true;
-		nk.almacen = almacen;
-		nk.creador = "root";
-		nk.destino = "-";
-		nk.origen = "Regularizacion";
-		nk.fecha = new Date();
-		nk.fecha_orden = nk.fecha;
-		nk.lote = strLote;
-
-		String[] strDate = strFecha.split("-");
-		System.out.println("array size: " + strDate.length);
-		int day = Integer.parseInt(strDate[2].trim());
-		int month = Integer.parseInt(strDate[1].trim())-1;
-		int year = Integer.parseInt(strDate[0].trim())-1900;
-		Date date = new Date();
-		date.setYear(year);
-		date.setDate(day);
-		date.setMonth(month);
-		nk.fecha_vencimiento = date;
-		BigDecimal sistema = BigDecimal.ZERO;
-		if(ok!=null){
-			sistema = ok.stock;
-		}
-		BigDecimal dif = sistema.subtract(fisico);
-		nk.documento = "REG-20220623";
-		nk.ingreso = dif.compareTo(BigDecimal.ZERO)<=0?BigDecimal.ZERO:dif;
-		nk.salida = dif.compareTo(BigDecimal.ZERO)<=0?new BigDecimal(Math.abs(dif.doubleValue())):BigDecimal.ZERO;
-		
-		nk.orden_id = 0;
-		nk.precio_costo = BigDecimal.ZERO;
-		nk.precio_venta = BigDecimal.ZERO;
-		nk.producto = producto;
-		nk.stock_anterior = ok==null?BigDecimal.ZERO:ok.stock;
-		nk.stock = nk.stock_anterior.add(nk.ingreso).subtract(nk.salida);
-		nk.tipo = Util.TIPO_ORDEN_REGULARIZACION;
-		nk.usado = BigDecimal.ZERO;
-		nk.movimiento = nk.salida.compareTo(BigDecimal.ZERO)==0?Util.MOVIMIENTO_KARDEX_ENTRADA:Util.MOVIMIENTO_KARDEX_SALIDA;
-		CRUD.save(app,nk);
-	}
-	
-	private void readFileUpdateCostos(String app) throws Exception {
-		try {
-			
-			String iso = "ISO-8859-1";
-			String utf = "UTF-8";
-			File file = new File("D:/empresas/emel/productos_costos.txt");
-			Scanner scan = new Scanner(file, iso);
-			scan.useDelimiter("\n");
-			String text = "";
-			int codigo = 1;
-			ProductoServiceImpl productoService = new ProductoServiceImpl();
-			while (scan.hasNext()) {
-				String line = scan.next();
-				Scanner scanLine = new Scanner(line);
-				scanLine.useDelimiter("\t");
-				//lectura de datos Nombre	Presentacion	UNIDAD	LABORATORIO	PrecioCosto	Stockactual
-				
-				String str_id 		= scanLine.next().trim();
-				String str_codigo	= scanLine.next().trim();
-				BigDecimal costo 	= new BigDecimal(scanLine.next().trim());
-				////////////////////////// fin de lectura de datos
-				Producto prod = productoService.getProductoByCodigo(app,str_codigo);
-				if(prod==null) {
-					continue;
-				}else {
-					System.out.println("costo_ultima_compra: " + prod.costo_ultima_compra);
-					if(prod.costo_ultima_compra.compareTo(new BigDecimal("42.2912"))==0) {
-						
-						CRUD.execute(app, "update logistica.producto set costo_ultima_compra = " +costo+" where codigo = '" + str_codigo+"'" );
-					}else {
-						
-					}
-					
-				}
-			}
-			System.out.println(text);
-			scan.close();
-			
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			
-			throw new Exception(ex.getMessage());
-
-		}
-	}
-
 	
 	private void readFileProductos(String app) throws Exception {
 		try {
@@ -425,34 +201,21 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 				producto.activo = true;
 				producto.codigo_barras1 = "-";
 				producto.codigo_barras2 = "-";
-				producto.codigo_barras3 = "-";
-				producto.concentracion = "";
-				producto.contenido = BigDecimal.ONE;
 				producto.costo_ultima_compra = new BigDecimal(str_costo);
 				producto.creador = "root";
 				producto.descripcion = "";
-				producto.empresa = new Empresa();
-				producto.empresa.id = 0 ;
 				producto.es_servicio = false;
 				producto.garantia = false;
-				producto.laboratorio = str_marca;
-				producto.accion_farmacologica = "";
 				producto.linea = getLinea(app, str_linea,0);
-				producto.lote = 0;
 				producto.marca = getMarca(app,str_marca,0);
 				producto.moneda = new Moneda();
 				producto.moneda.id = 1;
 				producto.nombre = str_nombre;
 				producto.peso = BigDecimal.ZERO;
 				producto.precio = new BigDecimal(str_precio1);
-				producto.precio_promocion = BigDecimal.ZERO;
-				producto.precio_distribuidor = BigDecimal.ZERO;
 				producto.unidad = getUnidad(app, str_unidad);
-				producto.presentacion = producto.unidad.abreviatura;
 				producto.stock_minimo = BigDecimal.ZERO;
-				producto.codigo_interno = Integer.parseInt(str_codigo+"");
 				producto.codigo = str_codigo+"";
-				producto.presentacion = "-";
 				producto.codigo_ubicacion="-";
 				producto.impuesto = new Impuesto();
 				producto.impuesto.id = Util.TIPO_IMPUESTO_IGV;
@@ -462,7 +225,6 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 				// codigo++;
 				 Almacen alm1 = new Almacen();
 				 alm1.id = 1;
-				 saveKardexFromCorteInicial(app, alm1,producto, new BigDecimal(str_stock), "2022-07-01","00000");
 			}
 			System.out.println(text);
 			scan.close();

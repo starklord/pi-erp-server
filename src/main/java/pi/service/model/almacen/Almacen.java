@@ -2,8 +2,9 @@ package pi.service.model.almacen;
 
 import java.io.Serializable;
 
+import pi.service.db.client.TableDB;
 import pi.service.model.empresa.Sucursal;
-import pi.service.util.db.client.TableDB;
+import pi.service.util.Util;
 
 
 @TableDB(name="logistica.almacen")
@@ -18,6 +19,27 @@ public class Almacen implements Serializable {
 	public Boolean es_para_venta;
 	public Boolean es_principal;
 	
+	
+	public String getEstado() {
+		return activo?Util.OK:Util.ANULADO;
+	}
+
+	public String getSucursal(){
+		return sucursal.toString();
+	}
+
+	public String getCodigo(){
+		return codigo;
+	}
+
+	public String getEsParaVenta(){
+		return es_para_venta?Util.SI:Util.NO;
+	}
+
+	public String getEsPrincipal(){
+		return es_principal?Util.SI:Util.NO;
+	}
+
 	@Override
 	public String toString() {
 		return codigo;

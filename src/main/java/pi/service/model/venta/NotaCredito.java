@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import pi.service.db.client.TableDB;
 import pi.service.factory.Numbers;
 import pi.service.model.Impuesto;
 import pi.service.model.Moneda;
 import pi.service.model.empresa.Sucursal;
 import pi.service.util.Util;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="venta.nota_credito")
 public class NotaCredito implements Serializable {

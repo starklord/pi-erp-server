@@ -20,9 +20,9 @@ import java.util.List;
 import pi.service.model.logistica.GuiaRemision;
 import pi.service.model.logistica.GuiaRemisionDet;
 import pi.service.model.logistica.MotivoTraslado;
+import pi.server.db.Update;
 import pi.service.GuiaService;
-import pi.service.util.db.Update;
-import pi.service.util.db.server.CRUD;
+import pi.service.db.server.CRUD;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;

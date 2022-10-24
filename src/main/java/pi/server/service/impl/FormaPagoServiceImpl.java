@@ -17,7 +17,7 @@ package pi.server.service.impl;
 import java.util.List;
 import pi.service.model.FormaPago;
 import pi.service.FormaPagoService;
-import pi.service.util.db.server.CRUD;
+import pi.service.db.server.CRUD;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;

@@ -2,8 +2,8 @@ package pi.service.model.almacen;
 
 import java.io.Serializable;
 
+import pi.service.db.client.TableDB;
 import pi.service.model.empresa.Empresa;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="logistica.linea")
 public class Linea implements Serializable {

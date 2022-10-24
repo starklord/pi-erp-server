@@ -3,8 +3,7 @@ package pi.service.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
-import pi.service.util.db.client.TableDB;
+import pi.service.db.client.TableDB;
 
 @TableDB(name="public.impuesto")
 public class Impuesto implements Serializable {

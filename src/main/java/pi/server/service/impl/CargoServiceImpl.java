@@ -23,9 +23,9 @@ import java.util.List;
 import pi.service.model.rrhh.Cargo;
 import pi.service.model.rrhh.CargoPermiso;
 import pi.service.model.rrhh.Permiso;
+import pi.server.db.Update;
 import pi.service.CargoService;
-import pi.service.util.db.Update;
-import pi.service.util.db.server.CRUD;
+import pi.service.db.server.CRUD;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;

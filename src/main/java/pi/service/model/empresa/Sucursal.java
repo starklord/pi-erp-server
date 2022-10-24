@@ -2,8 +2,8 @@ package pi.service.model.empresa;
 
 import java.io.Serializable;
 
+import pi.service.db.client.TableDB;
 import pi.service.model.persona.Direccion;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="empresa.sucursal")
 public class Sucursal implements Serializable {

@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import pi.service.db.client.TableDB;
 import pi.service.model.Moneda;
 import pi.service.model.empresa.Sucursal;
 import pi.service.model.persona.Direccion;
 import pi.service.model.rrhh.Empleado;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="venta.proforma")
 public class Proforma implements Serializable {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pi.service.util.db;
+package pi.server.db;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pi.App;
-import pi.service.util.db.client.TableDB;
+import pi.service.db.client.TableDB;
 
 
 /**

@@ -3,10 +3,10 @@ package pi.service.model.venta;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import pi.service.db.client.FieldDB;
+import pi.service.db.client.TableDB;
 import pi.service.model.almacen.Almacen;
 import pi.service.model.almacen.Producto;
-import pi.service.util.db.client.FieldDB;
-import pi.service.util.db.client.TableDB;
 
 
 @TableDB(name="venta.proforma_det")

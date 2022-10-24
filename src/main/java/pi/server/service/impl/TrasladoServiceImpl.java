@@ -15,9 +15,9 @@ import pi.service.model.almacen.Almacen;
 import pi.service.model.almacen.Kardex;
 import pi.service.model.logistica.TrasladoInternoCab;
 import pi.service.model.logistica.TrasladoInternoDet;
+import pi.server.db.Update;
 import pi.service.TrasladoService;
-import pi.service.util.db.Update;
-import pi.service.util.db.server.CRUD;
+import pi.service.db.server.CRUD;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;
@@ -74,7 +74,7 @@ public class TrasladoServiceImpl extends HessianServlet implements TrasladoServi
 		nk.fecha = new Date();
 		nk.fecha_orden = ocd.traslado_cab.fecha;
 		nk.documento = ocd.traslado_cab.id+"";
-		nk.ingreso = ocd.cantidad.multiply(ocd.producto.contenido).add(ocd.cantidad_fraccion);
+		nk.ingreso = ocd.cantidad;
 		nk.salida = BigDecimal.ZERO;
 		nk.movimiento = Util.MOVIMIENTO_KARDEX_ENTRADA;
 		nk.orden_id = ocd.traslado_cab.id;
@@ -102,7 +102,7 @@ public class TrasladoServiceImpl extends HessianServlet implements TrasladoServi
 		nk.fecha_orden = ovd.traslado_cab.fecha;
 		nk.documento = ovd.traslado_cab.id+"";
 		nk.ingreso = BigDecimal.ZERO;
-		nk.salida = ovd.cantidad.multiply(ovd.producto.contenido).add(ovd.cantidad_fraccion);
+		nk.salida = ovd.cantidad;
 		nk.movimiento = Util.MOVIMIENTO_KARDEX_SALIDA;
 		nk.orden_id = ovd.traslado_cab.id;
 		nk.precio_costo = BigDecimal.ZERO;

@@ -1,4 +1,4 @@
-package pi.service.util.db;
+package pi.server.db;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -6,8 +6,8 @@ import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Date;
 
-import pi.service.util.db.client.FieldDB;
-import pi.service.util.db.client.TableDB;
+import pi.service.db.client.FieldDB;
+import pi.service.db.client.TableDB;
 
 import java.io.Serializable;
 

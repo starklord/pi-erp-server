@@ -9,8 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import com.caucho.hessian.server.HessianServlet;
 
 import pi.service.ParkingService;
+import pi.service.db.server.CRUD;
 import pi.service.model.parking.Ticket;
-import pi.service.util.db.server.CRUD;
 
 @WebServlet("pi/ParkingService")
 public class ParkingServiceImpl extends HessianServlet implements ParkingService {

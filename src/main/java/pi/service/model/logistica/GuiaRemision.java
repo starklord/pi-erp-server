@@ -3,10 +3,10 @@ package pi.service.model.logistica;
 import java.io.Serializable;
 import java.util.Date;
 
+import pi.service.db.client.TableDB;
 import pi.service.model.almacen.Almacen;
 import pi.service.model.persona.Direccion;
 import pi.service.model.persona.Persona;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="logistica.guia_remision")
 public class GuiaRemision implements Serializable {

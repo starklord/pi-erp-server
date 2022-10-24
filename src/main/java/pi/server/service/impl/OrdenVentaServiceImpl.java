@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import pi.App;
+import pi.server.db.Update;
 import pi.server.factory.Services;
 import pi.service.factory.Numbers;
 import pi.service.OrdenVentaService;
+import pi.service.db.server.CRUD;
 import pi.service.model.Moneda;
 import pi.service.model.almacen.Kardex;
 import pi.service.model.finanza.Caja;
@@ -17,8 +19,6 @@ import pi.service.model.venta.OrdenVenta;
 import pi.service.model.venta.OrdenVentaDet;
 import pi.service.model.venta.Proforma;
 import pi.service.util.Util;
-import pi.service.util.db.Update;
-import pi.service.util.db.server.CRUD;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;
@@ -247,7 +247,7 @@ public class OrdenVentaServiceImpl extends HessianServlet implements OrdenVentaS
         if (ovd.producto.unidad.id.intValue() == ovd.unidad.id) {
             nk.salida = ovd.cantidad;
         } else {
-            nk.salida = Numbers.divide(ovd.cantidad, ovd.producto.factor_conversion, 4).multiply(ovd.producto.contenido);
+            nk.salida = Numbers.divide(ovd.cantidad, ovd.producto.factor_conversion, 4);
         }
 
         nk.movimiento = Util.MOVIMIENTO_KARDEX_SALIDA;

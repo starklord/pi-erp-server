@@ -1,33 +1,25 @@
 package pi.server.service.impl;
 
-import java.io.File;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
-import pi.service.model.FormaPago;
-import pi.service.model.Moneda;
-import pi.service.model.almacen.Almacen;
+
+import javax.servlet.annotation.WebServlet;
+
+import com.caucho.hessian.server.HessianServlet;
+
+import pi.server.db.Update;
+import pi.service.OrdenCompraService;
+import pi.service.db.server.CRUD;
+import pi.service.factory.Numbers;
 import pi.service.model.almacen.Kardex;
 import pi.service.model.almacen.Producto;
-import pi.service.model.empresa.Sucursal;
-import pi.service.model.logistica.ImportacionInicial;
 import pi.service.model.logistica.OrdenCompra;
 import pi.service.model.logistica.OrdenCompraDet;
 import pi.service.model.logistica.OrdenEntradaSalida;
 import pi.service.model.logistica.OrdenEntradaSalidaDet;
-import pi.service.model.persona.Direccion;
 import pi.service.model.venta.OrdenVentaDet;
-import pi.service.factory.Numbers;
-import pi.service.OrdenCompraService;
 import pi.service.util.Util;
-import pi.service.util.db.Update;
-import pi.service.util.db.server.CRUD;
-
-import com.caucho.hessian.server.HessianServlet;
-import javax.servlet.annotation.WebServlet;
 
 @WebServlet("pi/OrdenCompraService")
 public class OrdenCompraServiceImpl extends HessianServlet implements OrdenCompraService {
@@ -186,7 +178,7 @@ public class OrdenCompraServiceImpl extends HessianServlet implements OrdenCompr
 		nk.fecha = new Date();
 		nk.fecha_orden = ocd.orden_compra.fecha;
 		nk.documento = ocd.orden_compra.documento_pago;
-		nk.ingreso = ocd.cantidad.multiply(ocd.producto.contenido);
+		nk.ingreso = ocd.cantidad;
 		nk.salida = BigDecimal.ZERO;
 		nk.movimiento = Util.MOVIMIENTO_KARDEX_ENTRADA;
 		nk.orden_id = ocd.orden_compra.id;
@@ -294,7 +286,6 @@ public class OrdenCompraServiceImpl extends HessianServlet implements OrdenCompr
 			if (cantidadLote > -1) {
 				if (!detalles.isEmpty()) {
 					Producto prod = detalles.get(0).articulo.producto;
-					prod.lote = prod.lote + cantidadLote;
 					CRUD.update(app,prod);
 				}
 			}
@@ -312,154 +303,7 @@ public class OrdenCompraServiceImpl extends HessianServlet implements OrdenCompr
 
 	@Override
 	public void importOrdenCompraInicial(String app) throws Exception {
-		readFile(app);
-	}
-
-	private void readFile(String app) throws Exception {
-		try {
-			String iso = "ISO-8859-1";
-			String utf = "UTF-8";
-			File file = new File("D:/empresas/emel/ordenes_compra_inicial.txt");
-			Scanner scan = new Scanner(file, iso);
-			scan.useDelimiter("\n");
-			String text = "";
-			List<ImportacionInicial> list = new ArrayList<>();
-			ProductoServiceImpl productoService = new ProductoServiceImpl();
-
-			while (scan.hasNext()) {
-				String line = scan.next();
-				Scanner scanLine = new Scanner(line);
-				scanLine.useDelimiter("\t");
-				// CODIGO NOMBRE DEL PRODUCTO PRINCIPIO M D CONTENIDO ACCION FARMACOLOGICA
-				// LABORATORIO CODIGO DE BARRAS
-				// 1 AB-BRONCOL 1200 NF/ INY IM. AMPICILINA 1200 VIAL 1 ANTIBIOTICO MEDIFARMA
-				// 7759307004374
-
-				String codigo = scanLine.next().trim();
-				String strFecha = scanLine.next().trim();
-				String lote = scanLine.next().trim();
-				String strCantidad = scanLine.next().trim();
-				String strCantidadContenido = scanLine.next().trim();
-
-				// fin lectura de datos
-
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				Date fecha = sdf.parse(strFecha);
-				BigDecimal cantidad = new BigDecimal(strCantidad);
-				BigDecimal cantidadContenido = new BigDecimal(strCantidadContenido);
-				ImportacionInicial ii = new ImportacionInicial();
-				ii.creador = "root";
-				ii.producto = productoService.getByCodigo(app, codigo);
-				ii.cantidad = cantidad;
-				ii.fecha_vencimiento = fecha;
-				ii.lote = lote;
-				ii.verificado = false;
-
-				CRUD.save(app,ii);
-				scanLine.close();
-			}
-			System.out.println(text);
-			scan.close();
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new Exception(ex.getMessage());
-
-		}
-	}
-
-	@Override
-	public List<ImportacionInicial> listImportacionesIniciales(String app, String codigo, String codigoBarras, String lote,
-			Date fechaVencimiento) throws Exception {
-		String[] require = { "producto", "producto.marca", "producto.linea" };
-		String filter = "where a.activo is true";
-		if (codigo != null) {
-			filter += " and b.codigo ilike '" + codigo + "'";
-		}
-		if (codigoBarras != null) {
-			filter += " and ( (b.codigo_barras1 ilike '" + codigoBarras + "') " + " or (b.codigo_barras2 ilike 	'"
-					+ codigoBarras + "') " + " or (b.codigo_barras3 ilike 	'" + codigoBarras + "') ) ";
-		}
-		if (lote != null) {
-			filter += " and a.lote ilike '" + lote + "'";
-		}
-		if (fechaVencimiento != null) {
-			filter += " and a.fecha_vencimiento ='" + fechaVencimiento.toString() + "'";
-		}
-		List<ImportacionInicial> list = CRUD.list(app,ImportacionInicial.class, require, filter);
-		return list;
-
-	}
-
-	@Override
-	public ImportacionInicial saveOrUpdateImportacionInicial(String app, boolean save, ImportacionInicial entity) throws Exception {
-		if (save) {
-			CRUD.save(app,entity);
-		} else {
-			CRUD.update(app,entity);
-		}
-		return entity;
-	}
-
-	@Override
-	public void deleteImportacionInicial(String app, ImportacionInicial entity) throws Exception {
-		CRUD.delete(app, entity);
-	}
-
-	@Override
-	public void convertImportacionesInicialesToOrdenescompra(String app) throws Exception {
-		try {
-			List<ImportacionInicial> listImportacionesIniciales = CRUD.list(app,ImportacionInicial.class,
-					"order by lote,producto asc");
-			OrdenCompra oc = new OrdenCompra();
-			oc.activo = true;
-			oc.almacen_entrega = new Almacen();
-			oc.almacen_entrega.id = 1;
-			oc.creador = "root";
-			oc.dias_credito = 0;
-			oc.direccion_proveedor = new Direccion();
-			oc.direccion_proveedor.id = 0;
-			oc.documento_pago = "R001-00000001";
-			oc.fecha = new Date();
-			oc.fecha_entrega = oc.fecha;
-			oc.forma_pago = new FormaPago();
-			oc.forma_pago.id = Util.FP_CREDITO;
-			oc.impuesto.id = 1;
-			oc.impuesto_incluido = true;
-			oc.moneda = new Moneda();
-			oc.moneda.id = 1;
-			oc.numero = 0;
-			oc.observaciones = "REGULARIZACION INVENTARIO INICIAL";
-			oc.sucursal = new Sucursal();
-			oc.sucursal.id = 0;
-			System.out.println("before tipocambio: " + BigDecimal.ONE);
-			oc.tipo_cambio = BigDecimal.ONE;
-			System.out.println("after tipocambio: " + oc.tipo_cambio);
-			oc.total = BigDecimal.ZERO;
-			oc.total_cobrado = BigDecimal.ZERO;
-			CRUD.save(app,oc);
-			//
-			for (ImportacionInicial ii : listImportacionesIniciales) {
-				OrdenCompraDet ocd = new OrdenCompraDet();
-				ocd.activo = true;
-				ocd.almacen = oc.almacen_entrega;
-				ocd.cantidad = ii.cantidad;
-				ocd.cantidad_tg = BigDecimal.ZERO;
-				ocd.creador = "root";
-				ocd.descuento = BigDecimal.ZERO;
-				ocd.fecha_vencimiento = ii.fecha_vencimiento;
-				ocd.lote = ii.lote;
-				ocd.orden_compra = oc;
-				ocd.precio_unitario = new BigDecimal("0.01");
-				ocd.producto = ii.producto;
-				ocd.total = ocd.precio_unitario.multiply(ocd.cantidad);
-				CRUD.save(app,ocd);
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new Exception(ex.getCause());
-		}
-
+		// readFile(app);
 	}
 
 	@Override
@@ -507,7 +351,7 @@ public class OrdenCompraServiceImpl extends HessianServlet implements OrdenCompr
 		nk.fecha_orden = ocd.orden_compra.fecha;
 		nk.documento = ocd.orden_compra.documento_pago;
 		nk.ingreso 	= BigDecimal.ZERO;
-		nk.salida 	= ocd.cantidad.multiply(ocd.producto.contenido);
+		nk.salida 	= ocd.cantidad;
 		nk.movimiento = Util.MOVIMIENTO_KARDEX_SALIDA;
 		nk.orden_id = ocd.orden_compra.id;
 		nk.precio_costo = ocd.precio_unitario;

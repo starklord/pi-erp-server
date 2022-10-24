@@ -3,7 +3,7 @@ package pi.service.model.rrhh;
 
 import java.io.Serializable;
 
-import pi.service.util.db.client.TableDB;
+import pi.service.db.client.TableDB;
 
 @TableDB(name="rrhh.cargo")
 public class Cargo implements Serializable {

@@ -3,7 +3,6 @@ package pi.service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import pi.service.model.logistica.ImportacionInicial;
 import pi.service.model.logistica.OrdenCompra;
 import pi.service.model.logistica.OrdenCompraDet;
 import pi.service.model.logistica.OrdenEntradaSalida;
@@ -37,11 +36,6 @@ public interface OrdenCompraService{
 	public void updateCostoPromedioToVentas(String app, List<OrdenVentaDet> list) throws Exception;
 	
 	
-	//para las importaciones iniciales
-	public List<ImportacionInicial> listImportacionesIniciales(String app, String codigo, String codigoBarras, String lote, Date fechaVencimiento) throws Exception;
-	public ImportacionInicial saveOrUpdateImportacionInicial(String app, boolean save, ImportacionInicial entity) throws Exception;
-	public void deleteImportacionInicial(String app, ImportacionInicial entity) throws Exception;
-	public void convertImportacionesInicialesToOrdenescompra(String app) throws Exception;
 	
 	public void asignarDocumentoPago(String app, String documentoPago, int ordenCompraId) throws Exception;
 	public List<OrdenCompraDet> listDetalles(String app, int sucursalId, Date inicio, Date fin) throws Exception;

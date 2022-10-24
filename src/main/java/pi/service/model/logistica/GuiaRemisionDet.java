@@ -3,8 +3,8 @@ package pi.service.model.logistica;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import pi.service.db.client.TableDB;
 import pi.service.model.almacen.Producto;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="logistica.guia_remision_det")
 public class GuiaRemisionDet implements Serializable {

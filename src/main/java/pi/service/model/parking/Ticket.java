@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import pi.service.db.client.TableDB;
 import pi.service.factory.Numbers;
 import pi.service.model.venta.OrdenVenta;
 import pi.service.util.Util;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name="parking.ticket")
 public class Ticket implements Serializable {

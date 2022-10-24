@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import pi.service.db.client.TableDB;
 import pi.service.factory.Numbers;
 import pi.service.model.almacen.Almacen;
 import pi.service.model.almacen.Producto;
 import pi.service.model.almacen.Unidad;
-import pi.service.util.db.client.TableDB;
 
 @TableDB(name = "venta.orden_venta_det")
 public class OrdenVentaDet implements Serializable {
