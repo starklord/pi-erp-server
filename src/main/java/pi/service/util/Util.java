@@ -619,4 +619,8 @@ public class Util {
         return Numbers.getBD(total.subtract(Numbers.divide(total, divisor, 8)), decimals);
     }
 
+    public static Boolean isPossitive(BigDecimal val){
+        return val.compareTo(new BigDecimal(0)) >0;
+    }
+
 }
