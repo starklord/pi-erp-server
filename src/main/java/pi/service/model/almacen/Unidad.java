@@ -13,6 +13,15 @@ public class Unidad implements Serializable {
 	public Boolean activo;
 	public String nombre;
 	public String abreviatura;
+
+	public Unidad(){
+
+	}
+
+	public Unidad(int id, String nombre){
+		this.id = id;
+		this.nombre = nombre;
+	}
 	
 	@Override
 	public String toString() {

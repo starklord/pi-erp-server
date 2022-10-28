@@ -16,18 +16,23 @@ package pi.server.service.impl;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import pi.server.factory.Services;
 import pi.service.LoginService;
 import pi.server.db.server.CRUD;
 import pi.service.model.MetaServer;
+import pi.service.model.TipoCambio;
+import pi.service.model.efact.TxxxSituacion;
 import pi.service.model.rrhh.CargoPermiso;
 import pi.service.model.rrhh.Empleado;
 import pi.service.model.rrhh.Permiso;
 import pi.service.util.Util;
 
 import com.caucho.hessian.server.HessianServlet;
+
 import javax.servlet.annotation.WebServlet;
 
 @WebServlet("pi/LoginService")
@@ -65,7 +70,22 @@ public class LoginServiceImpl extends HessianServlet implements LoginService {
 				throw new Exception("No cuenta con permisos para la sucursal seleccionada");
 			}
 		}
-
+		List<TxxxSituacion> efactSituaciones = Services.getEfact().listEfactSituaciones(app);
+        if (efactSituaciones.isEmpty()) {
+            throw new Exception("No se pudieron cargar efact_situaciones");
+        }
+		Map<String,String> mapEfactSituaciones = new HashMap<>();
+        for (TxxxSituacion item : efactSituaciones) {
+            String nomSitu = item.nom_situacion;
+            if (item.cod_situacion.equals(Util.COD_SITU_DESCARGAR_CDR)) {
+                nomSitu = "ENVIADO ACEPTADO";
+            }
+            if (item.cod_situacion.equals(Util.COD_SITU_DESCARGAR_CDR_OBS)) {
+                nomSitu = "ENVIADO ACEPTADO OBSERVADO";
+            }
+            mapEfactSituaciones.put(item.cod_situacion, nomSitu);
+        }
+		TipoCambio tc = Services.getTipoCambio().getLastTipoCambio(app);
 		MetaServer meta = new MetaServer();
 		meta.sucursal = empleado.sucursal; 
 		meta.empresa = empleado.empresa;
@@ -79,6 +99,12 @@ public class LoginServiceImpl extends HessianServlet implements LoginService {
 		meta.almacenes = Services.getAlmacen().listActives(app, meta.empresa.id);
 		meta.marcas = Services.getMarca().list(app, meta.empresa.id);
 		meta.lineas = Services.getLinea().list(app, meta.empresa.id);
+		meta.unidades = Services.getUnidad().list(app);
+		meta.impuestos = Services.getImpuesto().listActives(app);
+		meta.efactSituaciones = efactSituaciones;
+		meta.mapEfactSituaciones = mapEfactSituaciones;
+		meta.tc_compra = tc.compra;
+		meta.tc_venta = tc.venta;
 		meta.app = app;
         return meta;
     }

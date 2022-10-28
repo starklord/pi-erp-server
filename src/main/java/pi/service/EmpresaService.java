@@ -19,7 +19,7 @@ import pi.service.model.empresa.Empresa;
 
 public interface EmpresaService{
 	
-	public Empresa get(String app);
+	public Empresa get(String app) throws Exception ;
 	public List<Empresa> list(String app) throws Exception;
 	public List<Empresa> listActive(String app) throws Exception;
 	public Empresa save(String app, Empresa empresa) throws Exception;

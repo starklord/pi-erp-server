@@ -21,11 +21,12 @@ public class MantenimientoServiceImpl extends HessianServlet implements Mantenim
             CRUD.execute(app, update_fechas);
             OrdenVentaServiceImpl ovService = new OrdenVentaServiceImpl();
             DocumentoPagoServiceImpl dpService = new DocumentoPagoServiceImpl();
-            List<OrdenVenta> listOv = ovService.listCabsLightOnlyEfact(app, 500);
+            List<OrdenVenta> listOv = ovService.listCabsLightOnlyEfact(app, limite);
             Collections.reverse(listOv);
             for (OrdenVenta ov : listOv) {
                 dpService.saveByOrdenVenta(app, ov);
             }
+            ActualizarAnulados(app);
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new Exception(ex.getMessage());

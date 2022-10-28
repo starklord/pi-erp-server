@@ -32,10 +32,11 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
                 "sucursal.direccion",
                 "direccion_cliente",
                 "direccion_cliente.persona",
-                "forma_pago"
+                "forma_pago",
+                "impuesto"
         };
         String where = "where a.id = " + dpId + " order by a.id desc limit 1";
-        List<DocumentoPago> list = CRUD.list(app,DocumentoPago.class, req, where);
+        List<DocumentoPago> list = CRUD.list(app, DocumentoPago.class, req, where);
         return list.isEmpty() ? null : list.get(0);
     }
 
@@ -47,8 +48,9 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
                 "direccion_cliente.persona",
                 "forma_pago"
         };
-        String where = "where a.serie = '" + ov.documento_serie+ "' and a.numero = "+ov.documento_numero+" order by a.id desc limit 1";
-        List<DocumentoPago> list = CRUD.list(app,DocumentoPago.class, req, where);
+        String where = "where a.serie = '" + ov.documento_serie + "' and a.numero = " + ov.documento_numero
+                + " order by a.id desc limit 1";
+        List<DocumentoPago> list = CRUD.list(app, DocumentoPago.class, req, where);
         return list.isEmpty() ? null : list.get(0);
     }
 
@@ -59,7 +61,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         String filterCab = "where a.sucursal = " + sucursalId + " and a.fecha  between '" + inicio + "' and '" + fin
                 + "'";
         filterCab += " order by a.id desc";
-        List<DocumentoPago> listCabs = CRUD.list(app,DocumentoPago.class, reqCab, filterCab);
+        List<DocumentoPago> listCabs = CRUD.list(app, DocumentoPago.class, reqCab, filterCab);
         return listCabs;
     }
 
@@ -80,7 +82,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         filterCab += " and d.identificador ilike '%" + identificador + "%'";
         filterCab += " and d.apellidos ilike '%" + apellidos + "%'";
         filterCab += " order by a.id desc";
-        List<DocumentoPago> listCabs = CRUD.list(app,DocumentoPago.class, reqCab, filterCab);
+        List<DocumentoPago> listCabs = CRUD.list(app, DocumentoPago.class, reqCab, filterCab);
         return listCabs;
     }
 
@@ -89,7 +91,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         // primero iniciar las cabeceras
         String[] reqCab = { "sucursal", "direccion_cliente", "direccion_cliente.persona", "forma_pago", "moneda" };
         String filterCab = "where d.id = " + personaId + " order by a.id desc";
-        List<DocumentoPago> listCabs = CRUD.list(app,DocumentoPago.class, reqCab, filterCab);
+        List<DocumentoPago> listCabs = CRUD.list(app, DocumentoPago.class, reqCab, filterCab);
         return listCabs;
     }
 
@@ -100,16 +102,17 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
                 "producto.unidad",
                 "producto.marca",
                 "producto.linea",
-                "unidad" };
+                "unidad",
+                "documento_pago.impuesto" };
         String filter = "where documento_pago = " + dpId;
-        return CRUD.list(app,DocumentoPagoDet.class, req, filter);
+        return CRUD.list(app, DocumentoPagoDet.class, req, filter);
     }
 
     @Override
     public void saveByOrdenVenta(String app, OrdenVenta ov) throws Exception {
         String whereDp = "where a.serie = '" + ov.documento_serie +
                 "' and a.numero = " + ov.documento_numero;
-        List<DocumentoPago> listDp = CRUD.list(app,DocumentoPago.class, whereDp);
+        List<DocumentoPago> listDp = CRUD.list(app, DocumentoPago.class, whereDp);
         if (!listDp.isEmpty()) {
             return;
         }
@@ -134,6 +137,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         dp.guia_remision = ov.guia_remision;
         dp.orden_compra = ov.orden_compra;
         dp.orden_venta = ov;
+        dp.impuesto = ov.impuesto;
         dp.ind_situacion = Server.COD_SITU_POR_GENERAR_XML;
 
         OrdenVentaServiceImpl ordenVentaService = new OrdenVentaServiceImpl();
@@ -161,15 +165,15 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
 
     @Override
     public void save(String app, DocumentoPago cab, List<DocumentoPagoDet> dets) throws Exception {
-        try{
+        try {
             Update.beginTransaction(app);
-            CRUD.save(app,cab);
-            for(DocumentoPagoDet det : dets){
+            CRUD.save(app, cab);
+            for (DocumentoPagoDet det : dets) {
                 det.documento_pago = cab;
-                CRUD.save(app,det);
+                CRUD.save(app, det);
             }
             Update.commitTransaction(app);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             Update.rollbackTransaction(app);
             throw new Exception(ex.getMessage());
         }
@@ -177,7 +181,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
 
     @Override
     public void updateDP(String app, DocumentoPago dp) throws Exception {
-        CRUD.update(app,dp);
+        CRUD.update(app, dp);
     }
 
     @Override
@@ -191,7 +195,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         String where = "where a.serie = '" + serie + "' order by a.numero desc limit 1";
         List<NotaCredito> list = new ArrayList<>();
         try {
-            list = CRUD.list(app,NotaCredito.class, req, where);
+            list = CRUD.list(app, NotaCredito.class, req, where);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -208,7 +212,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         String where = "where a.serie = '" + serie + "' order by a.numero desc limit 1";
         List<DocumentoPago> list = new ArrayList<>();
         try {
-            list = CRUD.list(app,DocumentoPago.class, req, where);
+            list = CRUD.list(app, DocumentoPago.class, req, where);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -226,7 +230,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         String where = "where a.id = " + ncId + " order by a.id desc limit 1";
         List<NotaCredito> list = new ArrayList<>();
         try {
-            list = CRUD.list(app,NotaCredito.class, req, where);
+            list = CRUD.list(app, NotaCredito.class, req, where);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -234,7 +238,8 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
     }
 
     @Override
-    public List<NotaCredito> listNotasCredito(String app, int sucursalId, Date inicio, Date fin, String serie, String numero,
+    public List<NotaCredito> listNotasCredito(String app, int sucursalId, Date inicio, Date fin, String serie,
+            String numero,
             String identificador, String apellidos) {
         String[] reqCab = { "sucursal", "documento_pago",
                 "documento_pago.direccion_cliente", "documento_pago.direccion_cliente.persona" };
@@ -252,7 +257,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         filterCab += " order by a.id desc";
         List<NotaCredito> listCabs = new ArrayList<>();
         try {
-            listCabs = CRUD.list(app,NotaCredito.class, reqCab, filterCab);
+            listCabs = CRUD.list(app, NotaCredito.class, reqCab, filterCab);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -270,7 +275,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         String filter = "where a.nota_credito = " + ncId;
         List<NotaCreditoDet> list = new ArrayList<>();
         try {
-            list = CRUD.list(app,NotaCreditoDet.class, req, filter);
+            list = CRUD.list(app, NotaCreditoDet.class, req, filter);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -283,10 +288,10 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
             Update.beginTransaction(app);
             CRUD.execute(app, "update venta.documento_pago set observaciones = observaciones||'NC" +
                     nc.getNotaCreditoStr() + "' where id = " + nc.documento_pago.id);
-            CRUD.save(app,nc);
-            for(NotaCreditoDet ncd : listDets){
+            CRUD.save(app, nc);
+            for (NotaCreditoDet ncd : listDets) {
                 ncd.nota_credito = nc;
-                CRUD.save(app,ncd);
+                CRUD.save(app, ncd);
             }
             Update.commitTransaction(app);
         } catch (Exception ex) {
@@ -297,22 +302,22 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
 
     @Override
     public void updateNotaCredito(String app, NotaCredito nc) throws Exception {
-        CRUD.update(app,nc);
+        CRUD.update(app, nc);
     }
 
     @Override
     public void anular(String app, DocumentoPago dp) throws Exception {
-        try{
+        try {
             Update.beginTransaction(app);
-            Services.getOrdenVenta().anular(app,dp.orden_venta.id);
+            Services.getOrdenVenta().anular(app, dp.orden_venta.id);
             CRUD.execute(app, "update venta.documento_pago set activo = false where id = " + dp.id);
             Update.commitTransaction(app);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             Update.rollbackTransaction(app);
             ex.printStackTrace();
             throw new Exception(ex.getMessage());
         }
-        
+
     }
 
     @Override
@@ -320,7 +325,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         List<ResumenDiario> list = new ArrayList<>();
         try {
             String where = "where fecha::date = '" + fecha.toString() + "'::date order by numero desc limit 1";
-            list = CRUD.list(app,ResumenDiario.class, where);
+            list = CRUD.list(app, ResumenDiario.class, where);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -332,7 +337,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         String where = "where fecha between '" + inicio + "' and '" + fin + "' order by fecha desc";
         List<ResumenDiario> list = new ArrayList<>();
         try {
-            list = CRUD.list(app,ResumenDiario.class, where);
+            list = CRUD.list(app, ResumenDiario.class, where);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -347,7 +352,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
                 "documento_pago.direccion_cliente",
                 "documento_pago.direccion_cliente.persona" };
         String filter = "where resumen_diario = " + rdId;
-        return CRUD.list(app,ResumenDiarioDet.class, req, filter);
+        return CRUD.list(app, ResumenDiarioDet.class, req, filter);
     }
 
     @Override
@@ -363,15 +368,15 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
             // rd.numero = rdlast == null ? 1 : (rdlast.numero + 1);
             // List<Object> dets = new ArrayList<>();
             // for (DocumentoPago dp : docspago) {
-            //     ResumenDiarioDet rdd = new ResumenDiarioDet();
-            //     rdd.activo = true;
-            //     rdd.creador = rd.creador;
-            //     rdd.documento_pago = dp;
-            //     rdd.resumen_diario = rd;
-            //     dets.add(rdd);
-            //     dp.observaciones = "[RD-" + Util.formatDateDMY(rd.fecha) + "-"
-            //             + Util.completeWithZeros(rd.numero + "", 3) + "] " + dp.observaciones;
-            //     CRUD.update(dp);
+            // ResumenDiarioDet rdd = new ResumenDiarioDet();
+            // rdd.activo = true;
+            // rdd.creador = rd.creador;
+            // rdd.documento_pago = dp;
+            // rdd.resumen_diario = rd;
+            // dets.add(rdd);
+            // dp.observaciones = "[RD-" + Util.formatDateDMY(rd.fecha) + "-"
+            // + Util.completeWithZeros(rd.numero + "", 3) + "] " + dp.observaciones;
+            // CRUD.update(dp);
             // }
             // CRUD.saveCabAndDets(rd, dets, "resumen_diario");
 
@@ -379,7 +384,5 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
             throw new Exception(ex.getMessage());
         }
     }
-
-    
 
 }

@@ -81,7 +81,7 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 		try {
 
 			if (save) {
-				if (object.codigo.trim().isEmpty()) {
+				if (object.codigo==null||object.codigo.trim().isEmpty()) {
 					System.out.println("entrando a crear un codigo");
 					String filter = " order by codigo_interno desc limit 1";
 					List<Producto> list = CRUD.list(app, Producto.class, filter);

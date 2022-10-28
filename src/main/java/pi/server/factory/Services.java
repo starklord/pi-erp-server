@@ -9,6 +9,7 @@ import pi.server.service.impl.DireccionServiceImpl;
 import pi.server.service.impl.DocumentoIdentidadServiceImpl;
 import pi.server.service.impl.DocumentoPagoServiceImpl;
 import pi.server.service.impl.DocumentoTipoServiceImpl;
+import pi.server.service.impl.EfactServiceImpl;
 import pi.server.service.impl.EmpleadoServiceImpl;
 import pi.server.service.impl.EmpresaServiceImpl;
 import pi.server.service.impl.FinanzaServiceImpl;
@@ -27,6 +28,7 @@ import pi.server.service.impl.ProductoServiceImpl;
 import pi.server.service.impl.ProveedorServiceImpl;
 import pi.server.service.impl.StockProductoServiceImpl;
 import pi.server.service.impl.SucursalServiceImpl;
+import pi.server.service.impl.TipoCambioServiceImpl;
 import pi.server.service.impl.UbigeoServiceImpl;
 import pi.server.service.impl.UnidadServiceImpl;
 import pi.server.service.impl.UtilidadServiceImpl;
@@ -39,6 +41,7 @@ import pi.service.DireccionService;
 import pi.service.DocumentoIdentidadService;
 import pi.service.DocumentoPagoService;
 import pi.service.DocumentoTipoService;
+import pi.service.EfactService;
 import pi.service.EmpleadoService;
 import pi.service.EmpresaService;
 import pi.service.FinanzaService;
@@ -57,9 +60,11 @@ import pi.service.ProductoService;
 import pi.service.ProveedorService;
 import pi.service.StockProductoService;
 import pi.service.SucursalService;
+import pi.service.TipoCambioService;
 import pi.service.UbigeoService;
 import pi.service.UnidadService;
 import pi.service.UtilidadService;
+import pi.service.model.TipoCambio;
 
 public class Services {
 
@@ -73,6 +78,7 @@ public class Services {
     private static DocumentoIdentidadService documentoIdentidad     = new DocumentoIdentidadServiceImpl();
     private static DocumentoTipoService documentoTipo               = new DocumentoTipoServiceImpl();
     private static EmpleadoService empleado                         = new EmpleadoServiceImpl();
+    private static EfactService efact                               = new EfactServiceImpl();
     private static EmpresaService empresa                           = new EmpresaServiceImpl();
     private static FinanzaService finanza                           = new FinanzaServiceImpl();
     private static FormaPagoService formaPago                       = new FormaPagoServiceImpl();
@@ -90,6 +96,7 @@ public class Services {
     private static ProveedorService proveedor                       = new ProveedorServiceImpl();
     private static SucursalService sucursal                         = new SucursalServiceImpl();
     private static StockProductoService stockProducto               = new StockProductoServiceImpl();
+    private static TipoCambioService tipoCambio                     = new TipoCambioServiceImpl();
     private static UbigeoService ubigeo                             = new UbigeoServiceImpl();
     private static UnidadService unidad                             = new UnidadServiceImpl();
     private static UtilidadService utilidad                         = new UtilidadServiceImpl();
@@ -128,6 +135,10 @@ public class Services {
 
     public static DocumentoTipoService getDocumentoTipo() {
         return documentoTipo;
+    }
+    
+    public static EfactService getEfact() {
+        return efact;
     }
 
     public static EmpleadoService getEmpleado() {
@@ -200,6 +211,10 @@ public class Services {
 
     public static StockProductoService getStockProducto() {
         return stockProducto;
+    }
+
+    public static TipoCambioService getTipoCambio() {
+        return tipoCambio;
     }
 
     public static UbigeoService getUbigeo() {

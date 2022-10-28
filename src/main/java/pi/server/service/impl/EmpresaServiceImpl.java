@@ -1,10 +1,13 @@
 package pi.server.service.impl;
 
+import java.io.InputStream;
 import java.util.List;
 
 import pi.service.EmpresaService;
+import pi.App;
 import pi.server.db.server.CRUD;
 import pi.service.model.empresa.Empresa;
+import pi.service.util.Util;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;
@@ -12,38 +15,37 @@ import javax.servlet.annotation.WebServlet;
 @WebServlet("pi/EmpresaService")
 public class EmpresaServiceImpl extends HessianServlet implements EmpresaService {
 
-    public static Class table = Empresa.class; 
+	public static Class table = Empresa.class;
 
 	@Override
 	public List<Empresa> list(String app) throws Exception {
-		String[] required = {"documento_tipo_xdefecto" };
-		List<Empresa> list = CRUD.list(app,table,required);
+		String[] required = { "documento_tipo_xdefecto" };
+		List<Empresa> list = CRUD.list(app, table, required);
 		return list;
 	}
 
 	@Override
-	public Empresa get(String app) {
-		String[] required = {"documento_tipo_xdefecto" };
+	public Empresa get(String app) throws Exception {
+		//para actualizar los datos iniciales de la empresa...
+		updateDB(app);
+		//Fin de actualizacion de datos iniciales de la empresa.
+		String[] required = { "documento_tipo_xdefecto" };
 		Empresa empresa = null;
-		try {
-			List<Empresa> list = CRUD.list(app,table, required);
-			empresa = list.isEmpty() ? null : list.get(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		List<Empresa> list = CRUD.list(app, table, required);
+		empresa = list.isEmpty() ? null : list.get(0);
 		return empresa;
 	}
 
 	@Override
 	public List<Empresa> listActive(String app) throws Exception {
-		String[] required = {"documento_tipo_xdefecto" };
-		List<Empresa> list = CRUD.list(app,table, required, "where a.activo is true");
+		String[] required = { "documento_tipo_xdefecto" };
+		List<Empresa> list = CRUD.list(app, table, required, "where a.activo is true");
 		return list;
 	}
 
 	@Override
 	public Empresa save(String app, Empresa empresa) throws Exception {
-		CRUD.save(app,empresa);
+		CRUD.save(app, empresa);
 		return empresa;
 	}
 
@@ -54,8 +56,22 @@ public class EmpresaServiceImpl extends HessianServlet implements EmpresaService
 
 	@Override
 	public Empresa saveOrUpdate(String app, boolean save, Empresa empresa) throws Exception {
-		CRUD.save(app,empresa);
+		CRUD.save(app, empresa);
 		return empresa;
 	}
-    
+
+	private void updateDB(String app) throws Exception {
+		try {
+			System.out.println("actualizando datos de la empresa...");
+			InputStream is = App.class.getResourceAsStream("/pi/pisqldb.txt");
+			String update = Util.readFile(is);
+			CRUD.execute(app, update);
+			System.out.println("Datos de la empresa actualizados exitosamente.");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new Exception("no se pudo cargar los datos de la empresa");
+		}
+
+	}
+
 }

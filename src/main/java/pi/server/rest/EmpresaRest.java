@@ -23,7 +23,7 @@ public class EmpresaRest {
     @GET
     @Path("/get") 
     @Produces(MediaType.APPLICATION_JSON)
-    public Empresa get(@QueryParam("app") String app) {
+    public Empresa get(@QueryParam("app") String app) throws Exception {
         
         Empresa  emp = Services.getEmpresa().get(app);
         System.out.println("empresa: " + emp.toString());

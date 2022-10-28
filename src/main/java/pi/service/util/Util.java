@@ -1,7 +1,14 @@
 package pi.service.util;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.security.InvalidKeyException;
@@ -27,8 +34,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
-public class Util {
+import pi.service.factory.Numbers;
 
+public class Util {
 
     public static String[] EVAS = { "127.0.0.1", "144.91.125.121", "127.0.0.1", "144.126.132.140", "154.53.32.33" };
     public static int waitCursorCount = 0;
@@ -40,14 +48,21 @@ public class Util {
     public static int MONEDA_SOLES_ID = 1;
     public static int MONEDA_DOLARES_ID = 2;
 
-    //para los tipos de sistema:
+    // para los tipos de sistema:
     public static char TIPO_SISTEMA_COMERCIAL = 'C';
     public static char TIPO_SISTEMA_DROGUERIA = 'D';
     public static char TIPO_SISTEMA_FARMACIA = 'F';
     public static char TIPO_SISTEMA_PARKING = 'p';
 
+    // para los productos
+    public static String NACIONAL = "Nacional";
+    public static String IMPORTADO = "Importado";
+    public static String PRODUCTO = "Producto";
+    public static String SERVICIO = "Servicio";
+    public static String CODIGO_PRODUCTO = "Codigo de Producto";
+    public static String SERIE_ARTICULO = "Serie de Articulo";
 
-    //para todas:
+    // para todas:
     public static String TODAS_MARCAS = "Todas las Marcas";
     public static String TODAS_LINEAS = "Todas las Lineas";
     public static String OCULTAR_ANULADOS = "Ocultar Anulados";
@@ -76,7 +91,6 @@ public class Util {
     public static final char MOVIMIENTO_KARDEX_ENTRADA = 'E';
     public static final char MOVIMIENTO_KARDEX_SALIDA = 'S';
 
-
     // PARA LOS PERMISOS
     public static final int PER_ROOT = 0;
     public static final int PER_VENDEDOR = 1;
@@ -104,19 +118,19 @@ public class Util {
     public static String PENDIENTE = "PENDIENTE";
     public static String NUESTRO = "Nuestro";
     public static String PARTICULAR = "Particular";
-    public static final String ACTIVO       = "Activo";
-    public static final String INACTIVO     = "Inactivo";
-    public static final String Masculino    = "Masculino";
-    public static final String Femenimo     = "Femenino";
-    public static final String ES_PRODUCTO  = "ES PRODUCTO";
-    public static final String ES_SERVICIO  = "ES SERVICIO";
+    public static final String ACTIVO = "Activo";
+    public static final String INACTIVO = "Inactivo";
+    public static final String Masculino = "Masculino";
+    public static final String Femenimo = "Femenino";
+    public static final String ES_PRODUCTO = "ES PRODUCTO";
+    public static final String ES_SERVICIO = "ES SERVICIO";
     public static final String TIPO_CLIENTE_NORMAL = "Normal";
     public static final String TIPO_CLIENTE_PREFERENCIAL = "Preferencial";
     public static final String TIPO_CLIENTE_LISTA_NEGRA = "Lista Negra";
 
-    public static final String IGV_18_STR           = "18%";
-    public static final String IGV_INAFECTO_STR     = "Inafecto";
-    public static final String IGV_EXONERADO_STR    = "Exonerado";
+    public static final String IGV_18_STR = "18%";
+    public static final String IGV_INAFECTO_STR = "Inafecto";
+    public static final String IGV_EXONERADO_STR = "Exonerado";
 
     public static final BigDecimal TARIFAXHORA = new BigDecimal(3);
     public static final BigDecimal TARIFAXNOCHE = new BigDecimal(10);
@@ -153,27 +167,25 @@ public class Util {
     public static final int FP_DEPOSITO = 8;
     public static final int FP_LETRAS = 9;
 
-    public static final int RT_OTROS_INGRESOS 	= 0;
-    public static final int RT_COBRO_VENTA 		= 2;
-    public static final int RT_COBRO_DEPOSITO 	= 23;
-    public static final int RT_COBRO_CHEQUE		= 4;
-    public static final int RT_COBRO_TARJETA 	= 3;
-    public static final int RT_COBRO_EFECTIVO 	= 9;
-    public static final int RT_OTROS_EGRESOS 	= -1;
-    public static final int RT_PAGO_EFECTIVO 	= 5;
-    public static final int RT_PAGO_DEPOSITO 	= 6;
-    public static final int RT_PAGO_TARJETA 	= 7;
-    public static final int RT_PAGO_CHEQUE 		= 8;
+    public static final int RT_OTROS_INGRESOS = 0;
+    public static final int RT_COBRO_VENTA = 2;
+    public static final int RT_COBRO_DEPOSITO = 23;
+    public static final int RT_COBRO_CHEQUE = 4;
+    public static final int RT_COBRO_TARJETA = 3;
+    public static final int RT_COBRO_EFECTIVO = 9;
+    public static final int RT_OTROS_EGRESOS = -1;
+    public static final int RT_PAGO_EFECTIVO = 5;
+    public static final int RT_PAGO_DEPOSITO = 6;
+    public static final int RT_PAGO_TARJETA = 7;
+    public static final int RT_PAGO_CHEQUE = 8;
 
-    public static final SimpleDateFormat SDF_HOURS         = new SimpleDateFormat("HH:mm:ss");
-    public static final SimpleDateFormat SDF_DATE         = new SimpleDateFormat("dd/MM/yyyy");
-    public static final SimpleDateFormat SDF_DATE_HOURS         = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    public static final SimpleDateFormat SDF_DATE_HOURS_SQLTE   = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    public static final SimpleDateFormat SDF_HOURS = new SimpleDateFormat("HH:mm:ss");
+    public static final SimpleDateFormat SDF_DATE = new SimpleDateFormat("dd/MM/yyyy");
+    public static final SimpleDateFormat SDF_DATE_HOURS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static final SimpleDateFormat SDF_DATE_HOURS_SQLTE = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     public static int PXH_DIF = 35;
     public static int PXW_DIF = 200;
-
-    
 
     // para el tratamiento de los errores:
     public static String NO_HA_INGRESADO = "NO HA INGRESADO UN DATO: ";
@@ -226,7 +238,6 @@ public class Util {
 
     // para la situacion de las notas de credito
 
-
     public static final String COD_NOTA_CREDITO = "07";
     public static final String COD_NOTA_DEBITO = "08";
     public static final String COD_TIPONC_ANULACION_OPERACION = "01";
@@ -275,10 +286,12 @@ public class Util {
     public static String formatDate(Date date, SimpleDateFormat sdf) {
         return sdf.format(date);
     }
+
     public static String formatDate(Date date, String pattern) {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         return sdf.format(date);
     }
+
     public static String formatDateDMY(Date date) {
         String pattern = "dd-MM-yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
@@ -342,7 +355,6 @@ public class Util {
     public static boolean isPar(int n) {
         return n % 2 == 0;
     }
-
 
     public static String formatDateToHourAndMinutes(Date date) {
         if (date == null) {
@@ -518,6 +530,33 @@ public class Util {
         for (File file : files) {
             file.delete();
         }
+
+    }
+
+    public static String readFile(InputStream is) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line + System.lineSeparator());
+        }
+        return sb.toString();
+    }
+
+    public static String readFile(String filePath) throws Exception {
+        File file = new File(filePath);
+        FileReader fr = new FileReader(file);
+        char[] chars = new char[(int) file.length()];
+        fr.read(chars);
+        fr.close();
+        return new String(chars);
+    }
+
+    public static void writeFile(String filePath, String content) throws Exception {
+        FileWriter fw = new FileWriter(filePath);
+        PrintWriter pw = new PrintWriter(fw);
+        pw.print(content);
+        fw.close();
     }
 
     public static String desencriptar(String textoEncriptado) {
@@ -569,5 +608,15 @@ public class Util {
         }
     }
 
+    public static BigDecimal getOpGravadas(BigDecimal total, int decimals, BigDecimal valor_impuesto) {
+
+        BigDecimal divisor = valor_impuesto.add(BigDecimal.ONE);
+        return Numbers.getBD(Numbers.divide(total, divisor, 8), decimals);
+    }
+
+    public static BigDecimal getIgv(BigDecimal total, int decimals, BigDecimal valor_impuesto) {
+        BigDecimal divisor = valor_impuesto.add(BigDecimal.ONE);
+        return Numbers.getBD(total.subtract(Numbers.divide(total, divisor, 8)), decimals);
+    }
 
 }

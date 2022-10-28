@@ -38,6 +38,7 @@ public class Producto implements Serializable {
 	public Character procedencia;
 	public String cod_dig;
 	public String registro_sanitario;
+	public Character tipo_control;//Codigo Serie
 	
 	@Override
 	public String toString() {
@@ -49,7 +50,11 @@ public class Producto implements Serializable {
 	}
 
 	public String getCodigo(){
-		return Util.completeWithZeros(codigo,7);
+		return Util.completeWithZeros(codigo,6);
+	}
+
+	public String getCodigoUbicacion(){
+		return codigo_ubicacion;
 	}
 
 	public String getMarcaStr(){
@@ -93,7 +98,7 @@ public class Producto implements Serializable {
 	}
 
 	public String getCodigoDigemid(){
-		return Util.completeWithZeros(cod_dig,7);
+		return cod_dig;
 	}
 
 	public String getRegistroSanitario(){
