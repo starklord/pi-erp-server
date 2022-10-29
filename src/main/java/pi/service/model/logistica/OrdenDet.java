@@ -3,10 +3,12 @@ package pi.service.model.logistica;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import pi.service.db.client.TableDB;
 import pi.service.factory.Numbers;
 import pi.service.model.almacen.Producto;
 import pi.service.model.almacen.Unidad;
 
+@TableDB(name = "logistica.orden_det")
 public class OrdenDet implements Serializable {
 
     public Integer id;

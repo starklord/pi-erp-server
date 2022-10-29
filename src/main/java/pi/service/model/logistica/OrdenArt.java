@@ -3,8 +3,10 @@ package pi.service.model.logistica;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import pi.service.db.client.TableDB;
 import pi.service.model.almacen.Articulo;
 
+@TableDB(name = "logistica.orden_arg")
 public class OrdenArt implements Serializable {
 
     public Integer id;

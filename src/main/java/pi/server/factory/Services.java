@@ -21,6 +21,7 @@ import pi.server.service.impl.MantenimientoServiceImpl;
 import pi.server.service.impl.MarcaServiceImpl;
 import pi.server.service.impl.MonedaServiceImpl;
 import pi.server.service.impl.OrdenCompraServiceImpl;
+import pi.server.service.impl.OrdenServiceImpl;
 import pi.server.service.impl.OrdenVentaServiceImpl;
 import pi.server.service.impl.PermisoServiceImpl;
 import pi.server.service.impl.PersonaServiceImpl;
@@ -53,6 +54,7 @@ import pi.service.MantenimientoService;
 import pi.service.MarcaService;
 import pi.service.MonedaService;
 import pi.service.OrdenCompraService;
+import pi.service.OrdenService;
 import pi.service.OrdenVentaService;
 import pi.service.PermisoService;
 import pi.service.PersonaService;
@@ -86,6 +88,7 @@ public class Services {
     private static LineaService linea                               = new LineaServiceImpl();
     private static LoginService login                               = new LoginServiceImpl();
     private static MarcaService marca                               = new MarcaServiceImpl();
+    private static OrdenService orden                               = new OrdenServiceImpl();
     private static OrdenCompraService ordenCompra                   = new OrdenCompraServiceImpl();
     private static OrdenVentaService ordenVenta                     = new OrdenVentaServiceImpl();
     private static MonedaService moneda                             = new MonedaServiceImpl();
@@ -187,6 +190,10 @@ public class Services {
 
     public static MonedaService getMoneda() {
         return moneda;
+    }
+
+    public static OrdenService getOrden() {
+        return orden;
     }
 
     public static PersonaService getPersona() {

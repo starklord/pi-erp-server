@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS logistica.orden
     cliente_string character varying COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
     direccion_proveedor character varying COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
     direccion_cliente character varying COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
-    fecha timestamp without time zone[] NOT NULL,
+    fecha timestamp without time zone NOT NULL,
     fecha_entrega date NOT NULL,
     sucursal integer NOT NULL,
     tipo character varying(1) COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
@@ -159,12 +159,14 @@ ALTER TABLE IF EXISTS logistica.articulo
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
+ALTER TABLE IF EXISTS logistica.orden drop constraint if exists orden_almacen_origen_fk;
 ALTER TABLE IF EXISTS logistica.orden
     ADD CONSTRAINT orden_almacen_origen_fk FOREIGN KEY (almacen_origen)
     REFERENCES logistica.almacen (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
+ALTER TABLE IF EXISTS logistica.orden drop constraint if exists orden_almacen_destino_fk;
 ALTER TABLE IF EXISTS logistica.orden
     ADD CONSTRAINT orden_almacen_destino_fk FOREIGN KEY (almacen_destino)
     REFERENCES logistica.almacen (id) MATCH SIMPLE

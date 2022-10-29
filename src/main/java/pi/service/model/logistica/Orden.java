@@ -4,14 +4,15 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import pi.service.db.client.TableDB;
 import pi.service.model.FormaPago;
 import pi.service.model.Moneda;
-import pi.service.model.TipoCambio;
 import pi.service.model.almacen.Almacen;
 import pi.service.model.empresa.Sucursal;
 import pi.service.model.persona.Persona;
 import pi.service.util.Util;
 
+@TableDB(name = "logistica.orden")
 public class Orden implements Serializable {
 
     public Integer id;
@@ -29,7 +30,7 @@ public class Orden implements Serializable {
     public Character tipo;//Venta,Compra,Trasladointerno,transFormacion,Entradasimple,Salidasimple
     public Integer numero;
     public Moneda moneda;
-    public TipoCambio tipo_cambio;
+    public BigDecimal tipo_cambio;
     public FormaPago forma_pago;
     public Integer dias_credito;
     public BigDecimal total;
@@ -60,6 +61,14 @@ public class Orden implements Serializable {
 
     public String getAlmacenDestino(){
         return almacen_destino.codigo;
+    }
+
+    public String getAprobadoPorStr(){
+        return aprobado_por==null?"-":aprobado_por.toString();
+    }
+
+    public String getAtendidoPorStr(){
+        return atendido_por==null?"-":atendido_por.toString();
     }
 
     public String getFechaStr(){
