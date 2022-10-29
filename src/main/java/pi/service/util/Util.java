@@ -77,19 +77,25 @@ public class Util {
     public static String UNIDAD_GA = "GA";// GALONES
     public static int UNIDAD_UN_ID = 0;
 
-    // para las ordenes de entrada salida
-    public static char TIPO_ORDEN_COMPRA = 'C';
-    public static char TIPO_ORDEN_VENTA = 'V';
-    public static char TIPO_ORDEN_TRASLADO = 'T';
-    public static char TIPO_ORDEN_REGULARIZACION = 'R';
-    public static char TIPO_ORDEN_ENTRADA = 'E';
-    public static char TIPO_ORDEN_SALIDA = 'S';
+    // para las ordenes de entradas y salidas
+    public static char TIPO_ORDEN_VENTA             = 'V';
+    public static char TIPO_ORDEN_COMPRA            = 'C';
+    public static char TIPO_ORDEN_RECEPCION         = 'R';
+    public static char TIPO_ORDEN_TRASLADO_INTERNO  = 'T';
+    public static char TIPO_ORDEN_TRANSFORMACION    = 'F';
+    public static char TIPO_ORDEN_ENTRADA           = 'E';
+    public static char TIPO_ORDEN_SALIDA            = 'S';
+
+    //PARA LOS ALMACENES:
+    public static int ALMACEN_PRINCIPAL_ID  = 1;
+    public static int ALMACEN_CLIENTE_ID    = 2;
+    public static int ALMACEN_PROVEEDOR_ID  = 3;
 
     public static final char MOVIMIENTO_EGRESO = 'E';
     public static final char MOVIMIENTO_INGRESO = 'I';
 
-    public static final char MOVIMIENTO_KARDEX_ENTRADA = 'E';
-    public static final char MOVIMIENTO_KARDEX_SALIDA = 'S';
+    public static final char MOVIMIENTO_ENTRADA = 'E';
+    public static final char MOVIMIENTO_SALIDA = 'S';
 
     // PARA LOS PERMISOS
     public static final int PER_ROOT = 0;

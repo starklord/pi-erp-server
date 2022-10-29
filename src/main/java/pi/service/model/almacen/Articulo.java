@@ -13,7 +13,8 @@ public class Articulo implements Serializable {
 	public Boolean activo;
 	public Character estado;//K:OK P:Pendiente
 	public Producto producto;
-	public Almacen almacen;
+	public Boolean es_unico;
+	// public Ordenartic;
 	public String serie;
 	public String lote;
 	public Date fecha_vencimiento;

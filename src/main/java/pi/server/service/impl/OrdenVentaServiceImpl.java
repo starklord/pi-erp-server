@@ -250,7 +250,7 @@ public class OrdenVentaServiceImpl extends HessianServlet implements OrdenVentaS
             nk.salida = Numbers.divide(ovd.cantidad, ovd.producto.factor_conversion, 4);
         }
 
-        nk.movimiento = Util.MOVIMIENTO_KARDEX_SALIDA;
+        nk.movimiento = Util.MOVIMIENTO_SALIDA;
         nk.orden_id = ovd.orden_venta.id;
         nk.precio_costo = BigDecimal.ZERO;
         nk.precio_venta = ovd.precio_unitario;
@@ -286,14 +286,14 @@ public class OrdenVentaServiceImpl extends HessianServlet implements OrdenVentaS
         }
 
         nk.salida = BigDecimal.ZERO;
-        nk.movimiento = Util.MOVIMIENTO_KARDEX_ENTRADA;
+        nk.movimiento = Util.MOVIMIENTO_ENTRADA;
         nk.orden_id = ovd.orden_venta.id;
         nk.precio_costo = BigDecimal.ZERO;
         nk.precio_venta = ovd.precio_unitario;
         nk.producto = ovd.producto;
         nk.stock_anterior = ok == null ? BigDecimal.ZERO : ok.stock;
         nk.stock = nk.stock_anterior.add(nk.ingreso);
-        nk.tipo = Util.TIPO_ORDEN_REGULARIZACION;
+        nk.tipo = Util.TIPO_ORDEN_TRANSFORMACION;
         nk.usado = BigDecimal.ZERO;
         nk.identificador = ovd.orden_venta.direccion_cliente.persona.identificador;
         CRUD.save(app,nk);
@@ -317,14 +317,14 @@ public class OrdenVentaServiceImpl extends HessianServlet implements OrdenVentaS
         nk.documento = ovd.orden_venta.documento_serie + "-" + numero;
         nk.salida = ovd.cantidad;
         nk.ingreso = BigDecimal.ZERO;
-        nk.movimiento = Util.MOVIMIENTO_KARDEX_SALIDA;
+        nk.movimiento = Util.MOVIMIENTO_SALIDA;
         nk.orden_id = ovd.orden_venta.id;
         nk.precio_costo = BigDecimal.ZERO;
         nk.precio_venta = ovd.precio_unitario;
         nk.producto = ovd.producto;
         nk.stock_anterior = ok == null ? BigDecimal.ZERO : ok.stock;
         nk.stock = nk.stock_anterior.subtract(nk.salida);
-        nk.tipo = Util.TIPO_ORDEN_REGULARIZACION;
+        nk.tipo = Util.TIPO_ORDEN_TRANSFORMACION;
         nk.usado = BigDecimal.ZERO;
         nk.identificador = ovd.orden_venta.direccion_cliente.persona.identificador;
         CRUD.save(app,nk);

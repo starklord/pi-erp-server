@@ -180,7 +180,7 @@ public class OrdenCompraServiceImpl extends HessianServlet implements OrdenCompr
 		nk.documento = ocd.orden_compra.documento_pago;
 		nk.ingreso = ocd.cantidad;
 		nk.salida = BigDecimal.ZERO;
-		nk.movimiento = Util.MOVIMIENTO_KARDEX_ENTRADA;
+		nk.movimiento = Util.MOVIMIENTO_ENTRADA;
 		nk.orden_id = ocd.orden_compra.id;
 		nk.precio_costo = ocd.precio_unitario;
 		if (!ocd.orden_compra.impuesto_incluido) {
@@ -352,14 +352,14 @@ public class OrdenCompraServiceImpl extends HessianServlet implements OrdenCompr
 		nk.documento = ocd.orden_compra.documento_pago;
 		nk.ingreso 	= BigDecimal.ZERO;
 		nk.salida 	= ocd.cantidad;
-		nk.movimiento = Util.MOVIMIENTO_KARDEX_SALIDA;
+		nk.movimiento = Util.MOVIMIENTO_SALIDA;
 		nk.orden_id = ocd.orden_compra.id;
 		nk.precio_costo = ocd.precio_unitario;
 		nk.precio_venta = BigDecimal.ZERO;
 		nk.producto = ocd.producto;
 		nk.stock_anterior = ok==null?BigDecimal.ZERO:ok.stock;
 		nk.stock = nk.stock_anterior.subtract(nk.salida);
-		nk.tipo = Util.TIPO_ORDEN_REGULARIZACION;
+		nk.tipo = Util.TIPO_ORDEN_TRANSFORMACION;
 		nk.usado = BigDecimal.ZERO;
 		CRUD.save(app,nk);
 	}

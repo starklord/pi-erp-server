@@ -25,6 +25,7 @@ public class MetaServer implements Serializable {
     public List<Permiso> permisos;
     // para los datos iniciales de las ventas
     public Direccion sinDireccion;
+    public List<Sucursal> sucursales;
     public List<DocumentoTipo> documentosTipo;
     public List<FormaPago> formasPago;
     public List<SucursalSerie> sucursalSeries;
