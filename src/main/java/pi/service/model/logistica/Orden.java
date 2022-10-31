@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import pi.service.db.client.TableDB;
+import pi.service.factory.Numbers;
 import pi.service.model.FormaPago;
 import pi.service.model.Moneda;
 import pi.service.model.almacen.Almacen;
@@ -85,6 +86,17 @@ public class Orden implements Serializable {
 
     public String getFechaAprobacionStr(){
         return fecha_aprobacion==null?"-":Util.formatDate(fecha_aprobacion, Util.SDF_DATE_HOURS);
+    }
+
+    public BigDecimal getTotal(){
+        return Numbers.getBD(total, 2);
+    }
+
+    public String getClienteStr(){
+        return cliente_string;
+    }
+    public String getObservaciones() {
+        return observaciones;
     }
 
     @Override

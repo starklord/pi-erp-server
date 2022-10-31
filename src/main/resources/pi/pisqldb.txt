@@ -25,11 +25,6 @@ CREATE TABLE IF NOT EXISTS logistica.articulo
     fecha_vencimiento date,
     CONSTRAINT articulo_pkey PRIMARY KEY (id),
     CONSTRAINT serieuk UNIQUE (serie),
-    CONSTRAINT orden_art_articulofk FOREIGN KEY (orden_art)
-        REFERENCES logistica.orden_art (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
     CONSTRAINT productoarticulofk FOREIGN KEY (producto)
         REFERENCES logistica.producto (id) MATCH SIMPLE
         ON UPDATE NO ACTION

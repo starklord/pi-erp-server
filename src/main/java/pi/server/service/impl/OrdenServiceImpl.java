@@ -17,6 +17,26 @@ import pi.service.model.logistica.OrdenDet;
 
 @WebServlet("pi/OrdenService")
 public class OrdenServiceImpl extends HessianServlet implements OrdenService {
+    @Override
+    public Orden getOrden(String app, int ordenId) {
+        List<Orden> list = new ArrayList<>();
+        String[] require = {
+                "proveedor",
+                "cliente",
+                "moneda",
+                "aprobado_por",
+                "atendido_por",
+                "almacen_origen",
+                "almacen_destino"
+        };
+        String where = "where a.id = " + ordenId + " order by numero desc limit 1";
+        try {
+            list = CRUD.list(app, Orden.class, require, where);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return list.isEmpty() ? null : list.get(0);
+    }
 
     @Override
     public Orden getLastOrden(String app, int sucursalId, char tipo) {
@@ -55,6 +75,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
         if (sucursalId != -1) {
             where += " and a.sucursal = " + sucursalId;
         }
+        where+= " order by a.id desc";
         try {
             list = CRUD.list(app, Orden.class, require, where);
         } catch (Exception ex) {
@@ -124,6 +145,30 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
     public void atenderOrden(String app, Orden orden, int personaId, List<OrdenArt> ordenArticulos) throws Exception {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void anularOrden(String app, int ordenId) throws Exception {
+        Orden orden = getOrden(app, ordenId);
+        if(!orden.activo){
+            throw new Exception("La orden ya figura anulada");
+        }
+        CRUD.execute(app, "update logistica.orden set activo = false where id = " + ordenId);
+    }
+
+    @Override
+    public String getClienteStringByCoincidence(String app, String txt) {
+        String cliente_string = null;
+        String where = " where cliente_string ilike '%"+txt+"%' order by id desc limit 1";
+        try {
+            List<Orden> list = CRUD.list(app,Orden.class,where);
+            if(!list.isEmpty()){
+                cliente_string = list.get(0).cliente_string;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cliente_string;
     }
 
 }

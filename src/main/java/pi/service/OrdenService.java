@@ -9,6 +9,7 @@ import pi.service.model.logistica.OrdenDet;
 
 public interface OrdenService {
 
+    public Orden getOrden(String app, int ordenId);
     public Orden getLastOrden(String app, int sucursalId, char tipo);
     public List<Orden> list(String app, Date inicio, Date fin,int sucursalId);
     public List<OrdenDet> listDetalles(String app,int ordenId);
@@ -17,5 +18,7 @@ public interface OrdenService {
     public Orden updateOrden(String app,Orden orden, List<OrdenDet> detalles) throws Exception;
     public void aprobarOrden(String app,Orden orden, int personaId) throws Exception;
     public void atenderOrden(String app,Orden orden, int personaId, List<OrdenArt> ordenArticulos) throws Exception;
+    public void anularOrden(String app, int ordenId) throws Exception;
+    public String getClienteStringByCoincidence(String app, String txt);
     
 }

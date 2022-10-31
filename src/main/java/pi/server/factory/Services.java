@@ -4,6 +4,7 @@ import pi.server.service.impl.AlmacenServiceImpl;
 import pi.server.service.impl.AreaServiceImpl;
 import pi.server.service.impl.CargoPermisoServiceImpl;
 import pi.server.service.impl.CargoServiceImpl;
+import pi.server.service.impl.ConstanciaServiceImpl;
 import pi.server.service.impl.CrudServiceImpl;
 import pi.server.service.impl.DireccionServiceImpl;
 import pi.server.service.impl.DocumentoIdentidadServiceImpl;
@@ -37,6 +38,7 @@ import pi.service.AlmacenService;
 import pi.service.AreaService;
 import pi.service.CargoPermisoService;
 import pi.service.CargoService;
+import pi.service.ConstanciaService;
 import pi.service.CrudService;
 import pi.service.DireccionService;
 import pi.service.DocumentoIdentidadService;
@@ -74,6 +76,7 @@ public class Services {
     private static AreaService area                                 = new AreaServiceImpl();
     private static CargoService cargo                               = new CargoServiceImpl();
     private static CargoPermisoService cargoPermiso                 = new CargoPermisoServiceImpl();
+    private static ConstanciaService constancia                     = new ConstanciaServiceImpl();
     private static CrudService crud                                 = new CrudServiceImpl();
     private static DireccionService direccion                       = new DireccionServiceImpl();
     private static DocumentoPagoService documentoPago               = new DocumentoPagoServiceImpl();
@@ -118,6 +121,10 @@ public class Services {
 
     public static CargoPermisoService getCargoPermiso() {
         return cargoPermiso;
+    }
+
+    public static ConstanciaService getConstancia() {
+        return constancia;
     }
 
     public static CrudService getCrud(){

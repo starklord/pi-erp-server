@@ -38,7 +38,19 @@ import pi.service.factory.Numbers;
 
 public class Util {
 
-    public static String[] EVAS = { "127.0.0.1", "144.91.125.121", "127.0.0.1", "144.126.132.140", "154.53.32.33" };
+    public static String[] EVAS = { "127.0.0.1", 
+    "144.91.125.121", 
+    "127.0.0.1", 
+    "144.126.132.140", 
+    "154.53.32.33",
+    "154.53.32.33",
+    "154.53.32.33",
+    "154.53.32.33",
+    "154.53.32.33",
+    "154.53.32.33",
+    "192.168.0.150",
+    "192.168.1.150",
+};
     public static int waitCursorCount = 0;
     // public static DialogBox dbxWait;
 
@@ -52,7 +64,8 @@ public class Util {
     public static char TIPO_SISTEMA_COMERCIAL = 'C';
     public static char TIPO_SISTEMA_DROGUERIA = 'D';
     public static char TIPO_SISTEMA_FARMACIA = 'F';
-    public static char TIPO_SISTEMA_PARKING = 'p';
+    public static char TIPO_SISTEMA_PARKING = 'K';
+    public static char TIPO_SISTEMA_PARROQUIA = 'P';
 
     // para los productos
     public static String NACIONAL = "Nacional";
@@ -271,6 +284,13 @@ public class Util {
     public static final String TIPONC_OTROS_CONCEPTOS = "OTROS CONCEPTOS";
     public static final String TIPONC_AJUSTES_OPERACIONES_EXP = "AJUSTES DE OPERACIONES DE EXPORTACION";
     public static final String TIPONC_AJUSTES_AFECTOS_IVAP = "AJUSTES AFECTOS AL IVAP";
+
+
+    //para los datos de la parroquia
+    public static final String PARROQUIA_FECHA_NACIMIENTO = "Fecha Nacimiento";
+    public static final String PARROQUIA_FECHA_BAUTISMO = "Fecha Bautismo";
+    public static final String PARROQUIA_FECHA_CONFIRMACION = "Fecha Confirmacion";
+    public static final String PARROQUIA_FECHA_MATRIMONIO = "Fecha Matrimonio";
 
     // para los datos de las personas
     // para los handlers
