@@ -72,8 +72,12 @@ public class Util {
     public static String IMPORTADO = "Importado";
     public static String PRODUCTO = "Producto";
     public static String SERVICIO = "Servicio";
+    public static String CODIGO = "Codigo";
+    public static String SERIE = "Serie";
     public static String CODIGO_PRODUCTO = "Codigo de Producto";
     public static String SERIE_ARTICULO = "Serie de Articulo";
+    public static char TIPO_CONTROL_CODIGO = 'C';
+    public static char TIPO_CONTROL_SERIE = 'S';
 
     // para todas:
     public static String TODAS_MARCAS = "Todas las Marcas";
@@ -143,9 +147,20 @@ public class Util {
     public static final String Femenimo = "Femenino";
     public static final String ES_PRODUCTO = "ES PRODUCTO";
     public static final String ES_SERVICIO = "ES SERVICIO";
-    public static final String TIPO_CLIENTE_NORMAL = "Normal";
-    public static final String TIPO_CLIENTE_PREFERENCIAL = "Preferencial";
-    public static final String TIPO_CLIENTE_LISTA_NEGRA = "Lista Negra";
+
+    public static String TODOS = "TODOS";
+    public static String NORMAL = "Normal";
+    public static String PREFERENCIAL = "Preferencial";
+    public static String LISTA_NEGRA = "Lista Negra";
+    public static String PROVEEDOR = "Proveedor";
+    public static String TIPO_BUSQUEDA_SOLO_PROVEEDORES = "Solo Proveedores";
+    public static String TIPO_BUSQUEDA_SOLO_CLIENTES = "Solo Clientes";
+    public static String TIPO_CLIENTE_NORMAL = "Normales";
+    public static String TIPO_CLIENTE_PREFERENCIAL = "Preferenciales";
+    public static String TIPO_CLIENTE_LISTA_NEGRA = "Lista Negra";
+    public static final char TIPO_CLIENTE_NORMAL_ID = 'N';
+    public static final char TIPO_CLIENTE_PREFERENCIAL_ID = 'P';
+    public static final char TIPO_CLIENTE_LISTA_NEGRA_ID = 'L';
 
     public static final String IGV_18_STR = "18%";
     public static final String IGV_INAFECTO_STR = "Inafecto";
@@ -200,8 +215,8 @@ public class Util {
 
     public static final SimpleDateFormat SDF_HOURS = new SimpleDateFormat("HH:mm:ss");
     public static final SimpleDateFormat SDF_DATE = new SimpleDateFormat("dd/MM/yyyy");
-    public static final SimpleDateFormat SDF_DATE_HOURS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    public static final SimpleDateFormat SDF_DATE_HOURS_SQLTE = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    public static final SimpleDateFormat SDF_DATE_HOURS = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    public static final SimpleDateFormat SDF_DATE_HOURS_SQLTE = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     public static int PXH_DIF = 35;
     public static int PXW_DIF = 200;
@@ -295,6 +310,10 @@ public class Util {
     // para los datos de las personas
     // para los handlers
     // public static List<ResizeWindowHandler> RESIZERS = new ArrayList<>();
+
+    public static final String[] MESES = {"Enero","Febrero","Marzo","Abril","Mayo","Junio",
+    "Julio","Agosto","Setiembre","Octubre","Noviembre","Diciembre"}; 
+
     public static float round2(float num) {
         float result = num * 100;
         result = Math.round(result);

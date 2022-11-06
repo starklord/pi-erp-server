@@ -17,7 +17,7 @@ package pi.service;
 import java.util.List;
 import pi.service.model.persona.Direccion;
 import pi.service.model.persona.Persona;
-public interface DireccionService{
+public interface DireccionService {
 	
 	public void annul(String app, int personaId) throws Exception;
 	public void save(String app, Direccion direccion) throws Exception;
@@ -26,9 +26,8 @@ public interface DireccionService{
 	public void saveOrUpdate(String app, Direccion direccion) throws Exception;
 	public List<Direccion> getList(String app, int personaId);
 	public List<Direccion> list(String app, String nombres, String apellidos, String identificador);
-	public Direccion getDireccionSinCliente(String app) throws Exception;
+	public Direccion getDireccionSinCliente(String app);
 	
-	public Direccion getDireccionFromRuc(String app, String ruc) throws Exception;
-	public List<Direccion> getDireccionDNI(String app, String dni) throws Exception;
-	public List<Direccion> getDireccionRUC(String app, String ruc) throws Exception;
+	public List<Direccion> getDireccionDNI(String app, String dni);
+	public List<Direccion> getDireccionRUC(String app, String ruc);
 }

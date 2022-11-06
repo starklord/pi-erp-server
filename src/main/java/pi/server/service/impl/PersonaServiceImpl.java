@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import pi.server.db.Update;
 import pi.service.PersonaService;
 import pi.server.db.server.CRUD;
 import pi.service.model.DocumentoIdentidad;
@@ -34,6 +33,12 @@ import javax.servlet.annotation.WebServlet;
 public class PersonaServiceImpl extends HessianServlet implements PersonaService {
 
     public static Class table = Persona.class;
+
+    @Override
+    public Persona save(String app, Persona persona) throws Exception {
+        CRUD.save(app, persona);
+        return persona;
+    }
 
     @Override
     public Persona save(String app, Persona persona, Direccion direccion) throws Exception {
@@ -56,102 +61,81 @@ public class PersonaServiceImpl extends HessianServlet implements PersonaService
     }
 
     @Override
-    public List<Persona> getListByNombre(String app, String nombres, String apellidos) throws Exception {
-
-        String filter = "where apellidos ilike '%" + apellidos + "%' ";
-        if (!nombres.isEmpty()) {
-            filter += "and nombres ilike '%" + nombres + "%' ";
-        }
-        filter += "order by apellidos asc";
-        return CRUD.list(app,table, filter);
-    }
-
-    @Override
-    public Persona getByCodigoAndClavePortal(String app, String codigo, String clavePortal) throws Exception {
-        String[] req = {"documento_identidad"};
-        String filter = "where a.codigo ='" + codigo + "' and clave_portal = '"+clavePortal + "' order by apellidos asc";
-        List<Persona> list =  CRUD.list(app,Persona.class, req, filter);
-        return list.isEmpty()?null:list.get(0);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<Persona> getListByIdentificador(String app, String identificador) throws Exception {
-        String[] req = {"documento_identidad"};
-        String filter = "where identificador ='" + identificador + "' " + "order by apellidos asc";
-        return CRUD.list(app,Persona.class, req, filter);
-        // return CRUD.list(app,table,filter);
-    }
-    @Override
-    public List<Persona> getListByID(String app, int personaId) throws Exception {
-        String[] req = {"documento_identidad"};
-        String filter = "where a.id='" + personaId + "' " + "order by apellidos asc";
-        return CRUD.list(app,Persona.class, req, filter);
-        // return CRUD.list(app,table,filter);
-    }
-
-    @Override
-    public List<Persona> getListByRazonSocial(String app, String razonSocial) throws Exception {
-        String[] req = {"documento_identidad"};
-        String filter = "where apellidos ilike '%" + razonSocial + "%' ";
-        filter += "order by apellidos asc";
-        return CRUD.list(app,Persona.class, req, filter);
-        // return CRUD.list(app,table,filter);
-    }
-
-    @Override
     public void update(String app, Persona persona) throws Exception {
         CRUD.update(app,persona);
     }
 
     @Override
-    public List<Persona> getList(String app, String nombres, String apellidos, String identificador) throws Exception {
+    public Persona getById(String app, int personaId) {
+        String[] req = {"documento_identidad"};
+        String filter = "where a.id='" + personaId + "' " + "order by apellidos asc limit 1";
+        List<Persona> list = new ArrayList<>();
+        try {
+            list= CRUD.list(app,Persona.class, req, filter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list.isEmpty()?null:list.get(0);
+    }
+
+    @Override
+    public Persona getByIdentificador(String app, String identificador) {
+        String[] req = {"documento_identidad"};
+        String filter = "where a.identificador='" + identificador + "' " + "order by apellidos asc limit 1";
+        List<Persona> list = new ArrayList<>();
+        try {
+            list= CRUD.list(app,Persona.class, req, filter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list.isEmpty()?null:list.get(0);
+    }
+
+    
+
+    @Override
+    public List<Persona> list(String app, String nombres, String apellidos, String identificador,
+    String tipo_busqueda, String tipo_cliente) {
         String[] req = {"documento_identidad"};
         String filterNames = " and nombres ilike '%" + nombres + "%' ";
         if (nombres.isEmpty()) {
             filterNames = " and (nombres ilike '%" + nombres + "%' or nombres is null) ";
         }
-
         String filter = "where apellidos ilike '%" + apellidos + "%' ";
         filter += filterNames;
         filter += "and identificador ilike '%" + identificador + "%' ";
+        if(tipo_busqueda.equals(Util.TIPO_BUSQUEDA_SOLO_CLIENTES)){
+            filter+= " and es_proveedor is false";
+        }
+        if(tipo_busqueda.equals(Util.TIPO_BUSQUEDA_SOLO_PROVEEDORES)){
+            filter+= " and es_proveedor is true";
+        }
+        if(tipo_cliente.equals(Util.TIPO_CLIENTE_NORMAL)){
+            filter+= " and tipo_cliente = '"+Util.TIPO_CLIENTE_NORMAL_ID+"'";
+        }
+        if(tipo_cliente.equals(Util.TIPO_CLIENTE_PREFERENCIAL)){
+            filter+= " and tipo_cliente = '"+Util.TIPO_CLIENTE_PREFERENCIAL_ID+"'";
+        }
+        if(tipo_cliente.equals(Util.TIPO_CLIENTE_LISTA_NEGRA)){
+            filter+= " and tipo_cliente = '"+Util.TIPO_CLIENTE_LISTA_NEGRA_ID+"'";
+        }
 
-        filter += "order by apellidos asc limit 100";
-        return CRUD.list(app,Persona.class, req, filter);
-        // return CRUD.list(app,table,filter);
-    }
-
-    @Override
-    public List<Persona> getList(String app, String coincidence) throws Exception {
-        List<Persona> listByIdentificador = getListByIdentificador(app, coincidence);
-        List<Persona> listByRazon = getListByRazonSocial(app, coincidence);
-        List<Persona> listByNombres = getListByNombre(app, coincidence, "");
-
+        filter += " order by apellidos asc";
         List<Persona> list = new ArrayList<>();
-        for (Persona per : listByIdentificador) {
-            if (!list.contains(per)) {
-                list.add(per);
-            }
+        try {
+            list = CRUD.list(app,Persona.class, req, filter);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        for (Persona per : listByRazon) {
-            if (!list.contains(per)) {
-                list.add(per);
-            }
-        }
-        for (Persona per : listByNombres) {
-            if (!list.contains(per)) {
-                list.add(per);
-            }
-        }
-
         return list;
-        // return CRUD.list(app,table,filter);
     }
 
     @Override
     public void importClientsFromTxt(String app) throws Exception {
         readFile(app);
     }
+
+    
 
     private void readFile(String app) throws Exception {
         try {
@@ -175,8 +159,8 @@ public class PersonaServiceImpl extends HessianServlet implements PersonaService
 
                 // fin lectura de datos
                 String ubigeo = "040101";
-                List<Persona> list = personaService.getListByIdentificador(app, ruc);
-                if (!list.isEmpty()) {
+                Persona per = personaService.getByIdentificador(app, ruc);
+                if (per!=null) {
                     continue;
                 }
                 Persona persona = new Persona();
@@ -211,17 +195,6 @@ public class PersonaServiceImpl extends HessianServlet implements PersonaService
             throw new Exception(ex.getMessage());
 
         }
-    }
-
-    @Override
-    public List<Persona> getListPersonas(String app, String nombres, String apellidos, String identificador) throws Exception {
-        String[] req = {"documento_identidad"};
-
-        String filter = " where (a.nombres ilike '%" + nombres + "%' or a.apellidos ilike '%" + apellidos + "%' "
-                + "or a.identificador ilike '%" + identificador + "%') ";
-
-        filter += "and a.activo is true order by a.apellidos asc";
-        return CRUD.list(app,Persona.class, req, filter);
     }
 
 }

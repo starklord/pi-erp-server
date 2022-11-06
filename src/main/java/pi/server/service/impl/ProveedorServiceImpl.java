@@ -92,8 +92,7 @@ public class ProveedorServiceImpl extends HessianServlet implements ProveedorSer
 				if(prov!=null){
 					continue;
 				}
-				List<Persona> list = personaService.getListByIdentificador(app, ruc);
-				Persona p = list.get(0);
+				Persona p = personaService.getByIdentificador(app, ruc);
 				Proveedor proveedor = new Proveedor();
 				proveedor.activo = true;
 				proveedor.creador = "root";

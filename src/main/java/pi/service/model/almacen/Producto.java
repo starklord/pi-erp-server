@@ -49,6 +49,10 @@ public class Producto implements Serializable {
 		return activo?Util.OK:Util.ANULADO;
 	}
 
+	public String getControl(){
+		return tipo_control==Util.TIPO_CONTROL_CODIGO? Util.CODIGO:Util.SERIE;
+	}
+
 	public String getCodigo(){
 		return Util.completeWithZeros(codigo,6);
 	}

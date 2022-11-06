@@ -7,6 +7,7 @@ import pi.service.db.client.TableDB;
 import pi.service.factory.Numbers;
 import pi.service.model.almacen.Producto;
 import pi.service.model.almacen.Unidad;
+import pi.service.util.Util;
 
 @TableDB(name = "logistica.orden_det")
 public class OrdenDet implements Serializable {
@@ -30,8 +31,12 @@ public class OrdenDet implements Serializable {
         return producto.nombre;
     }
 
+    public String getControl(){
+        return producto.getControl();
+    }
+
     public BigDecimal getCantidad(){
-        return Numbers.getBD(cantidad,2);
+        return producto.tipo_control==Util.TIPO_CONTROL_CODIGO?Numbers.getBD(cantidad,2):Numbers.getBD(cantidad, 0);
     }
 
     public BigDecimal getPrecioUnitario(){

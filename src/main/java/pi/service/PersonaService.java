@@ -18,22 +18,20 @@ import java.util.List;
 import pi.service.model.persona.Direccion;
 import pi.service.model.persona.Persona;
 
-public interface PersonaService{
-	
+public interface PersonaService {
+
+	public Persona getByIdentificador(String app, String identificador);
+
+	public Persona getById(String app, int personaId);
+
+	public List<Persona> list(String app, String nombres, String apellidos, String identificador,
+			String tipo_busqueda, String tipo_cliente);
+
+	public Persona save(String app, Persona persona) throws Exception;
+
 	public Persona save(String app, Persona persona, Direccion direccion) throws Exception;
+
 	public void update(String app, Persona persona) throws Exception;
-        
-//        public Persona saveOrUpdate(boolean save, Curso curso, Ciclo ciclo)throws Exception ;
-        public Persona getByCodigoAndClavePortal(String app, String codigo, String clavePortal) throws Exception;
-	
-	public List<Persona> getList(String app, String nombres, String apellidos, String identificador) throws Exception;
-	public List<Persona> getListByNombre(String app, String nombres, String apellidos) throws Exception;
-	public List<Persona> getListByIdentificador(String app, String identificador) throws Exception;
-	public List<Persona> getListByID(String app, int personaId) throws Exception;
-	public List<Persona> getListByRazonSocial(String app, String razonSocial) throws Exception;
-	public List<Persona> getList(String app, String coincidence) throws Exception;
-	
-	//import
+
 	public void importClientsFromTxt(String app) throws Exception;
-	List<Persona> getListPersonas(String app, String nombres, String apellidos, String identificador) throws Exception;
 }

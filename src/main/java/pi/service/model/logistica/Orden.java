@@ -77,7 +77,7 @@ public class Orden implements Serializable {
     }
 
     public String getFechaEntregaStr(){
-        return Util.formatDate(fecha_entrega, Util.SDF_DATE);
+        return Util.formatDate(fecha_entrega, Util.SDF_DATE_HOURS);
     }
 
     public String getFechaAtencionStr(){

@@ -10,6 +10,7 @@ ALTER TABLE IF EXISTS logistica.producto ADD COLUMN if not exists unidad_convers
 ALTER TABLE IF EXISTS logistica.producto ADD COLUMN if not exists factor_conversion numeric(18,2) NOT NULL DEFAULT 1;
 ALTER TABLE IF EXISTS logistica.producto ADD COLUMN if not exists procedencia character varying(1) NOT NULL DEFAULT 'N';
 ALTER TABLE IF EXISTS logistica.producto ADD COLUMN if not exists impuesto integer NOT NULL DEFAULT 1;
+ALTER TABLE IF EXISTS persona.persona ADD COLUMN if not exists es_proveedor boolean NOT NULL DEFAULT false;
 --para la tabla articulo
 CREATE TABLE IF NOT EXISTS logistica.articulo
 (
@@ -17,9 +18,8 @@ CREATE TABLE IF NOT EXISTS logistica.articulo
     creado timestamp without time zone NOT NULL DEFAULT now(),
     creador character varying(255) COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
     activo boolean NOT NULL DEFAULT true,
-    estado character varying(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'K'::character varying,
     producto integer NOT NULL,
-    orden_art integer NOT NULL,
+    orden_art integer,
     serie character varying(255) COLLATE pg_catalog."default" NOT NULL,
     lote character varying(255) COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
     fecha_vencimiento date,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS logistica.orden
     direccion_proveedor character varying COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
     direccion_cliente character varying COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
     fecha timestamp without time zone NOT NULL,
-    fecha_entrega date NOT NULL,
+    fecha_entrega timestamp without time zone NOT NULL,
     sucursal integer NOT NULL,
     tipo character varying(1) COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
     numero integer NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS logistica.orden
     aprobado_por integer,
     fecha_aprobacion timestamp without time zone,
     atendido_por integer,
-    fecha_atencion time without time zone,
+    fecha_atencion timestamp without time zone,
     observaciones character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT orden_pkey PRIMARY KEY (id),
     CONSTRAINT ordentiposucursalnumeropk UNIQUE (sucursal, tipo, numero),
@@ -130,6 +130,9 @@ CREATE TABLE IF NOT EXISTS logistica.orden_art
     articulo integer NOT NULL,
     movimiento character varying(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'E'::character varying,
     observaciones character varying COLLATE pg_catalog."default" NOT NULL,
+    stock_anterior numeric(18,4) NOT NULL DEFAULT 0,
+    cantidad numeric(18,4) NOT NULL DEFAULT 0,
+    stock numeric(18,4) NOT NULL DEFAULT 0,
     CONSTRAINT orden_art_pkey PRIMARY KEY (id),
     CONSTRAINT orden_art_mov_uk UNIQUE (orden,articulo,movimiento),
     CONSTRAINT orden_art_articulo_fkey FOREIGN KEY (articulo)

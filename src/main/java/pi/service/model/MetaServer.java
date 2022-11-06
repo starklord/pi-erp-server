@@ -27,6 +27,7 @@ public class MetaServer implements Serializable {
     public Direccion sinDireccion;
     public List<Sucursal> sucursales;
     public List<DocumentoTipo> documentosTipo;
+    public List<DocumentoIdentidad> documentosIdentidad;
     public List<FormaPago> formasPago;
     public List<SucursalSerie> sucursalSeries;
     public List<Moneda> monedas;

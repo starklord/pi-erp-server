@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import pi.service.db.client.TableDB;
 import pi.service.model.DocumentoIdentidad;
+import pi.service.util.Util;
 
 
 @TableDB(name = "persona.persona")
@@ -24,28 +25,44 @@ public class Persona implements Serializable {
     public String email;
     public String telefonos;
     public String nombre_comercial;
-    public String codigo;
-    public String clave_portal;
     public Boolean es_agente_retencion;
-    public Character area;// S B I
-    public Character turno;//T M
-    public Character tipo_cliente;//N P B
+    public Boolean es_proveedor;
+    public Character tipo_cliente;//N P L
     public BigDecimal limite_credito;
 
     
     public Boolean getActivo() {
         return activo;
     }
+
+    public String getEstado(){
+        return activo?Util.OK:Util.INACTIVO;
+    }
     
     public Direccion getDireccion() {
         Direccion dir = null;
         try {
             // dir = Services.getDireccion().getDireccionDNI(identificador).get(0);
-        } catch (Exception ex) {
+        } catch (Exception ex) { 
             Logger.getLogger(Persona.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error en obtener direccion por dni :" + ex);
         }
         return dir;
+    }
+
+    public String getTipoCliente(){
+        
+        String tipo = Util.NORMAL;
+        if(tipo_cliente==Util.TIPO_CLIENTE_PREFERENCIAL_ID){
+            tipo = Util.PREFERENCIAL;
+        }
+        if(tipo_cliente==Util.TIPO_CLIENTE_LISTA_NEGRA_ID){
+            tipo = Util.LISTA_NEGRA;
+        }
+        if(es_proveedor){
+            tipo+= " "+Util.PROVEEDOR;
+        }
+        return tipo;
     }
 
     public void setActivo(Boolean activo) {
@@ -69,6 +86,21 @@ public class Persona implements Serializable {
     public String getNombres(){
         return nombres;
     } 
+    public String getNombreStr(){
+        return toString();
+    }
+
+    public String getNombreComercial(){
+        return nombre_comercial;
+    }
+
+    public String getTelefonos(){
+        return telefonos;
+    }
+
+    public String getEmail(){
+        return email;
+    }
     
     @Override
     public String toString() {
