@@ -68,7 +68,12 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
     @Override
     public List<DocumentoPago> listOnlyEfact(String app, int sucursalId, Date inicio, Date fin,
             String serie, String numero, String identificador, String apellidos) throws Exception {
-        String[] reqCab = { "sucursal", "direccion_cliente", "direccion_cliente.persona", "forma_pago" };
+        String[] reqCab = { "sucursal",
+                "direccion_cliente",
+                "direccion_cliente.persona",
+                "forma_pago",
+                "impuesto"
+        };
         String filterCab = "where a.fecha  between '" + inicio + "' and '" + fin
                 + "'"
                 + " and a.tipo in(1,3,0)";
