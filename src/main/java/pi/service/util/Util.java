@@ -307,7 +307,8 @@ public class Util {
     public static final String PARROQUIA_FECHA_CONFIRMACION = "Fecha Confirmacion";
     public static final String PARROQUIA_FECHA_MATRIMONIO = "Fecha Matrimonio";
 
-    // para los datos de las personas
+    // para los datos de las personas y direcciones
+
     // para los handlers
     // public static List<ResizeWindowHandler> RESIZERS = new ArrayList<>();
 

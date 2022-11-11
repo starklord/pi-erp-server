@@ -76,7 +76,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         };
         String filterCab = "where a.fecha  between '" + inicio + "' and '" + fin
                 + "'"
-                + " and a.tipo in(1,3,0)";
+                + " and a.tipo in(1,3)";
         if (sucursalId != -1) {
             filterCab += " and a.sucursal =" + sucursalId;
         }
@@ -229,8 +229,9 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         String[] req = { "sucursal",
                 "sucursal.direccion",
                 "documento_pago",
-                "documento_pago.direccion_cliente",
+                "documento_pago.direccion_cliente", 
                 "documento_pago.direccion_cliente.persona",
+                "impuesto"
         };
         String where = "where a.id = " + ncId + " order by a.id desc limit 1";
         List<NotaCredito> list = new ArrayList<>();
@@ -295,6 +296,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
                     nc.getNotaCreditoStr() + "' where id = " + nc.documento_pago.id);
             CRUD.save(app, nc);
             for (NotaCreditoDet ncd : listDets) {
+                ncd.id= null;
                 ncd.nota_credito = nc;
                 CRUD.save(app, ncd);
             }

@@ -3,6 +3,7 @@ package pi.service.model.persona;
 import java.io.Serializable;
 
 import pi.service.db.client.TableDB;
+import pi.service.util.Util;
 
 @TableDB(name="persona.direccion")
 public class Direccion implements Serializable {
@@ -21,6 +22,10 @@ public class Direccion implements Serializable {
 	@Override
 	public String toString() {
 		return descripcion;
+	}
+
+	public String getEstado(){
+		return activo?Util.OK:Util.ANULADO;
 	}
 
 	public String getNombreStr() {

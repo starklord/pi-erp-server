@@ -103,6 +103,7 @@ public class LoginServiceImpl extends HessianServlet implements LoginService {
 		meta.lineas = Services.getLinea().list(app, meta.empresa.id);
 		meta.unidades = Services.getUnidad().list(app);
 		meta.impuestos = Services.getImpuesto().listActives(app);
+		meta.ubigeos = Services.getUbigeo().list(app);
 		meta.efactSituaciones = efactSituaciones;
 		meta.mapEfactSituaciones = mapEfactSituaciones;
 		meta.tc_compra = tc.compra;

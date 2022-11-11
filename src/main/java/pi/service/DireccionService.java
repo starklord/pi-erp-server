@@ -24,7 +24,8 @@ public interface DireccionService {
 	public void save(String app, Persona persona, Direccion direccion) throws Exception;
 	public void update(String app, Direccion direccion) throws Exception;
 	public void saveOrUpdate(String app, Direccion direccion) throws Exception;
-	public List<Direccion> getList(String app, int personaId);
+	public void delete(String app, Direccion direccion)throws Exception;
+	public List<Direccion> list(String app, int personaId);
 	public List<Direccion> list(String app, String nombres, String apellidos, String identificador);
 	public Direccion getDireccionSinCliente(String app);
 	

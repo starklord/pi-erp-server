@@ -73,7 +73,12 @@ public class DireccionServiceImpl extends HessianServlet implements DireccionSer
 	}
 
 	@Override
-	public List<Direccion> getList(String app, int personaId) {
+	public void delete(String app, Direccion direccion) throws Exception {
+		CRUD.delete(app, direccion);
+	}
+
+	@Override
+	public List<Direccion> list(String app, int personaId) {
 		List<Direccion> list = new ArrayList<>();
 		try {
 			String[] required = {
@@ -164,7 +169,7 @@ public class DireccionServiceImpl extends HessianServlet implements DireccionSer
 			PersonaServiceImpl service = new PersonaServiceImpl();
 			Persona per = service.getByIdentificador(app, dni);
 			if (per != null) {
-				direcciones = getList(app, per.id);
+				direcciones = list(app, per.id);
 				return direcciones;
 			}
 
@@ -201,7 +206,7 @@ public class DireccionServiceImpl extends HessianServlet implements DireccionSer
 				direccion.descripcion = "-";
 			}
 			this.save(app, persona, direccion);
-			direcciones = getList(app, persona.id);
+			direcciones = list(app, persona.id);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -215,7 +220,7 @@ public class DireccionServiceImpl extends HessianServlet implements DireccionSer
 			PersonaServiceImpl service = new PersonaServiceImpl();
 			Persona per = service.getByIdentificador(app, ruc);
 			if (per != null) {
-				direcciones = getList(app, per.id);
+				direcciones = list(app, per.id);
 				return direcciones;
 			}
 			JSONObject myrespond = new JSONObject(getResultMigo("ruc", ruc));
@@ -250,7 +255,7 @@ public class DireccionServiceImpl extends HessianServlet implements DireccionSer
 				direccion.descripcion = "-";
 			}
 			this.save(app, persona, direccion);
-			direcciones = getList(app, persona.id);
+			direcciones = list(app, persona.id);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

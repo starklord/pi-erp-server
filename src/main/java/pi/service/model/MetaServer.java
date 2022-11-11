@@ -37,6 +37,7 @@ public class MetaServer implements Serializable {
     public List<Unidad> unidades;
     public List<Impuesto> impuestos;
     public List<TxxxSituacion> efactSituaciones;
+    public List<Ubigeo> ubigeos;
     public Map<String, String> mapEfactSituaciones;
     public BigDecimal tc_compra;
     public BigDecimal tc_venta;
