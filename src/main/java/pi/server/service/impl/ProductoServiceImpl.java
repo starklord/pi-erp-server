@@ -82,7 +82,7 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 
 			if (save) {
 				if (object.codigo==null||object.codigo.trim().isEmpty()) {
-					System.out.println("entrando a crear un codigo");
+					System.out.println("entrando a crear un codigo"); 
 					String filter = " order by codigo_interno desc limit 1";
 					List<Producto> list = CRUD.list(app, Producto.class, filter);
 					if (!list.isEmpty()) {
@@ -214,7 +214,6 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 				producto.costo_ultima_compra = new BigDecimal(str_costo);
 				producto.creador = "root";
 				producto.descripcion = "";
-				producto.es_servicio = false;
 				producto.garantia = false;
 				producto.linea = getLinea(app, str_linea, 0);
 				producto.marca = getMarca(app, str_marca, 0);

@@ -31,7 +31,14 @@ public class Articulo implements Serializable {
 	}
 
 	public String getControl(){
-		return producto.tipo_control==Util.TIPO_CONTROL_CODIGO? Util.CODIGO:Util.SERIE;
+		String str = Util.PRODUCTO;
+		if(producto.tipo_control==Util.TIPO_CONTROL_ARTICULO){
+			str = Util.ARTICULO;
+		}
+		if(producto.tipo_control==Util.TIPO_CONTROL_SERVICIO){
+			str = Util.SERVICIO;
+		}
+		return str;
 	}
 
 	public String getCodigo(){

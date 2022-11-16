@@ -28,7 +28,6 @@ public class Producto implements Serializable {
 	public BigDecimal peso;
 	public Impuesto impuesto;
 	public BigDecimal stock_minimo;
-	public Boolean es_servicio;
 	public Boolean garantia;
 	public Moneda moneda;
 	public BigDecimal precio;
@@ -38,7 +37,7 @@ public class Producto implements Serializable {
 	public Character procedencia;
 	public String cod_dig;
 	public String registro_sanitario;
-	public Character tipo_control;//Codigo Serie
+	public Character tipo_control;//Producto Articulo Servicio
 	
 	@Override
 	public String toString() {
@@ -50,7 +49,14 @@ public class Producto implements Serializable {
 	}
 
 	public String getControl(){
-		return tipo_control==Util.TIPO_CONTROL_CODIGO? Util.CODIGO:Util.SERIE;
+		String str = Util.PRODUCTO;
+		if(this.tipo_control==Util.TIPO_CONTROL_ARTICULO){
+			str = Util.ARTICULO;
+		}
+		if(this.tipo_control==Util.TIPO_CONTROL_SERVICIO){
+			str = Util.SERVICIO;
+		}
+		return str;
 	}
 
 	public String getCodigo(){

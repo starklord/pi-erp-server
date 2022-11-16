@@ -34,6 +34,14 @@ public class OrdenArt implements Serializable {
         return articulo.producto.nombre;
     }
 
+    public String getFechaStr(){
+        return orden.getFechaStr();
+    }
+
+    public String getOrdenStr(){
+        return orden.getNumeroStr();
+    }
+
     public String getSerie(){
         return articulo.serie;
     }
@@ -48,6 +56,11 @@ public class OrdenArt implements Serializable {
 
     public BigDecimal getCantidad(){
         return Numbers.getBD(cantidad, 2);
+    }
+
+    public String getCantidadStr(){
+        char prefix = movimiento==Util.MOVIMIENTO_ENTRADA?'+':'-';
+        return prefix + Numbers.getBD(cantidad, 2).toString();
     }
 
     public BigDecimal getStock(){
@@ -65,7 +78,7 @@ public class OrdenArt implements Serializable {
     public String getObservaciones(){
         return observaciones;
     }
-
+ 
     @Override
     public int hashCode() {
         final int prime = 31;

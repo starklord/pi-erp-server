@@ -76,7 +76,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 "almacen_destino"
         };
         String where = "where a.fecha between '" + inicio.toString() + "' and '" + fin.toString() + "'";
-        where+= " and a.tipo = '"+tipo+"'";
+        where += " and a.tipo = '" + tipo + "'";
         if (sucursalId != -1) {
             where += " and a.sucursal = " + sucursalId;
         }
@@ -205,46 +205,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
             Update.beginTransaction(app);
             List<OrdenDet> detalles = listDets(app, ordenId);
             for (OrdenDet det : detalles) {
-                int almacenId = det.orden.almacen_destino.id;
-                Articulo lastByProducto = getLastArticulo(app, almacenId, det.producto.id);
-                if (lastByProducto == null) {
-                    if (orden.tipo == Util.TIPO_ORDEN_SALIDA) {
-                        throw new Exception("No hay stock para el producto: " + det.producto.nombre);
-                    } else {
-                        Articulo last = getLastArticulo(app, almacenId);
-                        int lastNumber = last == null ? 0
-                                : Integer.parseInt(last.serie.substring(4, last.serie.length()));
-                        Articulo art = new Articulo();
-                        art.activo = true;
-                        art.creador = usuario;
-                        art.fecha_vencimiento = null;
-                        art.lote = "-";
-                        art.serie = "PI" + Util.completeWithZeros(almacenId + "", 2)
-                                + Util.completeWithZeros((lastNumber + 1) + "", 7);
-                        art.orden_art = null;
-                        art.producto = det.producto;
-                        CRUD.save(app, art);
-                        lastByProducto = art;
-                    }
-                }
-                OrdenArt lastOart = getLastOrdenArt(app, almacenId, lastByProducto.producto.id);
-                OrdenArt oart = new OrdenArt();
-                oart.activo = true;
-                oart.articulo = lastByProducto;
-                oart.creador = usuario;
-                oart.movimiento =orden.tipo==Util.TIPO_ORDEN_ENTRADA?Util.MOVIMIENTO_ENTRADA:Util.MOVIMIENTO_SALIDA;
-                oart.observaciones = "";
-                oart.orden = det.orden;
-                oart.stock_anterior = lastOart == null ? BigDecimal.ZERO : lastOart.stock;
-                oart.cantidad = det.cantidad;
-                if(oart.movimiento==Util.MOVIMIENTO_ENTRADA){
-                    oart.stock = oart.stock_anterior.add(oart.cantidad);
-                }else{
-                    oart.stock = oart.stock_anterior.subtract(oart.cantidad);
-                }
-                CRUD.save(app, oart);
-                lastByProducto.orden_art = oart;
-                CRUD.update(app, lastByProducto);
+                createOrdenArtByOrdenDet(app, orden.tipo,orden, det, usuario);
             }
             orden.atendido_por = new Persona();
             orden.atendido_por.id = personaId;
@@ -257,6 +218,69 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
             throw new Exception(ex.getMessage());
         }
 
+    }
+
+    private void createOrdenArtByOrdenDet(String app, char tipo,Orden orden, OrdenDet det, String usuario) throws Exception {
+        int almacenOrigenId = det.orden.almacen_origen.id;
+        int almacenDestinoId = det.orden.almacen_destino.id;
+        if (tipo == Util.TIPO_ORDEN_ENTRADA) {
+            Articulo lastArt = getLastArticulo(app, almacenOrigenId, det.producto.id);
+            if (lastArt == null) {
+                Articulo last = getLastArticulo(app, almacenOrigenId);
+                int lastNumber = last == null ? 0
+                        : Integer.parseInt(last.serie.substring(4, last.serie.length()));
+                Articulo art = new Articulo();
+                art.activo = true;
+                art.creador = usuario;
+                art.fecha_vencimiento = null;
+                art.lote = "-";
+                art.serie = "PI" + Util.completeWithZeros(almacenOrigenId + "", 2)
+                        + Util.completeWithZeros((lastNumber + 1) + "", 7);
+                art.orden_art = null;
+                art.producto = det.producto;
+                CRUD.save(app, art);
+                lastArt = art;
+            }
+            OrdenArt lastOArt = getLastOrdenArt(app, almacenOrigenId, det.producto.id);
+            OrdenArt oart = new OrdenArt();
+            oart.activo = true;
+            oart.articulo = lastArt;
+            oart.creador = usuario;
+            oart.movimiento = Util.MOVIMIENTO_ENTRADA;
+            oart.observaciones = ""; 
+            oart.orden = det.orden;
+            oart.stock_anterior = lastOArt == null ? BigDecimal.ZERO : lastOArt.stock;
+            oart.cantidad = det.cantidad;
+            oart.stock = oart.stock_anterior.add(oart.cantidad);
+            CRUD.save(app, oart);
+            lastArt.orden_art = oart;
+            CRUD.update(app, lastArt);
+            return;
+        }
+        if (tipo == Util.TIPO_ORDEN_SALIDA) {
+            Articulo lastArt = getLastArticulo(app, almacenOrigenId, det.producto.id);
+            if (lastArt == null) {
+                throw new Exception("No hay stock para el producto: " + det.producto.nombre);
+            }
+            OrdenArt lastOArt = getLastOrdenArt(app, almacenOrigenId, det.producto.id);
+            if (lastOArt.stock.compareTo(det.cantidad) < 0) {
+                throw new Exception("No hay stock para el producto: " + det.producto.nombre);
+            }
+            OrdenArt oart = new OrdenArt();
+            oart.activo = true;
+            oart.articulo = lastArt;
+            oart.creador = usuario;
+            oart.movimiento = Util.MOVIMIENTO_SALIDA;
+            oart.observaciones = "";
+            oart.orden = det.orden;
+            oart.stock_anterior = lastOArt.stock;
+            oart.cantidad = det.cantidad;
+            oart.stock = oart.stock_anterior.subtract(oart.cantidad);
+            CRUD.save(app, oart);
+            lastArt.orden_art = oart;
+            CRUD.update(app, lastArt);
+            return;
+        }
     }
 
     @Override

@@ -70,14 +70,16 @@ public class Util {
     // para los productos
     public static String NACIONAL = "Nacional";
     public static String IMPORTADO = "Importado";
+    public static String ARTICULO = "Articulo";
     public static String PRODUCTO = "Producto";
     public static String SERVICIO = "Servicio";
     public static String CODIGO = "Codigo";
     public static String SERIE = "Serie";
     public static String CODIGO_PRODUCTO = "Codigo de Producto";
     public static String SERIE_ARTICULO = "Serie de Articulo";
-    public static char TIPO_CONTROL_CODIGO = 'C';
-    public static char TIPO_CONTROL_SERIE = 'S';
+    public static char TIPO_CONTROL_ARTICULO = 'A';
+    public static char TIPO_CONTROL_PRODUCTO = 'P';
+    public static char TIPO_CONTROL_SERVICIO = 'S';
 
     // para todas:
     public static String TODAS_MARCAS = "Todas las Marcas";
@@ -307,13 +309,19 @@ public class Util {
     public static final String PARROQUIA_FECHA_CONFIRMACION = "Fecha Confirmacion";
     public static final String PARROQUIA_FECHA_MATRIMONIO = "Fecha Matrimonio";
 
-    // para los datos de las personas y direcciones
-
+    // para los datos de las personas
     // para los handlers
     // public static List<ResizeWindowHandler> RESIZERS = new ArrayList<>();
 
     public static final String[] MESES = {"Enero","Febrero","Marzo","Abril","Mayo","Junio",
     "Julio","Agosto","Setiembre","Octubre","Noviembre","Diciembre"}; 
+
+    public static final String[] DIAS = {
+        "CERO","UNO","DOS","TRES","CUATRO","CINCO","SEIS","SIETE","OCHO","NUEVE","DIEZ",
+        "ONCE","DOCE","TRECE","CATORCE","QUINCE","DIECISEIS","DIECISIETE","DIECIOCHO","DIECINUEVE","VEINTE",
+        "VENTIUNO","VEINTIDOS","VEINTITRES","VEINTICUATRO","VEINTICINCO","VEINTISEIS","VEINTISIETE","VEINTIOCHO","VEINTINUEVE","TREINTA",
+        "TREINTA Y UNO"
+    };
 
     public static float round2(float num) {
         float result = num * 100;
