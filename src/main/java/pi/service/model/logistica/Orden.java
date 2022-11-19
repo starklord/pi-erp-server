@@ -43,6 +43,7 @@ public class Orden implements Serializable {
     public Almacen almacen_origen;
     public Almacen almacen_destino;
     public String observaciones;
+    public Persona vendedor;
 
     public String getEstado(){
         String estado = Util.OK;
@@ -50,6 +51,39 @@ public class Orden implements Serializable {
             estado = Util.PENDIENTE;
         }
 		return activo?estado:Util.ANULADO;
+	}
+
+    public String getMonedaStr() {
+		return moneda.simbolo;
+	}
+
+    public String getFormaPagoStr() {
+		String fp = forma_pago.descripcion;
+		if(forma_pago.id == Util.FP_CREDITO){
+			fp +=" " + dias_credito + " dias";
+		}
+		return fp;
+	}
+
+    public String getIdentificadorCliente(){
+		return cliente.identificador;
+	}
+
+    public String getIdentificadorProveedor(){
+		return proveedor.identificador;
+	}
+    
+    public String getVendedorStr(){
+        return vendedor.toString();
+    }
+    
+
+    public BigDecimal getCobrado() {
+		return Numbers.getBD(total_cobrado, 2);
+	}
+
+	public BigDecimal getSaldo() {
+		return Numbers.getBD(total.subtract(total_cobrado), 2);
 	}
 
     public String getNumeroStr(){

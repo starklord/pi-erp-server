@@ -262,7 +262,7 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
                 String cantEntera = Numbers.getBD(det.cantidad, 0).toString();
                 String cantidad_str = String.valueOf(cantEntera) + "/" + det.observaciones + "/"
                         + det.producto.marca.nombre;
-                if (det.cantidad.compareTo(BigDecimal.ZERO) != 0)
+                if (det.cantidad.compareTo(BigDecimal.ZERO) != 0) 
                     cantidad_str = cantEntera;
                 cantidad_str = String.valueOf(cantidad_str) + "/" + det.observaciones + "/" + det.producto.marca.nombre;
                 sbr.append(codUnidadMedida).append("|");
@@ -270,7 +270,7 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
                 sbr.append(codProducto).append("|");
                 sbr.append("-").append("|");
                 sbr.append(descripcion).append("|");
-                if (doc.impuesto.tipo == 1) {
+                if (doc.impuesto.tipo == Util.TIPO_IMPUESTO_IGV) {
                     sbr.append(mtoValorUnitario).append("|");
                     sbr.append(igvTotalItem).append("|");
                     sbr.append("1000").append("|");
@@ -279,7 +279,8 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
                     sbr.append("IGV").append("|");
                     sbr.append("VAT").append("|");
                     sbr.append("10").append("|");
-                } else {
+                } 
+                if (doc.impuesto.tipo == Util.TIPO_IMPUESTO_INA) {
                     sbr.append(mtoPrecioVentaItem).append("|")
                             .append("0.00").append("|")
                             .append("9998").append("|")
@@ -289,7 +290,17 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
                             .append("FRE").append("|")
                             .append("30").append("|");
                 }
-                // sbr.append("18.00").append("|");
+                if (doc.impuesto.tipo == Util.TIPO_IMPUESTO_EXP) {
+                    sbr.append(mtoPrecioVentaItem).append("|")
+                            .append("0.00").append("|")
+                            .append("9995").append("|")
+                            .append("0.00").append("|")
+                            .append(subtotal).append("|")
+                            .append("EXP").append("|")
+                            .append("FRE").append("|")
+                            .append("40").append("|");
+                }
+                // sbr.append("18.00").append("|"); 
                 sbr.append(IGVPercent).append("|");
                 sbr.append("-").append("|");
                 sbr.append("0.00").append("|");
@@ -350,10 +361,10 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
                 strIgvTrib = igv;
             }
             if (doc.impuesto.tipo == Util.TIPO_IMPUESTO_INA) {
-                strInaTrib = total;
+                strInaBase = total; 
             }
             if (doc.impuesto.tipo == Util.TIPO_IMPUESTO_EXP) {
-                strExpTrib = total;
+                strExpBase = total;
             }
             sbrTri.append("1000|IGV|VAT|").append(strIgvBase).append("|").append(strIgvTrib).append("|").append("\n");
             sbrTri.append("9998|INA|FRE|").append(strInaBase).append("|").append(strInaTrib).append("|").append("\n");
