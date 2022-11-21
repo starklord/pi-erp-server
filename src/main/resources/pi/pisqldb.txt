@@ -171,3 +171,11 @@ ALTER TABLE IF EXISTS logistica.orden
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
+ALTER TABLE IF EXISTS logistica.orden ADD COLUMN if not exists encargado integer NOT NULL DEFAULT '-1'::integer;
+ALTER TABLE IF EXISTS logistica.orden drop constraint if exists orden_encargado_persona_fk;
+ALTER TABLE IF EXISTS logistica.orden
+    ADD CONSTRAINT orden_encargado_persona_fk FOREIGN KEY (encargado)
+    REFERENCES persona.persona (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;

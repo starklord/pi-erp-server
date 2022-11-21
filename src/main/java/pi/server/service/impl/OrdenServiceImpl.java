@@ -73,7 +73,8 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 "aprobado_por",
                 "atendido_por",
                 "almacen_origen",
-                "almacen_destino"
+                "almacen_destino",
+                "sucursal"
         };
         String where = "where a.fecha between '" + inicio.toString() + "' and '" + fin.toString() + "'";
         where += " and a.tipo = '" + tipo + "'";
@@ -121,8 +122,8 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 "articulo",
                 "articulo.producto"
         };
-        String where = " where b.almacen_origen = " + almacenId + " and b.almacen_destino = " + almacenId;
-        where += " and c.producto = " + productoId;
+        String where = " where (b.almacen_origen = " + almacenId + " or b.almacen_destino = " + almacenId;
+        where += ") and c.producto = " + productoId;
         where += " order by a.creado asc";
         try {
             list = CRUD.list(app, OrdenArt.class, require, where);
@@ -223,10 +224,10 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
     private void createOrdenArtByOrdenDet(String app, char tipo,Orden orden, OrdenDet det, String usuario) throws Exception {
         int almacenOrigenId = det.orden.almacen_origen.id;
         int almacenDestinoId = det.orden.almacen_destino.id;
-        if (tipo == Util.TIPO_ORDEN_ENTRADA) {
-            Articulo lastArt = getLastArticulo(app, almacenOrigenId, det.producto.id);
+        if (tipo == Util.TIPO_ORDEN_ENTRADA||tipo==Util.TIPO_ORDEN_COMPRA) {
+            Articulo lastArt = getLastArticulo(app, almacenDestinoId, det.producto.id);
             if (lastArt == null) {
-                Articulo last = getLastArticulo(app, almacenOrigenId);
+                Articulo last = getLastArticulo(app, almacenDestinoId);
                 int lastNumber = last == null ? 0
                         : Integer.parseInt(last.serie.substring(4, last.serie.length()));
                 Articulo art = new Articulo();
@@ -234,14 +235,14 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 art.creador = usuario;
                 art.fecha_vencimiento = null;
                 art.lote = "-";
-                art.serie = "PI" + Util.completeWithZeros(almacenOrigenId + "", 2)
+                art.serie = "PI" + Util.completeWithZeros(almacenDestinoId + "", 2)
                         + Util.completeWithZeros((lastNumber + 1) + "", 7);
                 art.orden_art = null;
                 art.producto = det.producto;
                 CRUD.save(app, art);
                 lastArt = art;
             }
-            OrdenArt lastOArt = getLastOrdenArt(app, almacenOrigenId, det.producto.id);
+            OrdenArt lastOArt = getLastOrdenArt(app, almacenDestinoId, det.producto.id);
             OrdenArt oart = new OrdenArt();
             oart.activo = true;
             oart.articulo = lastArt;
@@ -257,7 +258,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
             CRUD.update(app, lastArt);
             return;
         }
-        if (tipo == Util.TIPO_ORDEN_SALIDA) {
+        if (tipo == Util.TIPO_ORDEN_SALIDA||tipo==Util.TIPO_ORDEN_VENTA) {
             Articulo lastArt = getLastArticulo(app, almacenOrigenId, det.producto.id);
             if (lastArt == null) {
                 throw new Exception("No hay stock para el producto: " + det.producto.nombre);

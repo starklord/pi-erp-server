@@ -43,7 +43,7 @@ public class Orden implements Serializable {
     public Almacen almacen_origen;
     public Almacen almacen_destino;
     public String observaciones;
-    public Persona vendedor;
+    public Persona encargado;
 
     public String getEstado(){
         String estado = Util.OK;
@@ -73,8 +73,8 @@ public class Orden implements Serializable {
 		return proveedor.identificador;
 	}
     
-    public String getVendedorStr(){
-        return vendedor.toString();
+    public String getEncargadoStr(){
+        return encargado.toString();
     }
     
 
@@ -129,6 +129,11 @@ public class Orden implements Serializable {
     public String getClienteStr(){
         return cliente_string;
     }
+
+    public String getProveedorStr(){
+        return proveedor.toString();
+    }
+
     public String getObservaciones() {
         return observaciones;
     }

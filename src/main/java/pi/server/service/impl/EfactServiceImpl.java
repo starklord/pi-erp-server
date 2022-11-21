@@ -364,7 +364,7 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
                 strInaBase = total; 
             }
             if (doc.impuesto.tipo == Util.TIPO_IMPUESTO_EXP) {
-                strExpBase = total;
+                strExpBase = total; 
             }
             sbrTri.append("1000|IGV|VAT|").append(strIgvBase).append("|").append(strIgvTrib).append("|").append("\n");
             sbrTri.append("9998|INA|FRE|").append(strInaBase).append("|").append(strInaTrib).append("|").append("\n");
