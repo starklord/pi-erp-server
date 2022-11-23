@@ -378,9 +378,9 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 + filterMarca
                 + filterLinea
                 + filterVer
-                + " and i.almacen_destino = " + almacenId + " order by b.nombre,b.codigo asc";
+                + " and (i.almacen_origen = " + almacenId + " or i.almacen_destino = "+almacenId+") order by b.nombre,b.codigo asc";
         try {
-            list = CRUD.list(app, Articulo.class, req, filter);
+            list = CRUD.list(app, Articulo.class, req, filter); 
         } catch (Exception e) {
             e.printStackTrace();
         }
