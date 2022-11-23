@@ -42,7 +42,7 @@ public class LoginServiceImpl extends HessianServlet implements LoginService {
 	public MetaServer login(String app, String user, String pass, int empresaId, int sucursalId) throws Exception {
 		Class table = Empleado.class;
 		String[] required = {
-			"persona","sucursal","cargo","empresa","caja" 
+			"persona","sucursal","cargo","empresa","caja","sucursal.direccion" 
 		};
 		String filter = "where usuario = '" + user + "' and clave = '" + Util.encrypt(pass) +"' and a.empresa = " +empresaId ;
 		List<Empleado> listEmpleados =  CRUD.list(app,table,required,filter);
