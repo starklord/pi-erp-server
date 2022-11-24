@@ -74,7 +74,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 "atendido_por",
                 "almacen_origen",
                 "almacen_destino",
-                "sucursal"
+                "sucursal",
         };
         String where = "where a.fecha between '" + inicio.toString() + "' and '" + fin.toString() + "'";
         where += " and a.tipo = '" + tipo + "'";
@@ -174,8 +174,21 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
 
     @Override
     public Orden updateOrden(String app, Orden orden, List<OrdenDet> detalles) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            Update.beginTransaction(app);
+            CRUD.update(app, orden);
+            CRUD.execute(app, "delete from logistica.orden_det where orden = " + orden.id);
+            for (OrdenDet det : detalles) {
+                det.orden = orden;
+                CRUD.save(app, det);
+            }
+            Update.commitTransaction(app);
+            return orden;
+        } catch (Exception ex) { 
+            ex.printStackTrace();
+            Update.rollbackTransaction(app);
+            throw new Exception(ex.getMessage());
+        }
     }
 
     @Override

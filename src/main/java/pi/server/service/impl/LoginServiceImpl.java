@@ -53,7 +53,6 @@ public class LoginServiceImpl extends HessianServlet implements LoginService {
 		if(!empleado.activo){
 			throw new Exception("El usuario ingresado se encuentra inhabilitado");
 		}
-		
 		//para los permisos
 		String[] requiredCP = {"cargo","permiso"};
 		List<CargoPermiso> cargosPermisos = CRUD.list(app,CargoPermiso.class,requiredCP,"where b.id = " + empleado.cargo.id);
@@ -72,7 +71,7 @@ public class LoginServiceImpl extends HessianServlet implements LoginService {
 		}
 		List<TxxxSituacion> efactSituaciones = Services.getEfact().listEfactSituaciones(app);
         if (efactSituaciones.isEmpty()) {
-            throw new Exception("No se pudieron cargar efact_situaciones");
+            throw new Exception("No se pudieron cargar efact_situaciones"); 
         }
 		Map<String,String> mapEfactSituaciones = new HashMap<>();
         for (TxxxSituacion item : efactSituaciones) {
@@ -87,7 +86,10 @@ public class LoginServiceImpl extends HessianServlet implements LoginService {
         }
 		TipoCambio tc = Services.getTipoCambio().getLastTipoCambio(app);
 		MetaServer meta = new MetaServer();
-		meta.sucursal = empleado.sucursal; 
+		
+		meta.sucursal = Services.getSucursal().get(app, sucursalId); 
+		System.out.println("telfs:xd " + meta.sucursal.direccion.telefono);
+        System.out.println("emails:xd " + meta.sucursal.direccion.email);
 		meta.empresa = empleado.empresa;
 		meta.empleado = empleado;
 		meta.permisos = permisos;

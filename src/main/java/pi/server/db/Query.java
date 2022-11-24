@@ -28,6 +28,7 @@ public class Query {
                 + join.getJoin().toString() + "\n"
                 + (where==null?"":where) + "\n"
                 + (end==null?"":end);
+                query = query.replace(" PEST ", " PET ");
         System.out.println(query);
 
     }

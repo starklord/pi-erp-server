@@ -185,8 +185,9 @@ public class Update {
         }
         query.deleteCharAt(query.length() - 1);
         query.append(')').append('\n');
-        System.out.println(query.toString());
-        int r = CConexion.getInstance(app_name).update(query.toString());
+        String strQuery = query.toString().replace(" PEST ", " PET ");
+        System.out.println(strQuery);
+        int r = CConexion.getInstance(app_name).update(strQuery);
         System.out.println("number of statement: " + r);
         if (r == 0) {
             throw new Exception("No se grabo ningun dato");
@@ -253,8 +254,9 @@ public class Update {
             throw new Exception("El objeto a actualizar no tiene ningun valor asignado en el campo id");
         }
         query.append("WHERE ").append(strId).append("=").append(objId);
-        System.out.println(query.toString());
-        int r = CConexion.getInstance(app_name).update(query.toString());
+        String strQuery = query.toString().replace(" PEST ", " PET ");
+        System.out.println(strQuery);
+        int r = CConexion.getInstance(app_name).update(strQuery);
         System.out.println("number of statement: " + r);
         if (r == 0) {
             throw new Exception("No se actualizo ningun dato");

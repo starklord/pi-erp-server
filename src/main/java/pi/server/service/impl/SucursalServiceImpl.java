@@ -126,8 +126,6 @@ public class SucursalServiceImpl extends HessianServlet implements SucursalServi
 		try {
 			String[] required = {
 					"empresa",
-					"empresa.direccion",
-					"empresa.direccion.persona",
 					"direccion"
 			};
 			list = CRUD.list(app,Sucursal.class, required, " where a.id = " + sucursalId);

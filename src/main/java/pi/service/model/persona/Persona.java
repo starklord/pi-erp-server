@@ -38,17 +38,6 @@ public class Persona implements Serializable {
     public String getEstado(){
         return activo?Util.OK:Util.INACTIVO;
     }
-    
-    public Direccion getDireccion() {
-        Direccion dir = null;
-        try {
-            // dir = Services.getDireccion().getDireccionDNI(identificador).get(0);
-        } catch (Exception ex) { 
-            Logger.getLogger(Persona.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Error en obtener direccion por dni :" + ex);
-        }
-        return dir;
-    }
 
     public String getTipoCliente(){
         
