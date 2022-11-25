@@ -18,18 +18,43 @@ CREATE TABLE IF NOT EXISTS logistica.articulo
     creado timestamp without time zone NOT NULL DEFAULT now(),
     creador character varying(255) COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
     activo boolean NOT NULL DEFAULT true,
+    estado character varying(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'K'::character varying,
     producto integer NOT NULL,
     orden_art integer,
     serie character varying(255) COLLATE pg_catalog."default" NOT NULL,
     lote character varying(255) COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
     fecha_vencimiento date,
+    almacen integer NOT NULL DEFAULT 1,
     CONSTRAINT articulo_pkey PRIMARY KEY (id),
     CONSTRAINT serieuk UNIQUE (serie),
+    CONSTRAINT articulo_almacen_fk FOREIGN KEY (almacen)
+        REFERENCES logistica.almacen (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT orden_art_articulofk FOREIGN KEY (orden_art)
+        REFERENCES logistica.orden_art (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
     CONSTRAINT productoarticulofk FOREIGN KEY (producto)
         REFERENCES logistica.producto (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS logistica.articulo
+    OWNER to postgres;
+-- Index: fki_articulo_almacen_fk
+
+-- DROP INDEX IF EXISTS logistica.fki_articulo_almacen_fk;
+
+CREATE INDEX IF NOT EXISTS fki_articulo_almacen_fk
+    ON logistica.articulo USING btree
+    (almacen ASC NULLS LAST)
+    TABLESPACE pg_default;
 
 --para crear las tablas de ordenes
 CREATE TABLE IF NOT EXISTS logistica.orden
@@ -179,3 +204,4 @@ ALTER TABLE IF EXISTS logistica.orden
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
+ALTER TABLE IF EXISTS logistica.articulo ADD COLUMN if not exists almacen integer NOT NULL DEFAULT 1;

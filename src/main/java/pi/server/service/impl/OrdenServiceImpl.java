@@ -125,7 +125,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
         String where = " where (b.almacen_origen = " + almacenId + " or b.almacen_destino = " + almacenId;
         where += ") and c.producto = " + productoId;
         where += " order by a.creado asc";
-        try {
+        try { 
             list = CRUD.list(app, OrdenArt.class, require, where);
         } catch (Exception e) {
             e.printStackTrace();
