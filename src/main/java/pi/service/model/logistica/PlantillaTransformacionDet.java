@@ -1,20 +1,41 @@
-package pi.service.model.almacen;
+package pi.service.model.logistica;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 import pi.service.db.client.TableDB;
+import pi.service.factory.Numbers;
+import pi.service.model.almacen.Producto;
 
-@TableDB(name="logistica.transformacion_det")
-public class TransformacionDet implements Serializable {
+@TableDB(name="logistica.plantilla_transformacion_det")
+public class PlantillaTransformacionDet implements Serializable {
 	
 	public Integer id;
 	public String creador;
 	public Boolean activo;
-	public Transformacion transformacion;
+	public PlantillaTransformacion plantilla_transformacion;
 	public Producto producto;
-	public Almacen almacen;
 	public BigDecimal cantidad;
+
+	public String getCodigo(){
+		return producto.codigo;
+	}
+
+	public String getNombre(){
+		return producto.nombre;
+	}
+
+	public BigDecimal getCantidad(){
+		return Numbers.getBD(cantidad, 2);
+	}
+
+	public BigDecimal getCosto(){
+		return Numbers.getBD(producto.costo_ultima_compra, 2);
+	}
+
+	public BigDecimal getTotal(){
+		return Numbers.getBD(producto.costo_ultima_compra.multiply(cantidad), 2);
+	}
 	
 	@Override
 	public String toString() {
@@ -37,7 +58,7 @@ public class TransformacionDet implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TransformacionDet other = (TransformacionDet) obj;
+		PlantillaTransformacionDet other = (PlantillaTransformacionDet) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

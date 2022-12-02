@@ -43,19 +43,6 @@ CREATE TABLE IF NOT EXISTS logistica.articulo
         ON DELETE NO ACTION
 );
 
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS logistica.articulo
-    OWNER to postgres;
--- Index: fki_articulo_almacen_fk
-
--- DROP INDEX IF EXISTS logistica.fki_articulo_almacen_fk;
-
-CREATE INDEX IF NOT EXISTS fki_articulo_almacen_fk
-    ON logistica.articulo USING btree
-    (almacen ASC NULLS LAST)
-    TABLESPACE pg_default;
-
 --para crear las tablas de ordenes
 CREATE TABLE IF NOT EXISTS logistica.orden
 (

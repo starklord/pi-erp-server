@@ -1,14 +1,14 @@
-package pi.service.model.almacen;
+package pi.service.model.logistica;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 import pi.service.db.client.TableDB;
-import pi.service.model.empresa.Empresa;
+import pi.service.model.almacen.Producto;
+import pi.service.util.Util;
 
-@TableDB(name="logistica.transformacion")
-public class Transformacion implements Serializable {
+@TableDB(name="logistica.plantilla_transformacion")
+public class PlantillaTransformacion implements Serializable {
 	
 	public Integer id;
 	public String creador;
@@ -16,14 +16,33 @@ public class Transformacion implements Serializable {
 	public Integer numero;
 	public Date fecha;
 	public Producto producto;
-	public Empresa empresa;
 	public String observaciones;
-	public Almacen almacen;
-	public BigDecimal cantidad;
-	public Ensamblador ensamblador;
-	public BigDecimal costo_unitario;
-	public BigDecimal costo_total;
+
+	public String getEstado(){
+        String estado = Util.OK;
+		return activo?estado:Util.ANULADO;
+	}
+
+	public String getNumeroStr(){
+		return Util.completeWithZeros(numero+"", 7);
+	}
+
+	public String getFechaStr(){
+        return Util.formatDate(fecha, Util.SDF_DATE_HOURS);
+    }
+
+	public String getProductoStr(){
+		return "["+producto.codigo+"] "+ producto.nombre;
+	}
 	
+	public String getCreador(){
+		return creador;
+	}
+
+	public String getObservaciones(){
+		return observaciones;
+	}
+
 	@Override
 	public String toString() {
 		
@@ -47,7 +66,7 @@ public class Transformacion implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Transformacion other = (Transformacion) obj;
+		PlantillaTransformacion other = (PlantillaTransformacion) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
