@@ -114,6 +114,7 @@ CREATE TABLE IF NOT EXISTS logistica.orden_det
     orden integer NOT NULL,
     producto integer NOT NULL,
     cantidad numeric(18,4) NOT NULL DEFAULT 0,
+    atendido numeric(18,4) NOT NULL DEFAULT 0,
     precio_unitario numeric(18,4) NOT NULL DEFAULT 0,
     total numeric(18,4) NOT NULL DEFAULT 0,
     unidad integer NOT NULL,
@@ -192,3 +193,4 @@ ALTER TABLE IF EXISTS logistica.orden
     ON DELETE NO ACTION
     NOT VALID;
 ALTER TABLE IF EXISTS logistica.articulo ADD COLUMN if not exists almacen integer NOT NULL DEFAULT 1;
+ALTER TABLE IF EXISTS logistica.orden_det ADD COLUMN if not exists atendido numeric(18,4) NOT NULL DEFAULT 0;
