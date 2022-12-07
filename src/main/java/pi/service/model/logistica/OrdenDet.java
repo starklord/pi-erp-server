@@ -18,7 +18,6 @@ public class OrdenDet implements Serializable {
     public Orden orden;
     public Producto producto;
     public BigDecimal cantidad;
-    public BigDecimal atendido;
     public BigDecimal precio_unitario;
     public BigDecimal total;
     public Unidad unidad;
@@ -38,10 +37,6 @@ public class OrdenDet implements Serializable {
 
     public BigDecimal getCantidad(){
         return Numbers.getBD(cantidad, 2);
-    }
-
-    public BigDecimal getAtendido(){
-        return Numbers.getBD(atendido, 2);
     }
 
     public BigDecimal getPrecioUnitario(){
