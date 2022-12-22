@@ -50,9 +50,6 @@ public class Producto implements Serializable {
 
 	public String getControl(){
 		String str = Util.PRODUCTO;
-		if(this.tipo_control==Util.TIPO_CONTROL_ARTICULO){
-			str = Util.ARTICULO;
-		}
 		if(this.tipo_control==Util.TIPO_CONTROL_SERVICIO){
 			str = Util.SERVICIO;
 		}

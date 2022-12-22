@@ -70,14 +70,13 @@ public class Util {
     // para los productos
     public static String NACIONAL = "Nacional";
     public static String IMPORTADO = "Importado";
-    public static String ARTICULO = "Articulo";
     public static String PRODUCTO = "Producto";
     public static String SERVICIO = "Servicio";
     public static String CODIGO = "Codigo";
     public static String SERIE = "Serie";
+    public static String LOTE = "Lote";
     public static String CODIGO_PRODUCTO = "Codigo de Producto";
     public static String SERIE_ARTICULO = "Serie de Articulo";
-    public static char TIPO_CONTROL_ARTICULO = 'A';
     public static char TIPO_CONTROL_PRODUCTO = 'P';
     public static char TIPO_CONTROL_SERVICIO = 'S';
 

@@ -18,9 +18,7 @@ public class OrdenArt implements Serializable {
     public Articulo articulo;
     public Character movimiento;
     public String observaciones;
-    public BigDecimal stock_anterior;
     public BigDecimal cantidad;
-    public BigDecimal stock;
 
     public String getEstado(){
         return activo?Util.OK:Util.ANULADO;
@@ -50,10 +48,6 @@ public class OrdenArt implements Serializable {
         return movimiento;
     }
 
-    public BigDecimal getStockAnterior(){
-        return Numbers.getBD(stock_anterior, 2);
-    }
-
     public BigDecimal getCantidad(){
         return Numbers.getBD(cantidad, 2);
     }
@@ -63,16 +57,12 @@ public class OrdenArt implements Serializable {
         return prefix + Numbers.getBD(cantidad, 2).toString();
     }
 
-    public BigDecimal getStock(){
-        return Numbers.getBD(stock, 2);
-    }
-
     public String getLote(){
-        return articulo.lote==null?"-":articulo.lote;
+        return articulo.lote==null?"":articulo.lote;
     }
 
     public String getFechaVencimiento(){
-        return articulo.fecha_vencimiento==null?"-":Util.formatDate(articulo.fecha_vencimiento, Util.SDF_DATE);
+        return articulo.fecha_vencimiento==null?"":Util.formatDate(articulo.fecha_vencimiento, Util.SDF_DATE);
     }
 
     public String getObservaciones(){
@@ -86,6 +76,7 @@ public class OrdenArt implements Serializable {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
     }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -101,10 +92,5 @@ public class OrdenArt implements Serializable {
         } else if (!id.equals(other.id))
             return false;
         return true;
-    }
-    
-    
-
-    
-    
+    }    
 }

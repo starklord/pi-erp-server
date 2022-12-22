@@ -1,6 +1,5 @@
 package pi.server.service.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -110,12 +109,42 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
 
     @Override
     public List<OrdenArt> listOrdenArts(String app, int ordenId) {
-        // TODO Auto-generated method stub
-        return null;
+        List<OrdenArt> list = new ArrayList<>();
+        String[] require = {
+                "orden",
+                "articulo",
+                "articulo.producto"
+        };
+        String where = " where b.id = " + ordenId;
+        where += " order by a.creado asc";
+        try {
+            list = CRUD.list(app, OrdenArt.class, require, where);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     @Override
-    public List<OrdenArt> listOrdenArtsByAlmacenProducto(String app, int almacenId, int productoId) {
+    public List<OrdenArt> listOrdenArtsByProducto(String app, int ordenId, int productoId) {
+        List<OrdenArt> list = new ArrayList<>();
+        String[] require = {
+                "orden",
+                "articulo",
+                "articulo.producto"
+        };
+        String where = " where b.id = " + ordenId + " and d.id = " + productoId;
+        where += " order by a.creado asc";
+        try {
+            list = CRUD.list(app, OrdenArt.class, require, where);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public List<OrdenArt> listOrdenArtsByAlmacenProducto(String app, int almacenId, int productoId, Date inicio, Date fin) {
         List<OrdenArt> list = new ArrayList<>();
         String[] require = {
                 "orden",
@@ -124,8 +153,11 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
         };
         String where = " where (b.almacen_origen = " + almacenId + " or b.almacen_destino = " + almacenId;
         where += ") and c.producto = " + productoId;
+        if(inicio!=null){
+            where += " and b.fecha between '" + inicio.toString()+"' and '" + fin.toString()+"'";
+        }
         where += " order by a.creado asc";
-        try { 
+        try {
             list = CRUD.list(app, OrdenArt.class, require, where);
         } catch (Exception e) {
             e.printStackTrace();
@@ -184,7 +216,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
             }
             Update.commitTransaction(app);
             return orden;
-        } catch (Exception ex) { 
+        } catch (Exception ex) {
             ex.printStackTrace();
             Update.rollbackTransaction(app);
             throw new Exception(ex.getMessage());
@@ -209,93 +241,192 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
 
     }
 
+
     @Override
-    public void atenderOrden(String app, int ordenId, int personaId, String usuario) throws Exception {
+    public void atenderOrden(String app, int ordenId, int personaId, OrdenArt oart) throws Exception {
         try {
             Orden orden = getOrden(app, ordenId);
-            if (orden.atendido_por != null) {
-                throw new Exception("La orden ya ha sido atendida");
-            }
+            int almacenOrigenId = orden.almacen_origen.id;
+            int almacenDestinoId = orden.almacen_destino.id;
+            char tipo = orden.tipo;
             Update.beginTransaction(app);
-            List<OrdenDet> detalles = listDets(app, ordenId);
-            for (OrdenDet det : detalles) {
-                createOrdenArtByOrdenDet(app, orden.tipo,orden, det, usuario);
-            }
             orden.atendido_por = new Persona();
             orden.atendido_por.id = personaId;
             orden.fecha_atencion = new Date();
             CRUD.update(app, orden);
+            Articulo articulo = null;
+            if (oart.movimiento == Util.MOVIMIENTO_ENTRADA) {
+                articulo = getArticulo(app, almacenDestinoId, oart.articulo.serie, oart.articulo.lote,
+                        oart.articulo.fecha_vencimiento, oart.articulo.producto.id);
+                if (articulo == null) {
+                    oart.observaciones = "Nuevo " + oart.observaciones;
+                    articulo = new Articulo();
+                    articulo.activo = true;
+                    articulo.creador = oart.creador;
+                    articulo.fecha_vencimiento = oart.articulo.fecha_vencimiento;
+                    articulo.lote = oart.articulo.lote;
+                    articulo.serie = oart.articulo.serie;
+                    articulo.producto = oart.articulo.producto;
+                    articulo.almacen = orden.almacen_destino;
+                    articulo.stock = oart.cantidad;
+                    CRUD.save(app, articulo);
+                } else {
+                    articulo.stock = articulo.stock.add(oart.cantidad);
+                    CRUD.update(app, articulo);
+                }
+                OrdenArt oart2 = new OrdenArt();
+                oart2.activo = true;
+                oart2.articulo = articulo;
+                oart2.creador = oart.creador;
+                oart2.movimiento = Util.MOVIMIENTO_ENTRADA;
+                oart2.observaciones = oart.observaciones;
+                oart2.orden = oart.orden;
+                oart2.cantidad = oart.cantidad;
+                CRUD.save(app, oart2);
+            } else {
+                articulo = getArticulo(app, almacenDestinoId, oart.articulo.serie, oart.articulo.lote,
+                        oart.articulo.fecha_vencimiento, oart.articulo.producto.id);
+                if (articulo == null) {
+                    throw new Exception("No hay stock para el producto: " + oart.articulo.producto.nombre);
+                }
+                if (articulo.stock.compareTo(oart.cantidad) < 0) {
+                    throw new Exception("No hay stock para el producto: " + articulo.producto.nombre);
+                }
+                OrdenArt oart2 = new OrdenArt();
+                oart2.activo = true;
+                oart2.articulo = articulo;
+                oart2.creador = oart.creador;
+                oart2.movimiento = Util.MOVIMIENTO_SALIDA;
+                oart2.observaciones = oart.observaciones;
+                oart2.orden = orden;
+                oart2.cantidad = oart.cantidad;
+                CRUD.save(app, oart2);
+                articulo.stock = articulo.stock.subtract(oart2.cantidad);
+                CRUD.update(app, articulo);
+                return;
+            }
+
             Update.commitTransaction(app);
         } catch (Exception ex) {
             Update.rollbackTransaction(app);
             ex.printStackTrace();
             throw new Exception(ex.getMessage());
         }
-
     }
 
-    private void createOrdenArtByOrdenDet(String app, char tipo,Orden orden, OrdenDet det, String usuario) throws Exception {
-        int almacenOrigenId = det.orden.almacen_origen.id;
-        int almacenDestinoId = det.orden.almacen_destino.id;
-        if (tipo == Util.TIPO_ORDEN_ENTRADA||tipo==Util.TIPO_ORDEN_COMPRA) {
-            Articulo lastArt = getLastArticulo(app, almacenDestinoId, det.producto.id);
-            if (lastArt == null) {
-                Articulo last = getLastArticulo(app, almacenDestinoId);
-                int lastNumber = last == null ? 0
-                        : Integer.parseInt(last.serie.substring(4, last.serie.length()));
-                Articulo art = new Articulo();
-                art.activo = true;
-                art.creador = usuario;
-                art.fecha_vencimiento = null;
-                art.lote = "-";
-                art.serie = "PI" + Util.completeWithZeros(almacenDestinoId + "", 2)
-                        + Util.completeWithZeros((lastNumber + 1) + "", 7);
-                art.orden_art = null;
-                art.producto = det.producto;
-                CRUD.save(app, art);
-                lastArt = art;
+    @Override
+    public void anularAtencionOrden(String app, int ordenArtId) throws Exception {
+        try{
+            Update.beginTransaction(app);
+            OrdenArt oart = getOrdenArt(app, ordenArtId);
+            if(!oart.activo){
+                throw new Exception("La atencion ya figura anulada");
             }
-            OrdenArt lastOArt = getLastOrdenArt(app, almacenDestinoId, det.producto.id);
-            OrdenArt oart = new OrdenArt();
-            oart.activo = true;
-            oart.articulo = lastArt;
-            oart.creador = usuario;
-            oart.movimiento = Util.MOVIMIENTO_ENTRADA;
-            oart.observaciones = ""; 
-            oart.orden = det.orden;
-            oart.stock_anterior = lastOArt == null ? BigDecimal.ZERO : lastOArt.stock;
-            oart.cantidad = det.cantidad;
-            oart.stock = oart.stock_anterior.add(oart.cantidad);
-            CRUD.save(app, oart);
-            lastArt.orden_art = oart;
-            CRUD.update(app, lastArt);
-            return;
+            oart.activo = false;
+            if(oart.movimiento==Util.MOVIMIENTO_ENTRADA){
+                oart.articulo.stock = oart.articulo.stock.subtract(oart.cantidad);
+            }else{
+                oart.articulo.stock = oart.articulo.stock.add(oart.cantidad);
+            }
+            CRUD.update(app, oart);
+            CRUD.update(app, oart.articulo);
+            Update.commitTransaction(app);
+        }catch(Exception ex){
+            Update.rollbackTransaction(app);
+            ex.printStackTrace();
+            throw new Exception(ex.getMessage());
         }
-        if (tipo == Util.TIPO_ORDEN_SALIDA||tipo==Util.TIPO_ORDEN_VENTA) {
-            Articulo lastArt = getLastArticulo(app, almacenOrigenId, det.producto.id);
-            if (lastArt == null) {
-                throw new Exception("No hay stock para el producto: " + det.producto.nombre);
-            }
-            OrdenArt lastOArt = getLastOrdenArt(app, almacenOrigenId, det.producto.id);
-            if (lastOArt.stock.compareTo(det.cantidad) < 0) {
-                throw new Exception("No hay stock para el producto: " + det.producto.nombre);
-            }
-            OrdenArt oart = new OrdenArt();
-            oart.activo = true;
-            oart.articulo = lastArt;
-            oart.creador = usuario;
-            oart.movimiento = Util.MOVIMIENTO_SALIDA;
-            oart.observaciones = "";
-            oart.orden = det.orden;
-            oart.stock_anterior = lastOArt.stock;
-            oart.cantidad = det.cantidad;
-            oart.stock = oart.stock_anterior.subtract(oart.cantidad);
-            CRUD.save(app, oart);
-            lastArt.orden_art = oart;
-            CRUD.update(app, lastArt);
-            return;
-        }
+        
     }
+
+    // @Override
+    // public void atenderOrden(String app, int ordenId, int personaId, String
+    // usuario) throws Exception {
+    // try {
+    // Orden orden = getOrden(app, ordenId);
+    // if (orden.atendido_por != null) {
+    // throw new Exception("La orden ya ha sido atendida");
+    // }
+    // Update.beginTransaction(app);
+    // List<OrdenDet> detalles = listDets(app, ordenId);
+    // for (OrdenDet det : detalles) {
+    // createOrdenArtByOrdenDet(app, orden.tipo, orden, det, usuario);
+    // }
+    // orden.atendido_por = new Persona();
+    // orden.atendido_por.id = personaId;
+    // orden.fecha_atencion = new Date();
+    // CRUD.update(app, orden);
+    // Update.commitTransaction(app);
+    // } catch (Exception ex) {
+    // Update.rollbackTransaction(app);
+    // ex.printStackTrace();
+    // throw new Exception(ex.getMessage());
+    // }
+
+    // }
+
+    // private void createOrdenArtByOrdenDet(String app, char tipo, Orden orden,
+    // OrdenDet det, String usuario)
+    // throws Exception {
+    // int almacenOrigenId = det.orden.almacen_origen.id;
+    // int almacenDestinoId = det.orden.almacen_destino.id;
+    // if (tipo == Util.TIPO_ORDEN_ENTRADA || tipo == Util.TIPO_ORDEN_COMPRA) {
+    // Articulo lastArt = getLastArticulo(app, almacenDestinoId, det.producto.id);
+    // if (lastArt == null) {
+    // Articulo last = getLastArticulo(app, almacenDestinoId);
+    // int lastNumber = last == null ? 0
+    // : Integer.parseInt(last.serie.substring(4, last.serie.length()));
+    // Articulo art = new Articulo();
+    // art.activo = true;
+    // art.creador = usuario;
+    // art.fecha_vencimiento = null;
+    // art.lote = "-";
+    // art.serie = "PI" + Util.completeWithZeros(almacenDestinoId + "", 2)
+    // + Util.completeWithZeros((lastNumber + 1) + "", 7);
+    // art.producto = det.producto;
+    // CRUD.save(app, art);
+    // lastArt = art;
+    // }
+    // OrdenArt lastOArt = getLastOrdenArt(app, almacenDestinoId, det.producto.id);
+    // OrdenArt oart = new OrdenArt();
+    // oart.activo = true;
+    // oart.articulo = lastArt;
+    // oart.creador = usuario;
+    // oart.movimiento = Util.MOVIMIENTO_ENTRADA;
+    // oart.observaciones = "";
+    // oart.orden = det.orden;
+    // oart.cantidad = det.cantidad;
+    // oart.stock = oart.stock_anterior.add(oart.cantidad);
+    // CRUD.save(app, oart);
+    // lastArt.orden_art = oart;
+    // CRUD.update(app, lastArt);
+    // return;
+    // }
+    // if (tipo == Util.TIPO_ORDEN_SALIDA || tipo == Util.TIPO_ORDEN_VENTA) {
+    // Articulo lastArt = getLastArticulo(app, almacenOrigenId, det.producto.id);
+    // if (lastArt == null) {
+    // throw new Exception("No hay stock para el producto: " + det.producto.nombre);
+    // }
+    // OrdenArt lastOArt = getLastOrdenArt(app, almacenOrigenId, det.producto.id);
+    // if (lastOArt.stock.compareTo(det.cantidad) < 0) {
+    // throw new Exception("No hay stock para el producto: " + det.producto.nombre);
+    // }
+    // OrdenArt oart = new OrdenArt();
+    // oart.activo = true;
+    // oart.articulo = lastArt;
+    // oart.creador = usuario;
+    // oart.movimiento = Util.MOVIMIENTO_SALIDA;
+    // oart.observaciones = "";
+    // oart.orden = det.orden;
+    // oart.stock_anterior = lastOArt.stock;
+    // oart.cantidad = det.cantidad;
+    // oart.stock = oart.stock_anterior.subtract(oart.cantidad);
+    // CRUD.save(app, oart);
+    // lastArt.orden_art = oart;
+    // CRUD.update(app, lastArt);
+    // return;
+    // }
+    // }
 
     @Override
     public void anularOrden(String app, int ordenId) throws Exception {
@@ -336,6 +467,37 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
     }
 
     @Override
+    public Articulo getArticulo(String app, int almacenId, String serie, String lote, Date fechaVencimiento,
+            int productoId) {
+        String[] req = { "producto" };
+        List<Articulo> list = new ArrayList<>();
+        String where = "where a.producto =" + productoId;
+        if (serie != null) {
+            where += " and a.serie = '" + serie + "'";
+        } else {
+            if (lote != null) {
+                where += " and a.lote = '" + lote + "'";
+            }
+            if (fechaVencimiento != null) {
+                where += " and a.fecha_vencimiento = '" + fechaVencimiento.toString() + "'";
+            }
+            where += " and a.almacen = " + almacenId;
+        }
+        where += " order by a.creado desc limit 1";
+        try {
+            list = CRUD.list(app, Articulo.class, req, where);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    public Articulo saveArticulo(String app, Articulo articulo) throws Exception {
+        CRUD.save(app, articulo);
+        return articulo;
+    }
+
+    @Override
     public Articulo getLastArticulo(String app, int almacenId, int productoId) {
         String[] req = { "producto", "orden_art" };
         List<Articulo> list = new ArrayList<>();
@@ -365,6 +527,19 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
     }
 
     @Override
+    public OrdenArt getOrdenArt(String app, int ordenArtId) {
+        String[] req = { "orden", "articulo", "articulo.producto" };
+        List<OrdenArt> list = new ArrayList<>();
+        String where = " where a.id = " + ordenArtId + " order by a.creado desc limit 1";
+        try {
+            list = CRUD.list(app, OrdenArt.class, req, where);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    @Override
     public List<Articulo> listArticulos(String app, int almacenId, int marcaId, int lineaId,
             String ver, String txt) {
         String[] req = {
@@ -374,8 +549,8 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 "producto.unidad",
                 "producto.unidad_conversion",
                 "producto.moneda",
-                "orden_art",
-                "orden_art.orden" };
+                "almacen"
+        };
         List<Articulo> list = new ArrayList<>();
         String filterBuscarPor = " where ( b.codigo ilike '%" + txt + "%'";
         filterBuscarPor += " or  b.nombre ilike '%" + txt + "%'";
@@ -391,9 +566,10 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 + filterMarca
                 + filterLinea
                 + filterVer
-                + " and (i.almacen_origen = " + almacenId + " or i.almacen_destino = "+almacenId+") order by b.nombre,b.codigo asc";
+                + " and a.almacen = " + almacenId
+                + " order by b.nombre,b.codigo asc";
         try {
-            list = CRUD.list(app, Articulo.class, req, filter); 
+            list = CRUD.list(app, Articulo.class, req, filter);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -401,9 +577,19 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
     }
 
     @Override
-    public List<Articulo> listArticulos(String app, int almacenId) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<Articulo> listArticulosLight(String app, int almacenId) {
+        String[] req = {
+                "almacen"
+        };
+        List<Articulo> list = new ArrayList<>();
+        String filter = " where a.almacen = " + almacenId
+                + " order by a.id asc";
+        try {
+            list = CRUD.list(app, Articulo.class, req, filter);
+        } catch (Exception e) { 
+            e.printStackTrace();
+        } 
+        return list;
     }
 
 }

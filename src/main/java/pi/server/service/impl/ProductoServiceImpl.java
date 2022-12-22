@@ -17,6 +17,7 @@ import pi.service.model.almacen.Kardex;
 import pi.service.model.almacen.Linea;
 import pi.service.model.almacen.Marca;
 import pi.service.model.almacen.Producto;
+import pi.service.model.almacen.ProductoModel;
 import pi.service.model.almacen.Unidad;
 import pi.service.model.auxiliar.MABCProducto;
 import pi.service.model.empresa.Empresa;
@@ -24,6 +25,7 @@ import pi.server.db.Query;
 import pi.server.db.Update;
 import pi.service.ProductoService;
 import pi.server.db.server.CRUD;
+import pi.server.factory.Services;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;
@@ -81,8 +83,8 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 		try {
 
 			if (save) {
-				if (object.codigo==null||object.codigo.trim().isEmpty()) {
-					System.out.println("entrando a crear un codigo"); 
+				if (object.codigo == null || object.codigo.trim().isEmpty()) {
+					System.out.println("entrando a crear un codigo");
 					String filter = " order by codigo_interno desc limit 1";
 					List<Producto> list = CRUD.list(app, Producto.class, filter);
 					if (!list.isEmpty()) {
@@ -127,13 +129,13 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 		List<Producto> list = new ArrayList<>();
 		String[] require = { "marca", "linea", "unidad", "unidad_conversion", "moneda" };
 		String filterBuscarPor = " where ( a.codigo ilike '%" + txt + "%'";
-			filterBuscarPor += " or  a.nombre ilike '%" + txt + "%'";
+		filterBuscarPor += " or  a.nombre ilike '%" + txt + "%'";
 		filterBuscarPor += " or ( (a.codigo_barras1 ilike '" + txt + "') " + " or (a.codigo_barras2 ilike 	'" + txt
 				+ "') " + " ) )";
 		String filterMarca = marcaId == -1 ? "" : " and a.marca = " + marcaId;
 		String filterLinea = lineaId == -1 ? "" : " and a.linea = " + lineaId;
 		String filterVer = "";
-		if(ver.equals(Util.OCULTAR_ANULADOS)){
+		if (ver.equals(Util.OCULTAR_ANULADOS)) {
 			filterVer = " and a.activo is true ";
 		}
 		String filter = filterBuscarPor
@@ -142,9 +144,31 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 				+ filterVer
 				+ " order by a.nombre,a.codigo asc";
 		try {
-			list =  CRUD.list(app, Producto.class, require, filter);
+			list = CRUD.list(app, Producto.class, require, filter);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<ProductoModel> listModel(String app, int marcaId, int lineaId,
+			String ver, String txt, int almacenId) {
+		List<Producto> listProductos = list(app, marcaId, lineaId, ver, txt);
+		List<Articulo> listArticulos = Services.getOrden().listArticulosLight(app, almacenId);
+		List<ProductoModel> list = new ArrayList<>();
+		for(Producto p : listProductos){
+			ProductoModel m = new ProductoModel();
+			m.producto = p;
+			m.stock = BigDecimal.ZERO;
+			m.articulos = new ArrayList<>();
+			for(Articulo a : listArticulos){
+				if(a.producto.id.intValue() == p.id){
+					m.articulos.add(a);
+					m.stock = m.stock.add(a.stock);
+				}
+			}
+			list.add(m);
 		}
 		return list;
 	}

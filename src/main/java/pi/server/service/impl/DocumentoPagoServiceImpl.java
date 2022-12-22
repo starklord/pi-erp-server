@@ -229,7 +229,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         String[] req = { "sucursal",
                 "sucursal.direccion",
                 "documento_pago",
-                "documento_pago.direccion_cliente", 
+                "documento_pago.direccion_cliente",
                 "documento_pago.direccion_cliente.persona",
                 "impuesto"
         };
@@ -296,7 +296,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
                     nc.getNotaCreditoStr() + "' where id = " + nc.documento_pago.id);
             CRUD.save(app, nc);
             for (NotaCreditoDet ncd : listDets) {
-                ncd.id= null;
+                ncd.id = null;
                 ncd.nota_credito = nc;
                 CRUD.save(app, ncd);
             }
@@ -357,35 +357,35 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
                 "documento_pago",
                 "documento_pago.sucursal",
                 "documento_pago.direccion_cliente",
-                "documento_pago.direccion_cliente.persona" };
+                "documento_pago.direccion_cliente.persona",
+            "documento_pago.impuesto" };
         String filter = "where resumen_diario = " + rdId;
         return CRUD.list(app, ResumenDiarioDet.class, req, filter);
     }
 
     @Override
-    public void saveResumenByDocsPago(String app, List<DocumentoPago> docspago) throws Exception {
+    public void saveResumenByDocsPago(String app, List<DocumentoPago> docspago, String usuario) throws Exception {
         try {
-            // ResumenDiario rd = new ResumenDiario();
-            // rd.activo = true;
-            // rd.creador = Client.usuario.usuario;
-            // rd.des_obse = "-";
-            // rd.fecha = new Date();
-            // rd.ind_situacion = Client.COD_SITU_POR_GENERAR_XML;
-            // ResumenDiario rdlast = getLastResumenDiarioByDate(rd.fecha);
-            // rd.numero = rdlast == null ? 1 : (rdlast.numero + 1);
-            // List<Object> dets = new ArrayList<>();
-            // for (DocumentoPago dp : docspago) {
-            // ResumenDiarioDet rdd = new ResumenDiarioDet();
-            // rdd.activo = true;
-            // rdd.creador = rd.creador;
-            // rdd.documento_pago = dp;
-            // rdd.resumen_diario = rd;
-            // dets.add(rdd);
-            // dp.observaciones = "[RD-" + Util.formatDateDMY(rd.fecha) + "-"
-            // + Util.completeWithZeros(rd.numero + "", 3) + "] " + dp.observaciones;
-            // CRUD.update(dp);
-            // }
-            // CRUD.saveCabAndDets(rd, dets, "resumen_diario");
+            ResumenDiario rd = new ResumenDiario();
+            rd.activo = true;
+            rd.creador = usuario;
+            rd.des_obse = "-";
+            rd.fecha = new Date();
+            rd.ind_situacion = Util.COD_SITU_POR_GENERAR_XML;
+            ResumenDiario rdlast = getLastResumenDiarioByDate(app, rd.fecha);
+            rd.numero = rdlast == null ? 1 : (rdlast.numero + 1);
+            CRUD.save(app, rd);
+            for (DocumentoPago dp : docspago) {
+                ResumenDiarioDet rdd = new ResumenDiarioDet();
+                rdd.activo = true;
+                rdd.creador = rd.creador;
+                rdd.documento_pago = dp;
+                rdd.resumen_diario = rd;
+                dp.observaciones = "[RD-" + Util.formatDateDMY(rd.fecha) + "-"
+                        + Util.completeWithZeros(rd.numero + "", 3) + "] " + dp.observaciones;
+                CRUD.update(app, dp);
+                CRUD.save(app, rdd);
+            }
 
         } catch (Exception ex) {
             throw new Exception(ex.getMessage());

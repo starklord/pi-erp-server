@@ -20,6 +20,7 @@ import java.util.List;
 import pi.service.model.almacen.Articulo;
 import pi.service.model.almacen.Kardex;
 import pi.service.model.almacen.Producto;
+import pi.service.model.almacen.ProductoModel;
 import pi.service.model.auxiliar.MABCProducto;
 
 public interface ProductoService{
@@ -28,6 +29,7 @@ public interface ProductoService{
 	public List<Producto> list(String app);
 	public List<Producto> list(String app, int empresaId) throws Exception;
 	public List<Producto> list(String app, int marcaId, int lineaId,String ver, String txt);
+	public List<ProductoModel> listModel(String app, int marcaId, int lineaId,String ver, String txt, int almacenId);
 	public List<Producto> listActives(String app, int empresaId) throws Exception;
 	public void delete(String app, Producto object) throws Exception;
 	public void annul(String app, int productoId) throws Exception;

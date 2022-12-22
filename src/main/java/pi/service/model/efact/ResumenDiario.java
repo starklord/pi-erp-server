@@ -40,6 +40,11 @@ public class ResumenDiario implements Serializable {
     public String getFechaEnvioStr() {
 		return fecha_envio==null?"-":Util.SDF_DATE_HOURS.format(fecha_envio);
 	}
+
+    public String getEstadoSunat() {
+		String estado =  Util.MAP_EFACT_SITUACIONES.get(this.ind_situacion);
+		return estado;
+	}
     
     
     @Override

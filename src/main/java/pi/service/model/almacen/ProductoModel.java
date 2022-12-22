@@ -1,33 +1,18 @@
 package pi.service.model.almacen;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.List;
 
-import pi.service.db.client.TableDB;
 import pi.service.factory.Numbers;
 import pi.service.util.Util;
 
-@TableDB(name="logistica.articulo")
-public class Articulo implements Serializable {
-	
-	public Integer id;
-	public String creador;
-	public Boolean activo;
-	public Producto producto;
-	public String serie;
-	public String lote;
-	public Date fecha_vencimiento;
-	public Almacen almacen;//en que almacen se encuentra actualmente el articulo
-	public BigDecimal stock;
-	
-	@Override
-	public String toString() {
-		return serie;
-	}
+public class ProductoModel implements Serializable {
+    public Producto producto;
+    public List<Articulo> articulos;
+    public BigDecimal stock = BigDecimal.ZERO;
 
-	public String getEstado(){
-		return activo?Util.OK:Util.ANULADO;
+    public String getEstado(){
+		return producto.activo?Util.OK:Util.ANULADO;
 	}
 
 	public String getControl(){
@@ -75,7 +60,7 @@ public class Articulo implements Serializable {
 	}
 
 	public BigDecimal getStock(){
-		return Numbers.getBD(this.stock, 2);
+		return Numbers.getBD(BigDecimal.ZERO, 2);
 	}
 
 	public BigDecimal getCostoTotal(){
@@ -101,30 +86,32 @@ public class Articulo implements Serializable {
 	public String toCodigo() {
 		return producto.nombre;
 	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Articulo other = (Articulo) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-	
-	
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((producto == null) ? 0 : producto.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ProductoModel other = (ProductoModel) obj;
+        if (producto == null) {
+            if (other.producto != null)
+                return false;
+        } else if (!producto.equals(other.producto))
+            return false;
+        return true;
+    }
+
+    
+    
 }

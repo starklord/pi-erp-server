@@ -47,7 +47,7 @@ public interface DocumentoPagoService {
     public List<ResumenDiario> listResumenes(String app, Date inicio, Date fin);
     public List<ResumenDiarioDet> listDetallesResumen(String app, int rdId) throws Exception;
     public ResumenDiario getLastResumenDiarioByDate(String app, Date fecha);
-    public void saveResumenByDocsPago(String app, List<DocumentoPago> docspago) throws Exception;
+    public void saveResumenByDocsPago(String app, List<DocumentoPago> docspago, String usuario) throws Exception;
 
     public void anular(String app, DocumentoPago dp) throws Exception;
 }

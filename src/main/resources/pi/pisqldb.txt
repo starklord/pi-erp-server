@@ -20,20 +20,15 @@ CREATE TABLE IF NOT EXISTS logistica.articulo
     activo boolean NOT NULL DEFAULT true,
     estado character varying(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'K'::character varying,
     producto integer NOT NULL,
-    orden_art integer,
-    serie character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    lote character varying(255) COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
+    serie character varying(255),
+    lote character varying(255),
     fecha_vencimiento date,
     almacen integer NOT NULL DEFAULT 1,
+    stock numeric(18,4) NOT NULL DEFAULT 0,
     CONSTRAINT articulo_pkey PRIMARY KEY (id),
     CONSTRAINT serieuk UNIQUE (serie),
     CONSTRAINT articulo_almacen_fk FOREIGN KEY (almacen)
         REFERENCES logistica.almacen (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
-    CONSTRAINT orden_art_articulofk FOREIGN KEY (orden_art)
-        REFERENCES logistica.orden_art (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID,
@@ -142,9 +137,7 @@ CREATE TABLE IF NOT EXISTS logistica.orden_art
     articulo integer NOT NULL,
     movimiento character varying(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'E'::character varying,
     observaciones character varying COLLATE pg_catalog."default" NOT NULL,
-    stock_anterior numeric(18,4) NOT NULL DEFAULT 0,
     cantidad numeric(18,4) NOT NULL DEFAULT 0,
-    stock numeric(18,4) NOT NULL DEFAULT 0,
     CONSTRAINT orden_art_pkey PRIMARY KEY (id),
     CONSTRAINT orden_art_mov_uk UNIQUE (orden,articulo,movimiento),
     CONSTRAINT orden_art_articulo_fkey FOREIGN KEY (articulo)
@@ -162,13 +155,6 @@ ALTER TABLE IF EXISTS logistica.orden ADD COLUMN IF NOT EXISTS almacen_origen in
 ALTER TABLE IF EXISTS logistica.orden ADD COLUMN IF NOT EXISTS almacen_destino integer NOT NULL;
 
 --ALTER TABLES FOREIGN KEYS
-ALTER TABLE IF EXISTS logistica.articulo drop constraint if exists orden_art_articulofk;
-ALTER TABLE IF EXISTS logistica.articulo
-    ADD CONSTRAINT orden_art_articulofk FOREIGN KEY (orden_art)
-    REFERENCES logistica.orden_art (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
-    NOT VALID;
 ALTER TABLE IF EXISTS logistica.orden drop constraint if exists orden_almacen_origen_fk;
 ALTER TABLE IF EXISTS logistica.orden
     ADD CONSTRAINT orden_almacen_origen_fk FOREIGN KEY (almacen_origen)
