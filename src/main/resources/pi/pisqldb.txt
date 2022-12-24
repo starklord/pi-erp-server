@@ -1,4 +1,5 @@
 ALTER TABLE IF EXISTS empresa.empresa ADD COLUMN if not exists tipo_sistema character varying(1) NOT NULL DEFAULT 'C';
+ALTER TABLE IF EXISTS empresa.sucursal ADD COLUMN if not exists atencion_automatica boolean NOT NULL DEFAULT true;
 ALTER TABLE IF EXISTS logistica.producto ADD COLUMN if not exists tipo_control character varying(1) NOT NULL DEFAULT 'C';
 ALTER TABLE IF EXISTS logistica.producto ADD COLUMN if not exists costo_ultima_compra numeric(18,4) NOT NULL DEFAULT 0;
 ALTER TABLE IF EXISTS logistica.producto ADD COLUMN if not exists precio numeric(18,4) NOT NULL DEFAULT 0;

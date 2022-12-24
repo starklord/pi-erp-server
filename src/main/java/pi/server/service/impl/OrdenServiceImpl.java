@@ -10,6 +10,7 @@ import com.caucho.hessian.server.HessianServlet;
 
 import pi.server.db.Update;
 import pi.server.db.server.CRUD;
+import pi.server.factory.Services;
 import pi.service.OrdenService;
 import pi.service.model.almacen.Articulo;
 import pi.service.model.logistica.Orden;
@@ -30,7 +31,8 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 "aprobado_por",
                 "atendido_por",
                 "almacen_origen",
-                "almacen_destino"
+                "almacen_destino",
+                "sucursal"
         };
         String where = "where a.id = " + ordenId + " order by numero desc limit 1";
         try {
@@ -144,7 +146,8 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
     }
 
     @Override
-    public List<OrdenArt> listOrdenArtsByAlmacenProducto(String app, int almacenId, int productoId, Date inicio, Date fin) {
+    public List<OrdenArt> listOrdenArtsByAlmacenProducto(String app, int almacenId, int productoId, Date inicio,
+            Date fin) {
         List<OrdenArt> list = new ArrayList<>();
         String[] require = {
                 "orden",
@@ -153,8 +156,8 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
         };
         String where = " where (b.almacen_origen = " + almacenId + " or b.almacen_destino = " + almacenId;
         where += ") and c.producto = " + productoId;
-        if(inicio!=null){
-            where += " and b.fecha between '" + inicio.toString()+"' and '" + fin.toString()+"'";
+        if (inicio != null) {
+            where += " and b.fecha between '" + inicio.toString() + "' and '" + fin.toString() + "'";
         }
         where += " order by a.creado asc";
         try {
@@ -194,6 +197,13 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
             for (OrdenDet det : detalles) {
                 det.orden = orden;
                 CRUD.save(app, det);
+                if (orden.sucursal.atencion_automatica) {
+                    aprobarOrden(app, orden.id, orden.encargado.id);
+                    char movimiento = (orden.tipo == Util.TIPO_ORDEN_VENTA || orden.tipo == Util.TIPO_ORDEN_SALIDA)
+                            ? Util.MOVIMIENTO_SALIDA
+                            : Util.MOVIMIENTO_ENTRADA;
+                    atenderOrdenRapida(app, det, null, null, null, orden.encargado.id, movimiento);
+                }
             }
             Update.commitTransaction(app);
             return orden;
@@ -202,6 +212,28 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
             Update.rollbackTransaction(app);
             throw new Exception(ex.getMessage());
         }
+    }
+
+    private void atenderOrdenRapida(String app, OrdenDet ordenDet, String serie, String lote,
+            Date fecha_vencimiento, int personaId, char movimiento) throws Exception {
+        System.out.println("atendiendo orden");
+        Articulo articulo = new Articulo();
+        articulo.activo = true;
+        articulo.almacen = ordenDet.orden.almacen_destino;
+        articulo.creador = "root";
+        articulo.fecha_vencimiento = fecha_vencimiento;
+        articulo.lote = lote;
+        articulo.serie = serie;
+        articulo.producto = ordenDet.producto;
+        OrdenArt oart = new OrdenArt();
+        oart.activo = true;
+        oart.articulo = articulo;
+        oart.cantidad = ordenDet.cantidad;
+        oart.creador = "root";
+        oart.movimiento = movimiento;
+        oart.observaciones = "";
+        oart.orden = ordenDet.orden;
+        atenderOrden(app, ordenDet.orden.id, personaId, oart);
     }
 
     @Override
@@ -227,9 +259,9 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
     public void aprobarOrden(String app, int ordenId, int personaId) throws Exception {
         try {
             Orden orden = getOrden(app, ordenId);
-            if (orden.aprobado_por != null) {
-                throw new Exception("La orden ya ha sido aprobada");
-            }
+            // if (orden.aprobado_por != null) {
+            //     throw new Exception("La orden ya ha sido aprobada");
+            // }
             orden.aprobado_por = new Persona();
             orden.aprobado_por.id = personaId;
             orden.fecha_aprobacion = new Date();
@@ -240,7 +272,6 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
         }
 
     }
-
 
     @Override
     public void atenderOrden(String app, int ordenId, int personaId, OrdenArt oart) throws Exception {
@@ -284,7 +315,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 oart2.cantidad = oart.cantidad;
                 CRUD.save(app, oart2);
             } else {
-                articulo = getArticulo(app, almacenDestinoId, oart.articulo.serie, oart.articulo.lote,
+                articulo = getArticulo(app, almacenOrigenId, oart.articulo.serie, oart.articulo.lote,
                         oart.articulo.fecha_vencimiento, oart.articulo.producto.id);
                 if (articulo == null) {
                     throw new Exception("No hay stock para el producto: " + oart.articulo.producto.nombre);
@@ -316,27 +347,27 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
 
     @Override
     public void anularAtencionOrden(String app, int ordenArtId) throws Exception {
-        try{
+        try {
             Update.beginTransaction(app);
             OrdenArt oart = getOrdenArt(app, ordenArtId);
-            if(!oart.activo){
+            if (!oart.activo) {
                 throw new Exception("La atencion ya figura anulada");
             }
             oart.activo = false;
-            if(oart.movimiento==Util.MOVIMIENTO_ENTRADA){
+            if (oart.movimiento == Util.MOVIMIENTO_ENTRADA) {
                 oart.articulo.stock = oart.articulo.stock.subtract(oart.cantidad);
-            }else{
+            } else {
                 oart.articulo.stock = oart.articulo.stock.add(oart.cantidad);
             }
             CRUD.update(app, oart);
             CRUD.update(app, oart.articulo);
             Update.commitTransaction(app);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             Update.rollbackTransaction(app);
             ex.printStackTrace();
             throw new Exception(ex.getMessage());
         }
-        
+
     }
 
     // @Override
@@ -430,11 +461,31 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
 
     @Override
     public void anularOrden(String app, int ordenId) throws Exception {
-        Orden orden = getOrden(app, ordenId);
-        if (!orden.activo) {
-            throw new Exception("La orden ya figura anulada");
+        try {
+            Update.beginTransaction(app);
+            Orden orden = getOrden(app, ordenId);
+            if (!orden.activo) {
+                throw new Exception("La orden ya figura anulada");
+            }
+            if(!orden.sucursal.atencion_automatica){
+                if(orden.atendido_por!=null){
+                    throw new Exception("La orden ya figura con atencion(es)");
+                }
+            }
+            CRUD.execute(app, "update logistica.orden set activo = false where id = " + ordenId);
+            if (orden.sucursal.atencion_automatica) {
+                List<OrdenArt> ordenArts = listOrdenArts(app, ordenId);
+                for (OrdenArt oart : ordenArts) {
+                    anularAtencionOrden(app, oart.id);
+                }
+            }
+            Update.commitTransaction(app);
+        } catch (Exception ex) {
+            Update.rollbackTransaction(app);
+            ex.printStackTrace();
+            throw new Exception(ex.getMessage());
         }
-        CRUD.execute(app, "update logistica.orden set activo = false where id = " + ordenId);
+
     }
 
     @Override
@@ -586,9 +637,9 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 + " order by a.id asc";
         try {
             list = CRUD.list(app, Articulo.class, req, filter);
-        } catch (Exception e) { 
+        } catch (Exception e) {
             e.printStackTrace();
-        } 
+        }
         return list;
     }
 

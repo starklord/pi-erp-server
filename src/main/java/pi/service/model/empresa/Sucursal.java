@@ -15,11 +15,13 @@ public class Sucursal implements Serializable {
 	public String 	descripcion;
 	public Direccion direccion;
 	public Empresa 	empresa;
+	public Boolean atencion_automatica;
 	public String	invoice_ruc;
 	public String	invoice_url;
 	public String	invoice_logo_url;
 	public String	invoice_commercial_name;
 	public String	invoice_path_sunat;
+
 	
 	@Override
 	public String toString() { 

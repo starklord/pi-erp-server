@@ -34,7 +34,7 @@ public interface ProductoService{
 	public void delete(String app, Producto object) throws Exception;
 	public void annul(String app, int productoId) throws Exception;
 	public Producto saveOrUpdate(String app, boolean save, Producto object) throws Exception;
-	void importProductsFromTxt(String app) throws Exception;
+	public void importProductsFromTxt(String app) throws Exception;
 	
 	public Articulo getArticuloBySerie(String app, String serie,int productoId, int empresaId) throws Exception;
 	public Articulo getArticuloBySerieCoincidences(String app, String serie,int productoId, int empresaId) throws Exception;
