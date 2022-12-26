@@ -195,6 +195,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
             orden.numero = numero;
             CRUD.save(app, orden);
             for (OrdenDet det : detalles) {
+                det.id = null;
                 det.orden = orden;
                 CRUD.save(app, det);
                 if (orden.sucursal.atencion_automatica) {
@@ -243,6 +244,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
             CRUD.update(app, orden);
             CRUD.execute(app, "delete from logistica.orden_det where orden = " + orden.id);
             for (OrdenDet det : detalles) {
+                det.id = null;
                 det.orden = orden;
                 CRUD.save(app, det);
             }

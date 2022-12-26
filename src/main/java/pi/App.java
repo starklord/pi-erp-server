@@ -38,9 +38,9 @@ public class App {
         Server.DB_DRIVER = "org.postgresql.Driver";
         Server.DB_USR = "postgres"; 
         Server.IP_SERVER = "154.53.32.33";  
-        // Server.IP_SERVER = "localhost";  
+        // Server.IP_SERVER = "localhost";   
         Server.DB_PORT = 7077;   
-        CConexion.strDriver = Server.DB_DRIVER; 
+        CConexion.strDriver = Server.DB_DRIVER;  
         CConexion.strPwd = Server.DB_PWD;  
         CConexion.strUsr = Server.DB_USR;    
         CConexion.IP_SERVER = Server.IP_SERVER; 
