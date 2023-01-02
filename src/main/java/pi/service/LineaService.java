@@ -5,9 +5,9 @@ import pi.service.model.almacen.Linea;
 
 public interface LineaService{
 	
-	public List<Linea> list(String app, int empresaId);
-	public List<Linea> listActives(String app, int empresaId);
-	public void saveOrUpdate(String app, Linea linea) throws Exception;
+	public List<Linea> list(String app);
+	public List<Linea> listActives(String app);
+	public Linea saveOrUpdate(String app, Linea linea) throws Exception;
 	public void delete(String app, Linea linea) throws Exception;
 	
 }

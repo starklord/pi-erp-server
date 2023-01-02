@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import pi.service.db.client.TableDB;
 import pi.service.model.empresa.Empresa;
+import pi.service.util.Util;
 
 @TableDB(name="logistica.linea")
 public class Linea implements Serializable {
@@ -24,6 +25,18 @@ public class Linea implements Serializable {
 		this.nombre = nombre;
 	}
 
+	public String getActivoStr() {
+		return activo?Util.ACTIVO:Util.INACTIVO;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public String getAbreviatura() {
+		return abreviatura;
+	}
+	
 	@Override
 	public String toString() {
 		return nombre;

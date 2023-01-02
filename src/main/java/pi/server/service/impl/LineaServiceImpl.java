@@ -13,12 +13,13 @@ import javax.servlet.annotation.WebServlet;
 public class LineaServiceImpl extends HessianServlet implements LineaService {
 
 	@Override
-	public void saveOrUpdate(String app, Linea linea) throws Exception {
+	public Linea saveOrUpdate(String app, Linea linea) throws Exception {
 		if(linea.id==null){
 			CRUD.save(app,linea);
 		}else{
 			CRUD.update(app,linea);
 		}
+		return linea;
 	}
 
 	@Override
@@ -27,10 +28,10 @@ public class LineaServiceImpl extends HessianServlet implements LineaService {
 	}
 
 	@Override
-	public List<Linea> list(String app, int empresaId) {
+	public List<Linea> list(String app) {
 		List<Linea> list = new ArrayList<>();
 		try{
-			list = CRUD.list(app,Linea.class,"where empresa=" + empresaId +" order by nombre asc");
+			list = CRUD.list(app,Linea.class," order by nombre asc");
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
@@ -38,11 +39,11 @@ public class LineaServiceImpl extends HessianServlet implements LineaService {
 	}
 
 	@Override
-	public List<Linea> listActives(String app, int empresaId) {
+	public List<Linea> listActives(String app) {
 		
 		List<Linea> list = new ArrayList<>();
 		try{
-			list = CRUD.list(app,Linea.class,"where empresa=" + empresaId +" and activo is true order by nombre asc");
+			list = CRUD.list(app,Linea.class,"where activo is true order by nombre asc");
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}

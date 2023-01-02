@@ -21,12 +21,13 @@ public class UnidadServiceImpl extends HessianServlet implements UnidadService{
 	}
 
 	@Override
-	public void saveOrUpdate(String app, Unidad unidad) throws Exception {
+	public Unidad saveOrUpdate(String app, Unidad unidad) throws Exception {
 		if(unidad.id==null){
 			CRUD.save(app,unidad);
 		}else{
 			CRUD.update(app,unidad);
 		}
+		return unidad;
 	}
 
 	@Override

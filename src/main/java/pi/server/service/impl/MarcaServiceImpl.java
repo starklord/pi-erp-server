@@ -13,10 +13,10 @@ import javax.servlet.annotation.WebServlet;
 public class MarcaServiceImpl extends HessianServlet implements MarcaService {
 
 	@Override
-	public List<Marca> list(String app, int empresaId){
+	public List<Marca> list(String app){
 		List<Marca> list = new ArrayList<>();
 		try{
-			list = CRUD.list(app,Marca.class,"where empresa= " + empresaId+" order by nombre asc");
+			list = CRUD.list(app,Marca.class," order by nombre asc");
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
@@ -24,12 +24,13 @@ public class MarcaServiceImpl extends HessianServlet implements MarcaService {
 	}
 
 	@Override
-	public void saveOrUpdate(String app, Marca marca) throws Exception {
+	public Marca saveOrUpdate(String app, Marca marca) throws Exception {
 		if(marca.id==null){
 			CRUD.save(app,marca);
 		}else{
 			CRUD.update(app,marca);
 		}
+		return marca;
 	}
 
 	@Override
@@ -37,11 +38,11 @@ public class MarcaServiceImpl extends HessianServlet implements MarcaService {
 		CRUD.delete(app, marca);
 	}
 
-	@Override
-	public List<Marca> listActives(String app, int empresaId) {
+	@Override 
+	public List<Marca> listActives(String app) {
 		List<Marca> list = new ArrayList<>();
 		try{
-			list = CRUD.list(app,Marca.class,"where empresa= " + empresaId+" and activo is true order by nombre asc");
+			list = CRUD.list(app,Marca.class,"where activo is true order by nombre asc");
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import pi.service.db.client.TableDB;
 import pi.service.model.empresa.Empresa;
+import pi.service.util.Util;
 
 
 @TableDB(name="logistica.marca")
@@ -29,6 +30,18 @@ public class Marca implements Serializable {
 	@Override
 	public String toString() {
 		return nombre;
+	}
+
+	public String getActivoStr() {
+		return activo?Util.ACTIVO:Util.INACTIVO;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public String getAbreviatura() {
+		return abreviatura;
 	}
 	
 	@Override
