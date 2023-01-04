@@ -42,7 +42,7 @@ public class CotizacionServiceImpl extends HessianServlet implements CotizacionS
                 "moneda",
                 "orden"
         };
-        String where = "where a.sucursal = " + sucursalId + " order by numero desc limit 1";
+        String where = "where a.sucursal = " + sucursalId + " order by a.numero desc limit 1";
         try {
             list = CRUD.list(app, Cotizacion.class, require, where);
         } catch (Exception ex) {
