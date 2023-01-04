@@ -13,6 +13,7 @@ import pi.server.db.server.CRUD;
 import pi.server.factory.Services;
 import pi.service.OrdenService;
 import pi.service.model.almacen.Articulo;
+import pi.service.model.logistica.Cotizacion;
 import pi.service.model.logistica.Orden;
 import pi.service.model.logistica.OrdenArt;
 import pi.service.model.logistica.OrdenDet;
@@ -187,13 +188,19 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
     }
 
     @Override
-    public Orden saveOrden(String app, Orden orden, List<OrdenDet> detalles) throws Exception {
+    public Orden saveOrden(String app, Orden orden, List<OrdenDet> detalles, Integer cotizacionId) throws Exception {
         try {
             Update.beginTransaction(app);
             Orden ordenLast = getLastOrden(app, orden.sucursal.id, orden.tipo);
             int numero = ordenLast == null ? 1 : (ordenLast.numero + 1);
             orden.numero = numero;
+            
             CRUD.save(app, orden);
+            if(cotizacionId!=null){
+                Cotizacion coti = Services.getCotizacion().get(app, cotizacionId);
+                coti.orden = orden;
+                CRUD.update(app, coti);
+            }
             for (OrdenDet det : detalles) {
                 det.id = null;
                 det.orden = orden;
@@ -238,10 +245,15 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
     }
 
     @Override
-    public Orden updateOrden(String app, Orden orden, List<OrdenDet> detalles) throws Exception {
+    public Orden updateOrden(String app, Orden orden, List<OrdenDet> detalles, Integer cotizacionId) throws Exception {
         try {
             Update.beginTransaction(app);
             CRUD.update(app, orden);
+            if(cotizacionId!=null){
+                Cotizacion coti = Services.getCotizacion().get(app, cotizacionId);
+                coti.orden = orden;
+                CRUD.update(app, coti);
+            }
             CRUD.execute(app, "delete from logistica.orden_det where orden = " + orden.id);
             for (OrdenDet det : detalles) {
                 det.id = null;

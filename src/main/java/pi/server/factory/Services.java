@@ -5,6 +5,7 @@ import pi.server.service.impl.AreaServiceImpl;
 import pi.server.service.impl.CargoPermisoServiceImpl;
 import pi.server.service.impl.CargoServiceImpl;
 import pi.server.service.impl.ConstanciaServiceImpl;
+import pi.server.service.impl.CotizacionServiceImpl;
 import pi.server.service.impl.CrudServiceImpl;
 import pi.server.service.impl.DireccionServiceImpl;
 import pi.server.service.impl.DocumentoIdentidadServiceImpl;
@@ -39,6 +40,7 @@ import pi.service.AreaService;
 import pi.service.CargoPermisoService;
 import pi.service.CargoService;
 import pi.service.ConstanciaService;
+import pi.service.CotizacionService;
 import pi.service.CrudService;
 import pi.service.DireccionService;
 import pi.service.DocumentoIdentidadService;
@@ -68,7 +70,6 @@ import pi.service.TipoCambioService;
 import pi.service.UbigeoService;
 import pi.service.UnidadService;
 import pi.service.UtilidadService;
-import pi.service.model.TipoCambio;
 
 public class Services {
 
@@ -77,6 +78,7 @@ public class Services {
     private static CargoService cargo                               = new CargoServiceImpl();
     private static CargoPermisoService cargoPermiso                 = new CargoPermisoServiceImpl();
     private static ConstanciaService constancia                     = new ConstanciaServiceImpl();
+    private static CotizacionService cotizacion                     = new CotizacionServiceImpl();
     private static CrudService crud                                 = new CrudServiceImpl();
     private static DireccionService direccion                       = new DireccionServiceImpl();
     private static DocumentoPagoService documentoPago               = new DocumentoPagoServiceImpl();
@@ -125,6 +127,10 @@ public class Services {
 
     public static ConstanciaService getConstancia() {
         return constancia;
+    }
+
+    public static CotizacionService getCotizacion() {
+        return cotizacion;
     }
 
     public static CrudService getCrud(){

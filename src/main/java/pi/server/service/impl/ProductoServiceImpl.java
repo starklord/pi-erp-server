@@ -261,7 +261,7 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 				listDets.add(createOrdenDetByProducto(producto, new BigDecimal(str_stock), producto.costo_ultima_compra));
 			}
 			Orden orden = Services.getOrden().getOrden(app, 1);
-			Services.getOrden().updateOrden(app, orden, listDets);
+			Services.getOrden().updateOrden(app, orden, listDets,null);
 			System.out.println("vamos a entrar a los dets: " + listDets.size());
 			for(OrdenDet odet : listDets){
 				odet.orden = orden;

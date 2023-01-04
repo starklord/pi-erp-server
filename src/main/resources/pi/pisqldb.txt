@@ -151,6 +151,95 @@ CREATE TABLE IF NOT EXISTS logistica.orden_art
         ON DELETE NO ACTION
 );
 
+
+CREATE TABLE IF NOT EXISTS logistica.cotizacion
+(
+    id serial NOT NULL,
+    creado timestamp without time zone NOT NULL DEFAULT now(),
+    creador character varying(255) COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
+    activo boolean NOT NULL DEFAULT true,
+    cliente integer NOT NULL,
+    cliente_string character varying COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
+    direccion_cliente character varying COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
+    fecha timestamp without time zone NOT NULL,
+    fecha_entrega date NOT NULL,
+    sucursal integer NOT NULL,
+    numero integer NOT NULL,
+    moneda integer NOT NULL DEFAULT 1,
+    tipo_cambio numeric(18,4) NOT NULL DEFAULT 1,
+    forma_pago integer NOT NULL,
+    dias_credito integer NOT NULL DEFAULT 0,
+    total numeric(18,4) NOT NULL DEFAULT 0,
+    observaciones character varying COLLATE pg_catalog."default" NOT NULL,
+    orden integer,
+    fecha_atencion timestamp without time zone,
+    encargado integer NOT NULL DEFAULT '-1'::integer,
+    CONSTRAINT cotizacion_pkey PRIMARY KEY (id),
+    CONSTRAINT cotizacionsucursalnumeropk UNIQUE (sucursal, numero),
+    CONSTRAINT cotizacion_encargado_persona_fk FOREIGN KEY (encargado)
+        REFERENCES persona.persona (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT cotizacionclientefk FOREIGN KEY (cliente)
+        REFERENCES persona.persona (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT cotizacionformapagofk FOREIGN KEY (forma_pago)
+        REFERENCES public.forma_pago (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT cotizacionmonedafk FOREIGN KEY (moneda)
+        REFERENCES public.moneda (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT cotizacionordenfk FOREIGN KEY (orden)
+        REFERENCES logistica.orden (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT cotizacionsucursalfk FOREIGN KEY (sucursal)
+        REFERENCES empresa.sucursal (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS logistica.cotizacion
+    OWNER to postgres;
+
+CREATE TABLE IF NOT EXISTS logistica.cotizacion_det
+(
+    id serial NOT NULL,
+    creado timestamp without time zone NOT NULL DEFAULT now(),
+    creador character varying(255) COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
+    activo boolean NOT NULL DEFAULT true,
+    cotizacion integer NOT NULL,
+    producto integer NOT NULL,
+    cantidad numeric(18,4) NOT NULL DEFAULT 0,
+    precio_unitario numeric(18,4) NOT NULL DEFAULT 0,
+    total numeric(18,4) NOT NULL DEFAULT 0,
+    unidad integer NOT NULL,
+    observaciones character varying COLLATE pg_catalog."default" NOT NULL DEFAULT ''::character varying,
+    CONSTRAINT cotizacion_det_pkey PRIMARY KEY (id),
+    CONSTRAINT cotizacion_det_orden_fkey FOREIGN KEY (cotizacion)
+        REFERENCES logistica.cotizacion (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT cotizacion_det_producto_fkey FOREIGN KEY (producto)
+        REFERENCES logistica.producto (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT cotizacion_det_unidad_fkey FOREIGN KEY (unidad)
+        REFERENCES logistica.unidad (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS logistica.cotizacion_det
+    OWNER to postgres;
+
 --ALTER TABLES ADD OR UPDATE COLUMNS
 ALTER TABLE IF EXISTS logistica.orden ADD COLUMN IF NOT EXISTS almacen_origen integer NOT NULL;
 ALTER TABLE IF EXISTS logistica.orden ADD COLUMN IF NOT EXISTS almacen_destino integer NOT NULL;
