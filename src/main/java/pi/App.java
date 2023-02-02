@@ -36,7 +36,7 @@ public class App {
         TimeZone.setDefault(TimeZone.getTimeZone("America/Lima"));
         System.out.println("inicializando datos de la base de datos...");
         Server.DB_PWD = "evadb7007";
-        Server.DB_DRIVER = "org.postgresql.Driver";  
+        Server.DB_DRIVER = "org.postgresql.Driver";   
         Server.DB_USR = "postgres"; 
         Server.IP_SERVER = Util.EVAS[5];
         // Server.IP_SERVER = "localhost";  
