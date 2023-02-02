@@ -6,6 +6,7 @@ import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.annotations.QuarkusMain;
 import pi.server.Server;
 import pi.server.db.CConexion;
+import pi.service.util.Util;
 
 @QuarkusMain
 public class App {
@@ -35,11 +36,11 @@ public class App {
         TimeZone.setDefault(TimeZone.getTimeZone("America/Lima"));
         System.out.println("inicializando datos de la base de datos...");
         Server.DB_PWD = "evadb7007";
-        Server.DB_DRIVER = "org.postgresql.Driver";
-        Server.DB_USR = "postgres";
-        Server.IP_SERVER = "154.53.32.33";
+        Server.DB_DRIVER = "org.postgresql.Driver";  
+        Server.DB_USR = "postgres"; 
+        Server.IP_SERVER = Util.EVAS[5];
         // Server.IP_SERVER = "localhost";  
-        Server.DB_PORT = 7077;
+        Server.DB_PORT = 7077;   
         CConexion.strDriver = Server.DB_DRIVER;
         CConexion.strPwd = Server.DB_PWD;
         CConexion.strUsr = Server.DB_USR;

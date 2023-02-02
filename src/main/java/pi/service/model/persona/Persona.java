@@ -2,8 +2,6 @@ package pi.service.model.persona;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import pi.service.db.client.TableDB;
 import pi.service.model.DocumentoIdentidad;
@@ -89,6 +87,10 @@ public class Persona implements Serializable {
 
     public String getEmail(){
         return email;
+    }
+
+    public String getAgenteRetencion(){
+        return es_agente_retencion?Util.SI:Util.NO;
     }
     
     @Override

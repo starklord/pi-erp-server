@@ -57,6 +57,29 @@ public class DocumentoPagoDet implements Serializable {
         }
         return true;
     }
+    public String getCodigo(){
+        return producto.codigo;
+    }
+    
+    public String getNombre(){
+        return producto.nombre;
+    }
+
+    public String getControl(){
+        return producto.getControl();
+    }
+
+    public BigDecimal getCantidad(){
+        return Numbers.getBD(cantidad, 2);
+    }
+
+    public BigDecimal getPrecioUnitario(){
+        return Numbers.getBD(precio_unitario,2);
+    }
+
+    public BigDecimal getTotal(){
+        return Numbers.getBD(total,2);
+    }
 
     public String getCreador() {
         return creador;
@@ -67,10 +90,6 @@ public class DocumentoPagoDet implements Serializable {
     }
     public String getDescripcion() {
         return producto.nombre;
-    }
-
-    public BigDecimal getTotal() {
-        return Numbers.getBigDecimal(total, 2);
     }
     
     

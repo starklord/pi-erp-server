@@ -215,7 +215,7 @@ public class OrdenVentaServiceImpl extends HessianServlet implements OrdenVentaS
                 CRUD.save(app,r);
             }
             if (ordenVenta.documento_tipo != Util.DOCUMENTO_TIPO_ORDEN_VENTA) {
-                Services.getDocumentoPago().saveByOrdenVenta(app, ordenVenta);
+                // Services.getDocumentoPago().saveByOrdenVenta(app, ordenVenta);
             }
             Update.commitTransaction(app);
         } catch (Exception ex) {

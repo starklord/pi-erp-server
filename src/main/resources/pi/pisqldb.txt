@@ -1,4 +1,11 @@
+ALTER TABLE IF EXISTS empresa.empresa ADD COLUMN if not exists app_name character varying NOT NULL DEFAULT 'pitec';
 ALTER TABLE IF EXISTS empresa.empresa ADD COLUMN if not exists tipo_sistema character varying(1) NOT NULL DEFAULT 'C';
+ALTER TABLE IF EXISTS empresa.sucursal ADD COLUMN if not exists atencion_automatica boolean NOT NULL DEFAULT true;
+ALTER TABLE IF EXISTS empresa.sucursal ADD COLUMN if not exists invoice_ruc character varying NOT NULL DEFAULT '';
+ALTER TABLE IF EXISTS empresa.sucursal ADD COLUMN if not exists invoice_url character varying NOT NULL DEFAULT '';
+ALTER TABLE IF EXISTS empresa.sucursal ADD COLUMN if not exists invoice_logo_url character varying NOT NULL DEFAULT '';
+ALTER TABLE IF EXISTS empresa.sucursal ADD COLUMN if not exists invoice_commercial_name character varying NOT NULL DEFAULT '';
+ALTER TABLE IF EXISTS empresa.sucursal ADD COLUMN if not exists invoice_path_sunat character varying NOT NULL DEFAULT '';
 ALTER TABLE IF EXISTS empresa.sucursal ADD COLUMN if not exists atencion_automatica boolean NOT NULL DEFAULT true;
 ALTER TABLE IF EXISTS logistica.producto ADD COLUMN if not exists tipo_control character varying(1) NOT NULL DEFAULT 'C';
 ALTER TABLE IF EXISTS logistica.producto ADD COLUMN if not exists costo_ultima_compra numeric(18,4) NOT NULL DEFAULT 0;
@@ -233,9 +240,123 @@ CREATE TABLE IF NOT EXISTS logistica.cotizacion_det
         REFERENCES logistica.unidad (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-)
+);
 
-TABLESPACE pg_default;
+CREATE TABLE IF NOT EXISTS venta.documento_pago
+(
+    id serial NOT NULL,
+    creado timestamp without time zone NOT NULL DEFAULT 'now()',
+    creador character varying COLLATE pg_catalog."default" NOT NULL,
+    activo boolean NOT NULL DEFAULT 'true',
+    sucursal integer NOT NULL,
+    forma_pago integer NOT NULL,
+    dias_credito integer NOT NULL DEFAULT 0,
+    moneda integer NOT NULL,
+    tipo_cambio numeric(10,4) NOT NULL DEFAULT 1,
+    total numeric(18,4) NOT NULL,
+    observaciones character varying COLLATE pg_catalog."default" DEFAULT '-'::character varying,
+    tipo integer NOT NULL DEFAULT 0,
+    serie character varying(255) COLLATE pg_catalog."default" NOT NULL DEFAULT 'B001'::character varying,
+    numero integer NOT NULL DEFAULT 0,
+    cliente_string character varying COLLATE pg_catalog."default" NOT NULL DEFAULT ''::character varying,
+    fecha timestamp without time zone NOT NULL,
+    fecha_generacion timestamp without time zone,
+    fecha_envio timestamp without time zone,
+    ind_situacion character varying COLLATE pg_catalog."default",
+    des_obse character varying COLLATE pg_catalog."default" NOT NULL DEFAULT '-'::character varying,
+    firma character varying COLLATE pg_catalog."default" DEFAULT '-'::character varying,
+    guia_remision character varying(255) COLLATE pg_catalog."default",
+    orden_compra character varying(255) COLLATE pg_catalog."default",
+    direccion_cliente character varying COLLATE pg_catalog."default",
+    orden integer NOT NULL,
+    impuesto integer NOT NULL DEFAULT 1,
+    cliente integer NOT NULL,
+    CONSTRAINT documento_pago_pkey PRIMARY KEY (id),
+    CONSTRAINT venta_documento_pago_tipo_serie_numero_uk UNIQUE (tipo, serie, numero),
+    CONSTRAINT cliente_fk_dp FOREIGN KEY (cliente)
+        REFERENCES persona.persona (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT dp_moneda_fkey FOREIGN KEY (moneda)
+        REFERENCES public.moneda (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT dpordenventafk FOREIGN KEY (orden)
+        REFERENCES logistica.orden (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT orden_dp_fk FOREIGN KEY (orden)
+        REFERENCES logistica.orden (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT pedido_formapago_fkey FOREIGN KEY (forma_pago)
+        REFERENCES public.forma_pago (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT venta_dp_documento_tipo_fk FOREIGN KEY (tipo)
+        REFERENCES public.documento_tipo (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE IF EXISTS venta.documento_pago
+    OWNER to postgres;
+-- Index: fki_cliente_fk_dp
+
+-- DROP INDEX IF EXISTS venta.fki_cliente_fk_dp;
+
+CREATE INDEX IF NOT EXISTS fki_cliente_fk_dp
+    ON venta.documento_pago USING btree
+    (cliente ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: fki_dpordenventafk
+
+-- DROP INDEX IF EXISTS venta.fki_dpordenventafk;
+
+CREATE INDEX IF NOT EXISTS fki_dpordenventafk
+    ON venta.documento_pago USING btree
+    (orden ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: fki_orden_dp_fk
+
+-- DROP INDEX IF EXISTS venta.fki_orden_dp_fk;
+
+CREATE INDEX IF NOT EXISTS fki_orden_dp_fk
+    ON venta.documento_pago USING btree
+    (orden ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+-- Table: venta.documento_pago_det
+
+-- DROP TABLE IF EXISTS venta.documento_pago_det;
+
+CREATE TABLE IF NOT EXISTS venta.documento_pago_det
+(
+    id serial NOT NULL,
+    creado timestamp without time zone NOT NULL DEFAULT 'now()',
+    creador character varying COLLATE pg_catalog."default" NOT NULL,
+    activo boolean NOT NULL DEFAULT 'true',
+    documento_pago integer NOT NULL,
+    producto integer NOT NULL,
+    unidad integer NOT NULL DEFAULT 0,
+    cantidad numeric(18,4) NOT NULL,
+    precio_unitario numeric(18,4) NOT NULL,
+    total numeric(18,4) NOT NULL,
+    descuento numeric(18,4) NOT NULL DEFAULT 0,
+    observaciones character varying COLLATE pg_catalog."default",
+    CONSTRAINT dpd_pkey PRIMARY KEY (id),
+    CONSTRAINT dpd_documento_pago_fkey FOREIGN KEY (documento_pago)
+        REFERENCES venta.documento_pago (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT dpd_producto_fkey FOREIGN KEY (producto)
+        REFERENCES logistica.producto (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
 
 ALTER TABLE IF EXISTS logistica.cotizacion_det
     OWNER to postgres;

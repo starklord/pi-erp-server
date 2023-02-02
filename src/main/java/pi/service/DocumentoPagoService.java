@@ -5,6 +5,7 @@ import java.util.List;
 
 import pi.service.model.efact.ResumenDiario;
 import pi.service.model.efact.ResumenDiarioDet;
+import pi.service.model.logistica.Orden;
 import pi.service.model.venta.DocumentoPago;
 import pi.service.model.venta.DocumentoPagoDet;
 import pi.service.model.venta.NotaCredito;
@@ -22,11 +23,11 @@ public interface DocumentoPagoService {
 
     public List<DocumentoPago> list(String app, int personaId) throws Exception;
 
-    public List<DocumentoPagoDet> listDetalles(String app, int dpId) throws Exception;
+    public List<DocumentoPagoDet> listDetalles(String app, int dpId);
 
     // to save
     public void save(String app, DocumentoPago cab, List<DocumentoPagoDet> dets) throws Exception;
-    public void saveByOrdenVenta(String app, OrdenVenta ov) throws Exception;
+    public void saveByOrden(String app, Orden ov) throws Exception;
 
     public void updateDP(String app, DocumentoPago dp) throws Exception;
 

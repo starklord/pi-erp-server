@@ -175,15 +175,15 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
             String numero = Util.completeWithZeros(doc.numero + "", 8);
             String nom = String.valueOf(empruc) + "-" + tipodoc + "-" + serie + "-" + numero;
             String observaciones = String.valueOf(doc.sucursal.direccion.descripcion) + "|"
-                    + doc.sucursal.direccion.telefono + "|" + doc.direccion_cliente.persona.nombre_comercial + "|"
+                    + doc.sucursal.direccion.telefono + "|" + doc.cliente.nombre_comercial + "|"
                     + doc.forma_pago.descripcion + "|" + doc.dias_credito + "|"
                     + ((doc.observaciones == null) ? " " : doc.observaciones.concat(" "));
-            String dir = doc.direccion_cliente.descripcion;
+            String dir = doc.direccion_cliente;
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fecha = formatter.format(doc.fecha);
             Format formatterH = new SimpleDateFormat("HH:mm:ss");
             String hora = formatterH.format(doc.fecha);
-            int documento_identidad = doc.direccion_cliente.persona.documento_identidad.id;
+            int documento_identidad = doc.cliente.documento_identidad.id;
             if (documento_identidad == 4) {
                 documento_identidad = 6;
             }
@@ -192,8 +192,8 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
                 documento_identidad = 1;
             }
             String tipoDocIdentidad = documento_identidad + "";
-            String razon = doc.nombre_imprimible.isEmpty() ? doc.direccion_cliente.persona.toString()
-                    : doc.nombre_imprimible;
+            String razon = doc.cliente_string.isEmpty() ? doc.cliente.toString()
+                    : doc.cliente_string;
             // String razon = doc.direccion_cliente.persona.toString();
             String moneda = (doc.moneda.id == 1) ? "PEN" : "USD";
             BigDecimal importeNum = Numbers.divide(doc.total, impuesto, 2);
@@ -210,7 +210,7 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
                     .append("-").append("|")
                     .append("0000").append("|")
                     .append(tipoDocIdentidad).append("|")
-                    .append(doc.direccion_cliente.persona.identificador).append("|")
+                    .append(doc.cliente.identificador).append("|")
                     .append(razon).append("|")
                     .append(moneda).append("|");
             if (doc.impuesto.tipo == 1) {
@@ -374,7 +374,7 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
 
             if (doc.tipo == Util.DOCUMENTO_TIPO_FACTURA) {
                 BigDecimal cuota1 = doc.total;
-                if (doc.direccion_cliente.persona.es_agente_retencion) {
+                if (doc.cliente.es_agente_retencion) {
                     System.out.println("es_agente_retencion true");
                     BigDecimal retencion = doc.total.multiply(new BigDecimal("0.03"));
                     cuota1 = doc.total.subtract(retencion);
@@ -466,14 +466,14 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
                 String fecha_resumen = formatter.format(det.resumen_diario.fecha);
                 String tipo = "0" + dp.tipo;
                 String comprobanteStr = dp.getDocumentoStr();
-                int tipo_docidentidad = dp.direccion_cliente.persona.documento_identidad.id;
+                int tipo_docidentidad = dp.cliente.documento_identidad.id;
                 if (tipo_docidentidad == 4) {
                     tipo_docidentidad = 6;
                 }
                 if (tipo_docidentidad == 2) {
                     tipo_docidentidad = 1;
                 }
-                String dni = dp.direccion_cliente.persona.identificador;
+                String dni = dp.cliente.identificador;
                 String moneda = dp.moneda.id == 1 ? "PEN" : "USD";
                 BigDecimal op_gravadas = Numbers.getBD("0", 2);
                 BigDecimal op_exoneradas = Numbers.getBD("0", 2);
@@ -665,12 +665,12 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
             String tipodocAfecto = "0" + nc.documento_pago.tipo;
             String nom = String.valueOf(empruc) + "-" + "07" + "-" + nc.getNotaCreditoStr();
             String observaciones = nc.observaciones;
-            String identificador = nc.documento_pago.direccion_cliente.persona.identificador;
+            String identificador = nc.documento_pago.cliente.identificador;
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fecha = formatter.format(nc.fecha);
             Format formatterH = new SimpleDateFormat("HH:mm:ss");
             String hora = formatterH.format(nc.fecha);
-            int documento_identidad = nc.documento_pago.direccion_cliente.persona.documento_identidad.id;
+            int documento_identidad = nc.documento_pago.cliente.documento_identidad.id;
             if (documento_identidad == 4) {
                 documento_identidad = 6;
             }
@@ -678,8 +678,8 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
                 documento_identidad = 1;
             }
             String tipoDocIdentidad = documento_identidad + "";
-            String razon = nc.documento_pago.nombre_imprimible.length() < 2 ? nc.getPersonaStr()
-                    : nc.documento_pago.nombre_imprimible;
+            String razon = nc.documento_pago.cliente_string.length() < 2 ? nc.getPersonaStr()
+                    : nc.documento_pago.cliente_string;
             // String razon = doc.direccion_cliente.persona.toString();
             String moneda = (nc.moneda.id == 1) ? "PEN" : "USD";
             BigDecimal importeNum = Numbers.divide(nc.total, impuesto, 2);

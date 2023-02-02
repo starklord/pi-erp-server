@@ -12,6 +12,7 @@ import pi.server.db.server.CRUD;
 import pi.service.factory.Numbers;
 import pi.service.model.efact.ResumenDiario;
 import pi.service.model.efact.ResumenDiarioDet;
+import pi.service.model.logistica.Orden;
 import pi.service.model.venta.DocumentoPago;
 import pi.service.model.venta.DocumentoPagoDet;
 import pi.service.model.venta.NotaCredito;
@@ -101,7 +102,8 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
     }
 
     @Override
-    public List<DocumentoPagoDet> listDetalles(String app, int dpId) throws Exception {
+    public List<DocumentoPagoDet> listDetalles(String app, int dpId) {
+        List<DocumentoPagoDet> list = new ArrayList<>();
         String[] req = { "documento_pago",
                 "producto",
                 "producto.unidad",
@@ -110,62 +112,67 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
                 "unidad",
                 "documento_pago.impuesto" };
         String filter = "where documento_pago = " + dpId;
-        return CRUD.list(app, DocumentoPagoDet.class, req, filter);
+        try {
+            list = CRUD.list(app, DocumentoPagoDet.class, req, filter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     @Override
-    public void saveByOrdenVenta(String app, OrdenVenta ov) throws Exception {
-        String whereDp = "where a.serie = '" + ov.documento_serie +
-                "' and a.numero = " + ov.documento_numero;
-        List<DocumentoPago> listDp = CRUD.list(app, DocumentoPago.class, whereDp);
-        if (!listDp.isEmpty()) {
-            return;
-        }
-        DocumentoPago dp = new DocumentoPago();
-        dp.activo = ov.activo;
-        dp.creador = ov.creador;
-        dp.des_obse = "-";
-        dp.dias_credito = ov.dias_credito;
-        dp.direccion_cliente = ov.direccion_cliente;
-        dp.fecha = ov.documento_fecha;
-        dp.forma_pago = ov.forma_pago;
-        dp.moneda = ov.moneda;
-        dp.nombre_imprimible = ov.nombre_imprimible;
-        dp.direccion_imprimible = ov.direccion_imprimible;
-        dp.numero = ov.documento_numero;
-        dp.observaciones = ov.observaciones;
-        dp.serie = ov.documento_serie;
-        dp.sucursal = ov.sucursal;
-        dp.tipo = ov.documento_tipo;
-        dp.tipo_cambio = ov.tipo_cambio;
-        dp.total = ov.total;
-        dp.guia_remision = ov.guia_remision;
-        dp.orden_compra = ov.orden_compra;
-        dp.orden_venta = ov;
-        dp.impuesto = ov.impuesto;
-        dp.ind_situacion = Server.COD_SITU_POR_GENERAR_XML;
+    public void saveByOrden(String app, Orden ov) throws Exception {
+        // String whereDp = "where a.serie = '" + ov.documento_serie +
+        //         "' and a.numero = " + ov.documento_numero;
+        // List<DocumentoPago> listDp = CRUD.list(app, DocumentoPago.class, whereDp);
+        // if (!listDp.isEmpty()) {
+        //     return;
+        // }
+        // DocumentoPago dp = new DocumentoPago();
+        // dp.activo = ov.activo;
+        // dp.creador = ov.creador;
+        // dp.des_obse = "-";
+        // dp.dias_credito = ov.dias_credito;
+        // dp.direccion_cliente = ov.direccion_cliente;
+        // dp.fecha = ov.documento_fecha;
+        // dp.forma_pago = ov.forma_pago;
+        // dp.moneda = ov.moneda;
+        // dp.nombre_imprimible = ov.nombre_imprimible;
+        // dp.direccion_imprimible = ov.direccion_imprimible;
+        // dp.numero = ov.documento_numero;
+        // dp.observaciones = ov.observaciones;
+        // dp.serie = ov.documento_serie;
+        // dp.sucursal = ov.sucursal;
+        // dp.tipo = ov.documento_tipo;
+        // dp.tipo_cambio = ov.tipo_cambio;
+        // dp.total = ov.total;
+        // dp.guia_remision = ov.guia_remision;
+        // dp.orden_compra = ov.orden_compra;
+        // dp.orden = ov;
+        // dp.impuesto = ov.impuesto;
+        // dp.ind_situacion = Server.COD_SITU_POR_GENERAR_XML;
 
-        OrdenVentaServiceImpl ordenVentaService = new OrdenVentaServiceImpl();
-        List<OrdenVentaDet> listOvdets = ordenVentaService.listDetsLight(app, ov.id);
-        List<DocumentoPagoDet> listDPdets = new ArrayList<>();
-        for (OrdenVentaDet ovd : listOvdets) {
-            DocumentoPagoDet dpd = new DocumentoPagoDet();
-            dpd.activo = true;
-            dpd.cantidad = ovd.cantidad;
-            dpd.creador = ovd.creador;
-            dpd.descuento = ovd.descuento;
-            dpd.documento_pago = dp;
-            dpd.observaciones = ovd.observaciones;
-            dpd.precio_unitario = ovd.precio_unitario;
-            dpd.producto = ovd.producto;
-            dpd.total = ovd.total;
-            dpd.unidad = ovd.unidad;
-            if (dpd.cantidad.compareTo(BigDecimal.ZERO) == 0) {
-                dpd.cantidad = Numbers.divide(dpd.total, dpd.precio_unitario, 2);
-            }
-            listDPdets.add(dpd);
-        }
-        save(app, dp, listDPdets);
+        // OrdenVentaServiceImpl ordenVentaService = new OrdenVentaServiceImpl();
+        // List<OrdenVentaDet> listOvdets = ordenVentaService.listDetsLight(app, ov.id);
+        // List<DocumentoPagoDet> listDPdets = new ArrayList<>();
+        // for (OrdenVentaDet ovd : listOvdets) {
+        //     DocumentoPagoDet dpd = new DocumentoPagoDet();
+        //     dpd.activo = true;
+        //     dpd.cantidad = ovd.cantidad;
+        //     dpd.creador = ovd.creador;
+        //     dpd.descuento = ovd.descuento;
+        //     dpd.documento_pago = dp;
+        //     dpd.observaciones = ovd.observaciones;
+        //     dpd.precio_unitario = ovd.precio_unitario;
+        //     dpd.producto = ovd.producto;
+        //     dpd.total = ovd.total;
+        //     dpd.unidad = ovd.unidad;
+        //     if (dpd.cantidad.compareTo(BigDecimal.ZERO) == 0) {
+        //         dpd.cantidad = Numbers.divide(dpd.total, dpd.precio_unitario, 2);
+        //     }
+        //     listDPdets.add(dpd);
+        // }
+        // save(app, dp, listDPdets);
     }
 
     @Override
@@ -211,8 +218,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
     public DocumentoPago getLastDocumentoPago(String app, String serie) {
         String[] req = { "sucursal",
                 "sucursal.direccion",
-                "direccion_cliente",
-                "direccion_cliente.persona",
+                "cliente"
         };
         String where = "where a.serie = '" + serie + "' order by a.numero desc limit 1";
         List<DocumentoPago> list = new ArrayList<>();
@@ -229,8 +235,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
         String[] req = { "sucursal",
                 "sucursal.direccion",
                 "documento_pago",
-                "documento_pago.direccion_cliente",
-                "documento_pago.direccion_cliente.persona",
+                "documento_pago.cliente",
                 "impuesto"
         };
         String where = "where a.id = " + ncId + " order by a.id desc limit 1";
@@ -316,7 +321,7 @@ public class DocumentoPagoServiceImpl extends HessianServlet implements Document
     public void anular(String app, DocumentoPago dp) throws Exception {
         try {
             Update.beginTransaction(app);
-            Services.getOrdenVenta().anular(app, dp.orden_venta.id);
+            Services.getOrdenVenta().anular(app, dp.orden.id);
             CRUD.execute(app, "update venta.documento_pago set activo = false where id = " + dp.id);
             Update.commitTransaction(app);
         } catch (Exception ex) {

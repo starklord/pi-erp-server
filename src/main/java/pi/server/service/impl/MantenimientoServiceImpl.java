@@ -16,21 +16,21 @@ public class MantenimientoServiceImpl extends HessianServlet implements Mantenim
 
     @Override
     public void importarDocumentosPago(String app, int limite) throws Exception {
-        try {
-            String update_fechas    = "update venta.orden_venta set documento_fecha = fecha::date + creado::time where documento_fecha is null or fecha::date<>documento_fecha::date";
-            CRUD.execute(app, update_fechas);
-            OrdenVentaServiceImpl ovService = new OrdenVentaServiceImpl();
-            DocumentoPagoServiceImpl dpService = new DocumentoPagoServiceImpl();
-            List<OrdenVenta> listOv = ovService.listCabsLightOnlyEfact(app, limite);
-            Collections.reverse(listOv);
-            for (OrdenVenta ov : listOv) {
-                dpService.saveByOrdenVenta(app, ov);
-            }
-            ActualizarAnulados(app);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new Exception(ex.getMessage());
-        }
+        // try {
+        //     String update_fechas    = "update venta.orden_venta set documento_fecha = fecha::date + creado::time where documento_fecha is null or fecha::date<>documento_fecha::date";
+        //     CRUD.execute(app, update_fechas);
+        //     OrdenVentaServiceImpl ovService = new OrdenVentaServiceImpl();
+        //     DocumentoPagoServiceImpl dpService = new DocumentoPagoServiceImpl();
+        //     List<Orden> listOv = ovService.listCabsLightOnlyEfact(app, limite);
+        //     Collections.reverse(listOv);
+        //     for (OrdenVenta ov : listOv) {
+        //         dpService.saveByOrden(app, ov);
+        //     }
+        //     ActualizarAnulados(app);
+        // } catch (Exception ex) {
+        //     ex.printStackTrace();
+        //     throw new Exception(ex.getMessage());
+        // }
 
     }
 

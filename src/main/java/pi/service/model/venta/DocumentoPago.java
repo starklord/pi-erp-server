@@ -10,7 +10,9 @@ import pi.service.model.FormaPago;
 import pi.service.model.Impuesto;
 import pi.service.model.Moneda;
 import pi.service.model.empresa.Sucursal;
+import pi.service.model.logistica.Orden;
 import pi.service.model.persona.Direccion;
+import pi.service.model.persona.Persona;
 import pi.service.util.Util;
 
 
@@ -21,7 +23,9 @@ public class DocumentoPago implements Serializable {
 	public String 			creador;
 	public Boolean 			activo;
 	public Sucursal 		sucursal;
-	public Direccion 		direccion_cliente;
+	public Persona 			cliente;
+	public String			cliente_string;
+	public String			direccion_cliente;
 	public FormaPago 		forma_pago;
 	public Integer 			dias_credito;
 	public Moneda 			moneda;
@@ -31,8 +35,6 @@ public class DocumentoPago implements Serializable {
 	public Integer 			tipo;
 	public String 			serie;
 	public Integer 			numero;
-	public String 			nombre_imprimible;
-	public String 			direccion_imprimible;
 	public Impuesto			impuesto;
 	public Date 			fecha;
 	public Date 			fecha_generacion;
@@ -42,7 +44,7 @@ public class DocumentoPago implements Serializable {
 	public String 			guia_remision;
 	public String 			orden_compra;
 	public String 			firma;
-	public OrdenVenta 		orden_venta;
+	public Orden 			orden;
 	
 
 	@Override
@@ -161,11 +163,11 @@ public class DocumentoPago implements Serializable {
 	}
 	
 	public String getIdentificador(){
-		return direccion_cliente.persona.identificador;
+		return cliente.identificador;
 	}
 
 	public String getPersonaStr() {
-		return direccion_cliente.persona.toString();
+		return cliente.toString();
 	}
 
         @Override
@@ -194,7 +196,7 @@ public class DocumentoPago implements Serializable {
 	}
 
     public String getNombres() {
-        return direccion_cliente.persona.toString();
+        return cliente.toString();
     }
 	
 }

@@ -120,11 +120,11 @@ public class NotaCredito implements Serializable {
 	}
 	
 	public String getIdentificador(){
-		return documento_pago.direccion_cliente.persona.identificador;
+		return documento_pago.cliente.identificador;
 	}
 
 	public String getPersonaStr() {
-		return documento_pago.direccion_cliente.persona.toString();
+		return documento_pago.cliente.toString();
 	}
 
         @Override
@@ -153,7 +153,7 @@ public class NotaCredito implements Serializable {
 	}
 
     public String getNombres() {
-        return documento_pago.direccion_cliente.persona.toString();
+        return documento_pago.cliente.toString();
     }
 	
 }
