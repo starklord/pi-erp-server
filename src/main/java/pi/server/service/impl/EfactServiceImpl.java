@@ -24,12 +24,12 @@ import pi.server.db.server.CRUD;
 import pi.server.factory.Services;
 import pi.service.EfactService;
 import pi.service.factory.Numbers;
+import pi.service.model.efact.Comprobante;
+import pi.service.model.efact.ComprobanteDet;
 import pi.service.model.efact.ResumenDiario;
 import pi.service.model.efact.ResumenDiarioDet;
 import pi.service.model.efact.TxxxSituacion;
 import pi.service.model.empresa.Sucursal;
-import pi.service.model.venta.DocumentoPago;
-import pi.service.model.venta.DocumentoPagoDet;
 import pi.service.model.venta.NotaCredito;
 import pi.service.model.venta.NotaCreditoDet;
 import pi.service.util.NumberToLetterConverter;
@@ -39,14 +39,14 @@ import pi.service.util.Util;
 public class EfactServiceImpl extends HessianServlet implements EfactService {
 
     @Override
-    public void generarArchivosPlanos(String app, DocumentoPago ov, List<DocumentoPagoDet> detalles) throws Exception {
+    public void generarArchivosPlanos(String app, Comprobante ov, List<ComprobanteDet> detalles) throws Exception {
         generateTxtFiles(app, ov, detalles);
     }
 
     @Override
     public void generarComprobante(String app, int ordenVentaId, int pdf) throws Exception {
-        DocumentoPago ov = Services.getDocumentoPago().getDocumentoPago(app, ordenVentaId);
-        List<DocumentoPagoDet> detalles = Services.getDocumentoPago().listDetalles(app, ov.id);
+        Comprobante ov = Services.getComprobante().getDocumentoPago(app, ordenVentaId);
+        List<ComprobanteDet> detalles = Services.getComprobante().listDetalles(app, ov.id);
         // primero generar los archivos planos
         String[] vars = generateTxtFiles(app, ov, detalles);
         generarXML(app, ov, vars);
@@ -67,16 +67,16 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
     }
 
     @Override
-    public DocumentoPago enviarComprobante(String app, int ordenVentaId, int pdf) throws Exception {
-        DocumentoPago ov = Services.getDocumentoPago().getDocumentoPago(app, ordenVentaId);
-        List<DocumentoPagoDet> detalles = Services.getDocumentoPago().listDetalles(app, ov.id);
+    public Comprobante enviarComprobante(String app, int ordenVentaId, int pdf) throws Exception {
+        Comprobante ov = Services.getComprobante().getDocumentoPago(app, ordenVentaId);
+        List<ComprobanteDet> detalles = Services.getComprobante().listDetalles(app, ov.id);
         // primero generar los archivos planos
         String[] vars = generateTxtFiles(app, ov, detalles);
         return enviarXML(app, ov, vars);
     }
 
     @Override
-    public void generarXML(String app, DocumentoPago dp, String[] vars) throws Exception {
+    public void generarXML(String app, Comprobante dp, String[] vars) throws Exception {
         String numRuc = dp.sucursal.invoice_ruc;
         String tipDoc = "0" + dp.tipo;
         String numDoc = dp.getDocumentoStr();
@@ -93,11 +93,11 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
             dp.ind_situacion = Util.COD_SITU_CON_ERRORES;
             dp.des_obse = rpta;
         }
-        Services.getDocumentoPago().updateDP(app, dp);
+        Services.getComprobante().updateDP(app, dp);
     }
 
     @Override
-    public DocumentoPago enviarXML(String app, DocumentoPago dp, String[] vars) throws Exception {
+    public Comprobante enviarXML(String app, Comprobante dp, String[] vars) throws Exception {
         String numRuc = dp.sucursal.invoice_ruc;
         String tipDoc = "0" + dp.tipo;
         String numDoc = dp.getDocumentoStr();
@@ -121,7 +121,7 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
         } else {
             dp.des_obse = rpta;
         }
-        Services.getDocumentoPago().updateDP(app, dp);
+        Services.getComprobante().updateDP(app, dp);
         return dp;
 
     }
@@ -162,7 +162,7 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
 
     }
 
-    public String[] generateTxtFiles(String app, DocumentoPago doc, List<DocumentoPagoDet> detalles) throws Exception {
+    public String[] generateTxtFiles(String app, Comprobante doc, List<ComprobanteDet> detalles) throws Exception {
         String[] vars = new String[10];
         try {
             BigDecimal IGV = Numbers.getBD(doc.impuesto.valor,2);
@@ -232,7 +232,7 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
             
             StringBuilder dets = new StringBuilder("");
             dets.append(nom).append(".DET").append(";;;");
-            for (DocumentoPagoDet det : detalles) {
+            for (ComprobanteDet det : detalles) {
                 String codUnidadMedida = "NIU";
                 if (det.producto.unidad.abreviatura.equals("MT"))
                     codUnidadMedida = "MTR";
@@ -441,7 +441,7 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
     public String[] generateTxtFilesRD(String app, ResumenDiario rd, List<ResumenDiarioDet> detalles) throws Exception {
         String[] vars = new String[10];
         try {
-            Sucursal sucursal = detalles.get(0).documento_pago.sucursal;
+            Sucursal sucursal = detalles.get(0).comprobante.sucursal;
             String empruc = sucursal.invoice_ruc;
             Calendar cal = Calendar.getInstance();
             cal.setTime(rd.fecha);
@@ -460,7 +460,7 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
             trd.append(nom).append(".TRD").append(";;;");
             int index = 1;
             for (ResumenDiarioDet det : detalles) {
-                DocumentoPago dp = det.documento_pago;
+                Comprobante dp = det.comprobante;
                 StringBuilder sbr = new StringBuilder();
                 String fecha_comprobante = formatter.format(dp.fecha);
                 String fecha_resumen = formatter.format(det.resumen_diario.fecha);
@@ -576,8 +576,8 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
 
     @Override
     public void generarNotaCredito(String app, int ncId, int pdf) throws Exception {
-        NotaCredito nc = Services.getDocumentoPago().getNotaCredito(app,ncId);
-        List<NotaCreditoDet> detalles = Services.getDocumentoPago().listNotasCreditoDets(app,nc.id);
+        NotaCredito nc = Services.getComprobante().getNotaCredito(app,ncId);
+        List<NotaCreditoDet> detalles = Services.getComprobante().listNotasCreditoDets(app,nc.id);
         // primero generar los archivos planos
         String[] vars = generateTxtFilesNC(app,nc, detalles);
         generarXMLNC(app,nc, vars);
@@ -599,8 +599,8 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
 
     @Override
     public void enviarNotaCredito(String app, int ncId, int pdf) throws Exception {
-        NotaCredito nc = Services.getDocumentoPago().getNotaCredito(app,ncId);
-        List<NotaCreditoDet> detalles = Services.getDocumentoPago().listNotasCreditoDets(app,nc.id);
+        NotaCredito nc = Services.getComprobante().getNotaCredito(app,ncId);
+        List<NotaCreditoDet> detalles = Services.getComprobante().listNotasCreditoDets(app,nc.id);
         // primero generar los archivos planos
         String[] vars = generateTxtFilesNC(app,nc, detalles);
         enviarXMLNC(app,nc, vars);
@@ -624,7 +624,7 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
             nc.sunat_ind_situacion = Util.COD_SITU_CON_ERRORES;
             nc.sunat_des_obse = rpta;
         }
-        Services.getDocumentoPago().updateNotaCredito(app,nc);
+        Services.getComprobante().updateNotaCredito(app,nc);
     }
 
     @Override
@@ -652,7 +652,7 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
         } else {
             nc.sunat_des_obse = rpta;
         }
-        Services.getDocumentoPago().updateNotaCredito(app,nc);
+        Services.getComprobante().updateNotaCredito(app,nc);
 
     }
 
@@ -662,15 +662,15 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
             BigDecimal impuesto = new BigDecimal("1.18");
             Sucursal sucursal = nc.sucursal;
             String empruc = sucursal.invoice_ruc;
-            String tipodocAfecto = "0" + nc.documento_pago.tipo;
+            String tipodocAfecto = "0" + nc.comprobante.tipo;
             String nom = String.valueOf(empruc) + "-" + "07" + "-" + nc.getNotaCreditoStr();
             String observaciones = nc.observaciones;
-            String identificador = nc.documento_pago.cliente.identificador;
+            String identificador = nc.comprobante.cliente.identificador;
             Format formatter = new SimpleDateFormat("yyyy-MM-dd");
             String fecha = formatter.format(nc.fecha);
             Format formatterH = new SimpleDateFormat("HH:mm:ss");
             String hora = formatterH.format(nc.fecha);
-            int documento_identidad = nc.documento_pago.cliente.documento_identidad.id;
+            int documento_identidad = nc.comprobante.cliente.documento_identidad.id;
             if (documento_identidad == 4) {
                 documento_identidad = 6;
             }
@@ -678,8 +678,8 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
                 documento_identidad = 1;
             }
             String tipoDocIdentidad = documento_identidad + "";
-            String razon = nc.documento_pago.cliente_string.length() < 2 ? nc.getPersonaStr()
-                    : nc.documento_pago.cliente_string;
+            String razon = nc.comprobante.cliente_string.length() < 2 ? nc.getPersonaStr()
+                    : nc.comprobante.cliente_string;
             // String razon = doc.direccion_cliente.persona.toString();
             String moneda = (nc.moneda.id == 1) ? "PEN" : "USD";
             BigDecimal importeNum = Numbers.divide(nc.total, impuesto, 2);
@@ -689,7 +689,7 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
             String total = Numbers.getBD(nc.total, 2).toString();
             String tipoOperacion = nc.tipo_operacion;
             String motivo = nc.motivo;
-            String serieNumeroDocAfecto = nc.documento_pago.getDocumentoStr();
+            String serieNumeroDocAfecto = nc.comprobante.getDocumentoStr();
             StringBuilder scab = new StringBuilder();
             scab.append(nom).append(".NOT").append(";;;");
             scab.append("0101").append("|")// 1
@@ -921,10 +921,10 @@ public class EfactServiceImpl extends HessianServlet implements EfactService {
 
     @Override
     public ResumenDiario enviarComprobanteRD(String app, ResumenDiario rd, int pdf) throws Exception {
-        List<ResumenDiarioDet> detalles = Services.getDocumentoPago().listDetallesResumen(app,rd.id);
+        List<ResumenDiarioDet> detalles = Services.getComprobante().listDetallesResumen(app,rd.id);
         // primero generar los archivos planos
         String[] vars = generateTxtFilesRD(app,rd, detalles);
-        Sucursal sucursal = detalles.get(0).documento_pago.sucursal;
+        Sucursal sucursal = detalles.get(0).comprobante.sucursal;
         return enviarXMLRD(app,rd, vars, sucursal);
     }
 

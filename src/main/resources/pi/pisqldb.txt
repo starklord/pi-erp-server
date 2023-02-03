@@ -241,11 +241,11 @@ CREATE TABLE IF NOT EXISTS logistica.cotizacion_det
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-
-CREATE TABLE IF NOT EXISTS venta.documento_pago
+------------
+CREATE TABLE IF NOT EXISTS efact.comprobante
 (
     id serial NOT NULL,
-    creado timestamp without time zone NOT NULL DEFAULT 'now()',
+    creado timestamp without time zone NOT NULL DEFAULT '2023-02-02 10:07:07.24678'::timestamp without time zone,
     creador character varying COLLATE pg_catalog."default" NOT NULL,
     activo boolean NOT NULL DEFAULT 'true',
     sucursal integer NOT NULL,
@@ -271,74 +271,51 @@ CREATE TABLE IF NOT EXISTS venta.documento_pago
     orden integer NOT NULL,
     impuesto integer NOT NULL DEFAULT 1,
     cliente integer NOT NULL,
-    CONSTRAINT documento_pago_pkey PRIMARY KEY (id),
+    CONSTRAINT comprobante_pkey PRIMARY KEY (id),
     CONSTRAINT venta_documento_pago_tipo_serie_numero_uk UNIQUE (tipo, serie, numero),
     CONSTRAINT cliente_fk_dp FOREIGN KEY (cliente)
         REFERENCES persona.persona (id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
-    CONSTRAINT dp_moneda_fkey FOREIGN KEY (moneda)
+        ON DELETE NO ACTION,
+    CONSTRAINT cp_moneda_fkey FOREIGN KEY (moneda)
         REFERENCES public.moneda (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
-    CONSTRAINT dpordenventafk FOREIGN KEY (orden)
+    CONSTRAINT cpordenventafk FOREIGN KEY (orden)
         REFERENCES logistica.orden (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
-    CONSTRAINT orden_dp_fk FOREIGN KEY (orden)
+    CONSTRAINT efact_cp_documento_tipo_fk FOREIGN KEY (tipo)
+        REFERENCES public.documento_tipo (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT orden_cp_fk FOREIGN KEY (orden)
         REFERENCES logistica.orden (id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
+        ON DELETE NO ACTION,
     CONSTRAINT pedido_formapago_fkey FOREIGN KEY (forma_pago)
         REFERENCES public.forma_pago (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT venta_dp_documento_tipo_fk FOREIGN KEY (tipo)
-        REFERENCES public.documento_tipo (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
 
-ALTER TABLE IF EXISTS venta.documento_pago
-    OWNER to postgres;
--- Index: fki_cliente_fk_dp
-
--- DROP INDEX IF EXISTS venta.fki_cliente_fk_dp;
-
 CREATE INDEX IF NOT EXISTS fki_cliente_fk_dp
-    ON venta.documento_pago USING btree
-    (cliente ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: fki_dpordenventafk
-
--- DROP INDEX IF EXISTS venta.fki_dpordenventafk;
-
+    ON efact.comprobante USING btree
+    (cliente ASC NULLS LAST);
 CREATE INDEX IF NOT EXISTS fki_dpordenventafk
-    ON venta.documento_pago USING btree
-    (orden ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: fki_orden_dp_fk
-
--- DROP INDEX IF EXISTS venta.fki_orden_dp_fk;
-
+    ON efact.comprobante USING btree
+    (orden ASC NULLS LAST);
 CREATE INDEX IF NOT EXISTS fki_orden_dp_fk
-    ON venta.documento_pago USING btree
-    (orden ASC NULLS LAST)
-    TABLESPACE pg_default;
+    ON efact.comprobante USING btree
+    (orden ASC NULLS LAST);
 
--- Table: venta.documento_pago_det
-
--- DROP TABLE IF EXISTS venta.documento_pago_det;
-
-CREATE TABLE IF NOT EXISTS venta.documento_pago_det
+CREATE TABLE IF NOT EXISTS efact.comprobante_det
 (
     id serial NOT NULL,
-    creado timestamp without time zone NOT NULL DEFAULT 'now()',
+    creado timestamp without time zone NOT NULL DEFAULT '2023-02-02 10:07:07.24678'::timestamp without time zone,
     creador character varying COLLATE pg_catalog."default" NOT NULL,
     activo boolean NOT NULL DEFAULT 'true',
-    documento_pago integer NOT NULL,
+    comprobante integer NOT NULL,
     producto integer NOT NULL,
     unidad integer NOT NULL DEFAULT 0,
     cantidad numeric(18,4) NOT NULL,
@@ -346,18 +323,17 @@ CREATE TABLE IF NOT EXISTS venta.documento_pago_det
     total numeric(18,4) NOT NULL,
     descuento numeric(18,4) NOT NULL DEFAULT 0,
     observaciones character varying COLLATE pg_catalog."default",
-    CONSTRAINT dpd_pkey PRIMARY KEY (id),
-    CONSTRAINT dpd_documento_pago_fkey FOREIGN KEY (documento_pago)
-        REFERENCES venta.documento_pago (id) MATCH SIMPLE
+    CONSTRAINT cpd_pkey PRIMARY KEY (id),
+    CONSTRAINT cpd_documento_pago_fkey FOREIGN KEY (comprobante)
+        REFERENCES efact.comprobante (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
-    CONSTRAINT dpd_producto_fkey FOREIGN KEY (producto)
+    CONSTRAINT cpd_producto_fkey FOREIGN KEY (producto)
         REFERENCES logistica.producto (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-);
-
-
+);   
+------------
 ALTER TABLE IF EXISTS logistica.cotizacion_det
     OWNER to postgres;
 
@@ -389,3 +365,4 @@ ALTER TABLE IF EXISTS logistica.orden
     ON DELETE NO ACTION
     NOT VALID;
 ALTER TABLE IF EXISTS logistica.articulo ADD COLUMN if not exists almacen integer NOT NULL DEFAULT 1;
+ALTER TABLE IF EXISTS public.impuesto ADD COLUMN if not exists tipo integer NOT NULL DEFAULT 1;

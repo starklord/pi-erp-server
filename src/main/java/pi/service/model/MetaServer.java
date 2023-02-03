@@ -13,6 +13,7 @@ import pi.service.model.almacen.Unidad;
 import pi.service.model.efact.TxxxSituacion;
 import pi.service.model.empresa.Empresa;
 import pi.service.model.empresa.Sucursal;
+import pi.service.model.finanza.Caja;
 import pi.service.model.persona.Direccion;
 import pi.service.model.rrhh.Empleado;
 import pi.service.model.rrhh.Permiso;
@@ -39,6 +40,7 @@ public class MetaServer implements Serializable {
     public List<TxxxSituacion> efactSituaciones;
     public List<Ubigeo> ubigeos;
     public Map<String, String> mapEfactSituaciones;
+    public List<Caja> cajas;
     public BigDecimal tc_compra;
     public BigDecimal tc_venta;
     //

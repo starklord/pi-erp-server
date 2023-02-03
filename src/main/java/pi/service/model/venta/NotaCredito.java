@@ -8,6 +8,7 @@ import pi.service.db.client.TableDB;
 import pi.service.factory.Numbers;
 import pi.service.model.Impuesto;
 import pi.service.model.Moneda;
+import pi.service.model.efact.Comprobante;
 import pi.service.model.empresa.Sucursal;
 import pi.service.util.Util;
 
@@ -32,7 +33,7 @@ public class NotaCredito implements Serializable {
 	public String			sunat_ind_situacion;
 	public String 			sunat_des_obse;
 	public String 			sunat_firma;
-	public DocumentoPago	documento_pago;
+	public Comprobante		comprobante;
 	public Sucursal 		sucursal;
 
 	@Override
@@ -53,7 +54,7 @@ public class NotaCredito implements Serializable {
 	}
 
 	public String getDocumentoAfectoStr() {
-		return documento_pago.getDocumentoStr();
+		return comprobante.getDocumentoStr();
 	}
 
 	public String getDocumentoEfactStr() {
@@ -120,11 +121,11 @@ public class NotaCredito implements Serializable {
 	}
 	
 	public String getIdentificador(){
-		return documento_pago.cliente.identificador;
+		return comprobante.cliente.identificador;
 	}
 
 	public String getPersonaStr() {
-		return documento_pago.cliente.toString();
+		return comprobante.cliente.toString();
 	}
 
         @Override
@@ -153,7 +154,7 @@ public class NotaCredito implements Serializable {
 	}
 
     public String getNombres() {
-        return documento_pago.cliente.toString();
+        return comprobante.cliente.toString();
     }
 	
 }

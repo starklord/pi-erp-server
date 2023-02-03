@@ -1,5 +1,6 @@
 package pi.server.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,8 @@ import pi.server.db.server.CRUD;
 import pi.server.factory.Services;
 import pi.service.OrdenService;
 import pi.service.model.almacen.Articulo;
+import pi.service.model.efact.Comprobante;
+import pi.service.model.finanza.Recibo;
 import pi.service.model.logistica.Cotizacion;
 import pi.service.model.logistica.Orden;
 import pi.service.model.logistica.OrdenArt;
@@ -33,7 +36,8 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 "atendido_por",
                 "almacen_origen",
                 "almacen_destino",
-                "sucursal"
+                "sucursal",
+                "sucursal.empresa"
         };
         String where = "where a.id = " + ordenId + " order by numero desc limit 1";
         try {
@@ -188,7 +192,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
     }
 
     @Override
-    public Orden saveOrden(String app, Orden orden, List<OrdenDet> detalles, Integer cotizacionId) throws Exception {
+    public Orden saveOrden(String app,Orden orden,List<OrdenDet> detalles,Integer cotizacionId,Comprobante comprobante,Recibo recibo) throws Exception {
         try {
             Update.beginTransaction(app);
             Orden ordenLast = getLastOrden(app, orden.sucursal.id, orden.tipo);
@@ -196,7 +200,27 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
             orden.numero = numero;
             
             CRUD.save(app, orden);
-            if(cotizacionId!=null){
+            if(comprobante!=null) {
+                Comprobante lastCp = Services.getComprobante().getLastDocumentoPago(app, comprobante.serie);
+                if(lastCp!=null){
+                    comprobante.serie = lastCp.serie;
+                    comprobante.numero = (lastCp.numero+1); 
+                }
+                comprobante.orden = orden;
+                CRUD.save(app, comprobante);
+            }
+            if(recibo!=null){
+                recibo.numero = 1;
+                Recibo lastRec = Services.getFinanza().getLastRecibo(app, orden.sucursal.id, recibo.movimiento, recibo.caja.id);
+                if(lastRec!=null){
+                    recibo.numero = (lastRec.numero+1);
+                }
+                recibo.orden = orden;
+                CRUD.save(app, recibo);
+                orden.total_cobrado = orden.total_cobrado.add(recibo.total);
+                CRUD.update(app, orden);
+            }
+            if (cotizacionId != null) {
                 Cotizacion coti = Services.getCotizacion().get(app, cotizacionId);
                 coti.orden = orden;
                 CRUD.update(app, coti);
@@ -249,7 +273,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
         try {
             Update.beginTransaction(app);
             CRUD.update(app, orden);
-            if(cotizacionId!=null){
+            if (cotizacionId != null) {
                 Cotizacion coti = Services.getCotizacion().get(app, cotizacionId);
                 coti.orden = orden;
                 CRUD.update(app, coti);
@@ -274,7 +298,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
         try {
             Orden orden = getOrden(app, ordenId);
             // if (orden.aprobado_por != null) {
-            //     throw new Exception("La orden ya ha sido aprobada");
+            // throw new Exception("La orden ya ha sido aprobada");
             // }
             orden.aprobado_por = new Persona();
             orden.aprobado_por.id = personaId;
@@ -304,7 +328,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 articulo = getArticulo(app, almacenDestinoId, oart.articulo.serie, oart.articulo.lote,
                         oart.articulo.fecha_vencimiento, oart.articulo.producto.id);
                 if (articulo == null) {
-                    oart.observaciones = "Nuevo " + oart.observaciones;
+                    oart.observaciones = oart.observaciones;
                     articulo = new Articulo();
                     articulo.activo = true;
                     articulo.creador = oart.creador;
@@ -332,11 +356,24 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 articulo = getArticulo(app, almacenOrigenId, oart.articulo.serie, oart.articulo.lote,
                         oart.articulo.fecha_vencimiento, oart.articulo.producto.id);
                 if (articulo == null) {
-                    throw new Exception("No hay stock para el producto: " + oart.articulo.producto.nombre);
+                    oart.observaciones = oart.observaciones;
+                    articulo = new Articulo();
+                    articulo.activo = true;
+                    articulo.creador = oart.creador;
+                    articulo.fecha_vencimiento = oart.articulo.fecha_vencimiento;
+                    articulo.lote = oart.articulo.lote;
+                    articulo.serie = oart.articulo.serie;
+                    articulo.producto = oart.articulo.producto;
+                    articulo.almacen = orden.almacen_origen;
+                    articulo.stock = BigDecimal.ZERO;
+                    CRUD.save(app, articulo);
                 }
-                if (articulo.stock.compareTo(oart.cantidad) < 0) {
-                    throw new Exception("No hay stock para el producto: " + articulo.producto.nombre);
+                if (!orden.sucursal.empresa.allow_buy_without_stock) {
+                    if (articulo.stock.compareTo(oart.cantidad) < 0) {
+                        throw new Exception("No hay stock para el producto: " + articulo.producto.nombre);
+                    }
                 }
+
                 OrdenArt oart2 = new OrdenArt();
                 oart2.activo = true;
                 oart2.articulo = articulo;
@@ -481,8 +518,8 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
             if (!orden.activo) {
                 throw new Exception("La orden ya figura anulada");
             }
-            if(!orden.sucursal.atencion_automatica){
-                if(orden.atendido_por!=null){
+            if (!orden.sucursal.atencion_automatica) {
+                if (orden.atendido_por != null) {
                     throw new Exception("La orden ya figura con atencion(es)");
                 }
             }

@@ -8,6 +8,7 @@ import pi.service.model.finanza.Banco;
 import pi.service.model.finanza.Caja;
 import pi.service.model.finanza.Recibo;
 import pi.service.model.finanza.ReciboTipo;
+import pi.service.model.logistica.Orden;
 import pi.service.model.logistica.OrdenCompra;
 import pi.service.model.venta.OrdenVenta;
 import pi.service.factory.Numbers;
@@ -16,6 +17,7 @@ import pi.server.db.Query;
 import pi.server.db.Update;
 import pi.service.FinanzaService;
 import pi.server.db.server.CRUD;
+import pi.server.factory.Services;
 
 import com.caucho.hessian.server.HessianServlet;
 import javax.servlet.annotation.WebServlet;
@@ -95,12 +97,10 @@ public class FinanzaServiceImpl extends HessianServlet implements FinanzaService
 			Recibo lastRecibo = getLastRecibo(app,recibo.sucursal.id, recibo.movimiento,recibo.caja.id);
 			int numero = lastRecibo == null ? 1 : lastRecibo.numero + 1;
 			recibo.numero = numero;
-			OrdenVenta ov = recibo.orden_venta;
-			OrdenCompra oc = recibo.orden_compra;
+			Orden ov = recibo.orden; 
 			BigDecimal totalAux;
 			if (ov != null) {
-				OrdenVentaServiceImpl ovs = new OrdenVentaServiceImpl();
-				ov = ovs.getOrdenVenta(app, ov.id);
+				ov = Services.getOrden().getOrden(app, ov.id);
 				if (ov.total.compareTo(ov.total_cobrado.add(recibo.total)) < 0) {
 					throw new Exception("La orden de venta tiene un saldo menor de cobranza al total del recibo");
 				}
@@ -113,21 +113,16 @@ public class FinanzaServiceImpl extends HessianServlet implements FinanzaService
 						totalAux = recibo.total.multiply(recibo.tipo_cambio);
 						System.out.println("TOTAL AUX " + totalAux);
 						ov.total_cobrado = ov.total_cobrado.add(totalAux).setScale(2, RoundingMode.HALF_UP);
-					}
+					} 
 				} else {
 					ov.total_cobrado = ov.total_cobrado.add(recibo.total).setScale(2, RoundingMode.HALF_UP);
 				}
 				CRUD.update(app,ov);
 			}
-			if (oc != null) {
-				oc.total_cobrado = oc.total_cobrado.add(recibo.total);
-				CRUD.update(app,oc);
-			}
 			CRUD.save(app,recibo);
 		} else {
 			if (!recibo.activo) {
-				OrdenVenta ov = recibo.orden_venta;
-				OrdenCompra oc = recibo.orden_compra;
+				Orden ov = recibo.orden;
 				BigDecimal totalAux;
 				if (ov != null) {
 					if (ov.moneda.id.intValue() != recibo.moneda.id) {
@@ -144,10 +139,6 @@ public class FinanzaServiceImpl extends HessianServlet implements FinanzaService
 						ov.total_cobrado = ov.total_cobrado.subtract(recibo.total).setScale(2, RoundingMode.HALF_UP);
 					}
 					CRUD.update(app,ov);
-				}
-				if (oc != null) {
-					oc.total_cobrado = oc.total_cobrado.subtract(recibo.total);
-					CRUD.update(app,oc);
 				}
 			}
 			CRUD.update(app,recibo);
@@ -214,30 +205,25 @@ public class FinanzaServiceImpl extends HessianServlet implements FinanzaService
 			recibo.activo = false;
 			CRUD.update(app,recibo);
 			BigDecimal totalAux;
-			if (recibo.orden_compra != null) {
-				recibo.orden_compra.total_cobrado = recibo.orden_compra.total_cobrado.subtract(recibo.total);
-				CRUD.update(app,recibo.orden_compra);
-			}
-			if (recibo.orden_venta != null) {
-				OrdenVentaServiceImpl ordenVentaService = new OrdenVentaServiceImpl();
-				recibo.orden_venta = ordenVentaService.getOrdenVenta(app, recibo.orden_venta.id);
-				if (recibo.orden_venta.moneda.id.intValue() != recibo.moneda.id) {
+			if (recibo.orden != null) {
+				recibo.orden = Services.getOrden().getOrden(app, recibo.orden.id);
+				if (recibo.orden.moneda.id.intValue() != recibo.moneda.id) {
 					if (recibo.moneda.id == 1) {
 						totalAux = Numbers.divide(recibo.total, recibo.tipo_cambio, 4);
 						System.out.println("TOTAL AUX " + totalAux);
-						recibo.orden_venta.total_cobrado = recibo.orden_venta.total_cobrado.subtract(totalAux)
+						recibo.orden.total_cobrado = recibo.orden.total_cobrado.subtract(totalAux)
 								.setScale(2, RoundingMode.HALF_UP);
 					} else {
 						totalAux = recibo.total.multiply(recibo.tipo_cambio);
 						System.out.println("TOTAL AUX " + totalAux);
-						recibo.orden_venta.total_cobrado = recibo.orden_venta.total_cobrado.subtract(totalAux)
+						recibo.orden.total_cobrado = recibo.orden.total_cobrado.subtract(totalAux)
 								.setScale(2, RoundingMode.HALF_UP);
 					}
 				} else {
-					recibo.orden_venta.total_cobrado = recibo.orden_venta.total_cobrado.subtract(recibo.total)
+					recibo.orden.total_cobrado = recibo.orden.total_cobrado.subtract(recibo.total)
 							.setScale(2, RoundingMode.HALF_UP);
 				}
-				CRUD.update(app,recibo.orden_venta);
+				CRUD.update(app,recibo.orden);
 			}
 
 		} catch (Exception ex) {

@@ -2,22 +2,22 @@ package pi.service;
 
 import java.util.List;
 
+import pi.service.model.efact.Comprobante;
+import pi.service.model.efact.ComprobanteDet;
 import pi.service.model.efact.ResumenDiario;
 import pi.service.model.efact.ResumenDiarioDet;
 import pi.service.model.efact.TxxxSituacion;
 import pi.service.model.empresa.Sucursal;
-import pi.service.model.venta.DocumentoPago;
-import pi.service.model.venta.DocumentoPagoDet;
 import pi.service.model.venta.NotaCredito;
 import pi.service.model.venta.NotaCreditoDet;
 
 public interface EfactService {
-    public void generarArchivosPlanos(String app, DocumentoPago ov, List<DocumentoPagoDet> detalles)  throws Exception;
-    public void generarXML(String app, DocumentoPago dp, String[] vars) throws Exception;
-    public DocumentoPago enviarXML(String app, DocumentoPago ov, String[] vars) throws Exception;
+    public void generarArchivosPlanos(String app, Comprobante cp, List<ComprobanteDet> detalles)  throws Exception;
+    public void generarXML(String app, Comprobante dp, String[] vars) throws Exception;
+    public Comprobante enviarXML(String app, Comprobante ov, String[] vars) throws Exception;
     
     public void generarComprobante(String app, int dpId, int pdf) throws Exception;
-    public DocumentoPago enviarComprobante(String app, int dpId, int pdf) throws Exception;
+    public Comprobante enviarComprobante(String app, int dpId, int pdf) throws Exception;
     
     public void generarComprobantes(String app, List<Integer> dpIds, int pdf) throws Exception;
     public void enviarComprobantes(String app, List<Integer> dpIds, int pdf) throws Exception;

@@ -3,7 +3,6 @@ package pi.service.model.efact;
 import java.io.Serializable;
 
 import pi.service.db.client.TableDB;
-import pi.service.model.venta.DocumentoPago;
 
 @TableDB(name="efact.resumen_diario_det")
 public class ResumenDiarioDet implements Serializable {
@@ -12,7 +11,7 @@ public class ResumenDiarioDet implements Serializable {
     public String creador;
     public Boolean activo;
     public ResumenDiario resumen_diario;
-    public DocumentoPago documento_pago;
+    public Comprobante comprobante;
 
     @Override
     public int hashCode() {

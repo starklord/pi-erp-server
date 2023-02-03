@@ -1,4 +1,4 @@
-package pi.service.model.venta;
+package pi.service.model.efact;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,13 +11,12 @@ import pi.service.model.Impuesto;
 import pi.service.model.Moneda;
 import pi.service.model.empresa.Sucursal;
 import pi.service.model.logistica.Orden;
-import pi.service.model.persona.Direccion;
 import pi.service.model.persona.Persona;
 import pi.service.util.Util;
 
 
-@TableDB(name="venta.documento_pago")
-public class DocumentoPago implements Serializable {
+@TableDB(name="efact.comprobante")
+public class Comprobante implements Serializable {
 	
 	public Integer 			id;
 	public String 			creador;
@@ -186,7 +185,7 @@ public class DocumentoPago implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DocumentoPago other = (DocumentoPago) obj;
+		Comprobante other = (Comprobante) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

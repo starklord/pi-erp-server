@@ -1,4 +1,4 @@
-package pi.service.model.venta;
+package pi.service.model.efact;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -8,13 +8,13 @@ import pi.service.factory.Numbers;
 import pi.service.model.almacen.Producto;
 import pi.service.model.almacen.Unidad;
 
-@TableDB(name = "venta.documento_pago_det")
-public class DocumentoPagoDet implements Serializable {
+@TableDB(name = "efact.comprobante_det")
+public class ComprobanteDet implements Serializable {
 
     public Integer              id;
     public String               creador;
     public Boolean              activo;
-    public DocumentoPago        documento_pago;
+    public Comprobante        documento_pago;
     public Producto             producto;
     public Unidad               unidad;
     public BigDecimal           cantidad;
@@ -27,7 +27,7 @@ public class DocumentoPagoDet implements Serializable {
 	public String toString() {
 		return id.toString();
 	}
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -36,27 +36,27 @@ public class DocumentoPagoDet implements Serializable {
         return result;
     }
 
+
+
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
+        if (this == obj)
             return true;
-        }
-        if (obj == null) {
+        if (obj == null)
             return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass())
             return false;
-        }
-        OrdenVentaDet other = (OrdenVentaDet) obj;
+        ComprobanteDet other = (ComprobanteDet) obj;
         if (id == null) {
-            if (other.id != null) {
+            if (other.id != null)
                 return false;
-            }
-        } else if (!id.equals(other.id)) {
+        } else if (!id.equals(other.id))
             return false;
-        }
         return true;
     }
+
+
+
     public String getCodigo(){
         return producto.codigo;
     }

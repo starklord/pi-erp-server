@@ -9,7 +9,7 @@ import pi.server.service.impl.CotizacionServiceImpl;
 import pi.server.service.impl.CrudServiceImpl;
 import pi.server.service.impl.DireccionServiceImpl;
 import pi.server.service.impl.DocumentoIdentidadServiceImpl;
-import pi.server.service.impl.DocumentoPagoServiceImpl;
+import pi.server.service.impl.ComprobanteServiceImpl;
 import pi.server.service.impl.DocumentoTipoServiceImpl;
 import pi.server.service.impl.EfactServiceImpl;
 import pi.server.service.impl.EmpleadoServiceImpl;
@@ -44,7 +44,7 @@ import pi.service.CotizacionService;
 import pi.service.CrudService;
 import pi.service.DireccionService;
 import pi.service.DocumentoIdentidadService;
-import pi.service.DocumentoPagoService;
+import pi.service.ComprobanteService;
 import pi.service.DocumentoTipoService;
 import pi.service.EfactService;
 import pi.service.EmpleadoService;
@@ -81,7 +81,7 @@ public class Services {
     private static CotizacionService cotizacion                     = new CotizacionServiceImpl();
     private static CrudService crud                                 = new CrudServiceImpl();
     private static DireccionService direccion                       = new DireccionServiceImpl();
-    private static DocumentoPagoService documentoPago               = new DocumentoPagoServiceImpl();
+    private static ComprobanteService comprobante                   = new ComprobanteServiceImpl();
     private static DocumentoIdentidadService documentoIdentidad     = new DocumentoIdentidadServiceImpl();
     private static DocumentoTipoService documentoTipo               = new DocumentoTipoServiceImpl();
     private static EmpleadoService empleado                         = new EmpleadoServiceImpl();
@@ -141,8 +141,8 @@ public class Services {
         return direccion;
     }
 
-    public static DocumentoPagoService getDocumentoPago() {
-        return documentoPago;
+    public static ComprobanteService getComprobante() {
+        return comprobante;
     }
 
     public static DocumentoIdentidadService getDocumentoIdentidad() {

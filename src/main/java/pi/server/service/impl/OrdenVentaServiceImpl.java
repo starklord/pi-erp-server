@@ -203,8 +203,7 @@ public class OrdenVentaServiceImpl extends HessianServlet implements OrdenVentaS
                 r.numero = numero_recibo;
                 r.numero_operacion = numero_operacion;
                 r.observaciones = "";
-                r.orden_compra = null;
-                r.orden_venta = ordenVenta;
+                // r.orden = orden;
                 r.paga_con = pagaCon;
                 r.recibo_tipo = new ReciboTipo();
                 r.recibo_tipo.id = Util.RT_COBRO_EFECTIVO;
