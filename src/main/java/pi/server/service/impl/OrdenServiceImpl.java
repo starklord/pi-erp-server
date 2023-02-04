@@ -15,6 +15,7 @@ import pi.server.factory.Services;
 import pi.service.OrdenService;
 import pi.service.model.almacen.Articulo;
 import pi.service.model.efact.Comprobante;
+import pi.service.model.efact.ComprobanteDet;
 import pi.service.model.finanza.Recibo;
 import pi.service.model.logistica.Cotizacion;
 import pi.service.model.logistica.Orden;
@@ -208,6 +209,20 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 }
                 comprobante.orden = orden;
                 CRUD.save(app, comprobante);
+                for(OrdenDet det : detalles){
+                    ComprobanteDet cdet = new ComprobanteDet();
+                    cdet.activo = true;
+                    cdet.cantidad = det.cantidad;
+                    cdet.creador = det.creador;
+                    cdet.descuento = BigDecimal.ZERO;
+                    cdet.comprobante = comprobante;
+                    cdet.observaciones = det.observaciones;
+                    cdet.precio_unitario = det.precio_unitario;
+                    cdet.producto = det.producto;
+                    cdet.total = det.total;
+                    cdet.unidad = det.unidad;
+                    CRUD.save(app, cdet);
+                }
             }
             if(recibo!=null){
                 recibo.numero = 1;

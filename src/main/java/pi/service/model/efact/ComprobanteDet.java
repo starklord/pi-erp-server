@@ -14,7 +14,7 @@ public class ComprobanteDet implements Serializable {
     public Integer              id;
     public String               creador;
     public Boolean              activo;
-    public Comprobante        documento_pago;
+    public Comprobante        comprobante;
     public Producto             producto;
     public Unidad               unidad;
     public BigDecimal           cantidad;

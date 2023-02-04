@@ -99,14 +99,14 @@ public class ComprobanteServiceImpl extends HessianServlet implements Comprobant
     @Override
     public List<ComprobanteDet> listDetalles(String app, int dpId) {
         List<ComprobanteDet> list = new ArrayList<>();
-        String[] req = { "documento_pago",
+        String[] req = { "comprobante",
                 "producto",
                 "producto.unidad",
                 "producto.marca",
                 "producto.linea",
                 "unidad",
-                "documento_pago.impuesto" };
-        String filter = "where documento_pago = " + dpId;
+                "comprobante.impuesto" };
+        String filter = "where comprobante = " + dpId;
         try {
             list = CRUD.list(app, ComprobanteDet.class, req, filter);
         } catch (Exception e) {
@@ -176,7 +176,7 @@ public class ComprobanteServiceImpl extends HessianServlet implements Comprobant
             Update.beginTransaction(app);
             CRUD.save(app, cab);
             for (ComprobanteDet det : dets) {
-                det.documento_pago = cab;
+                det.comprobante = cab;
                 CRUD.save(app, det);
             }
             Update.commitTransaction(app);
