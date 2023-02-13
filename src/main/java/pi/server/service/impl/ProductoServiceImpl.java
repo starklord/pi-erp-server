@@ -167,6 +167,7 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 			m.articulos = new ArrayList<>();
 			for(Articulo a : listArticulos){
 				if(a.producto.id.intValue() == p.id){
+					
 					m.articulos.add(a);
 					m.stock = m.stock.add(a.stock);
 				}
@@ -463,6 +464,19 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 		String filter = "where a.serie ilike '%" + serie + "%' and a.empresa = " + empresaId +
 				" and a.producto = " + productoId + " limit 1";
 		List<Articulo> list = CRUD.list(app, Articulo.class, req, filter);
+		return list.isEmpty() ? null : list.get(0);
+	}
+
+	@Override
+	public Articulo getArticuloBySerieCoincidences(String app, String serie) { 
+		String[] req = { "producto", "almacen" };
+		String filter = "where a.serie ilike '%" + serie + "%' limit 1";
+		List<Articulo> list = new ArrayList<>();
+		try {
+			list = CRUD.list(app, Articulo.class, req, filter);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return list.isEmpty() ? null : list.get(0);
 	}
 

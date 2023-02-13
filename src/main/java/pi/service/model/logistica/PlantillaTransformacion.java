@@ -16,11 +16,16 @@ public class PlantillaTransformacion implements Serializable {
 	public Integer numero;
 	public Date fecha;
 	public Producto producto;
+	public String nombre;
 	public String observaciones;
 
 	public String getEstado(){
         String estado = Util.OK;
 		return activo?estado:Util.ANULADO;
+	}
+
+	public String getNombre() {
+		return nombre;
 	}
 
 	public String getNumeroStr(){
@@ -46,7 +51,7 @@ public class PlantillaTransformacion implements Serializable {
 	@Override
 	public String toString() {
 		
-		return numero+"";
+		return nombre;
 		
 	}
 

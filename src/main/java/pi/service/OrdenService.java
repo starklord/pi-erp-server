@@ -31,6 +31,7 @@ public interface OrdenService {
         ) throws Exception;
     public Orden updateOrden(String app,Orden orden, List<OrdenDet> detalles, Integer cotizacionId) throws Exception;
     public void aprobarOrden(String app, int ordenId, int personaId) throws Exception;
+    public void atenderArticuloOrdenTransformacion(String app, Orden orden) throws Exception;
     public void atenderOrden(String app, int ordenId, int personaId, OrdenArt oart) throws Exception;
     public void anularAtencionOrden(String app, int ordenArtId) throws Exception;
     // public void atenderOrden(String app, int ordenId, int personaId, String usuario) throws Exception;

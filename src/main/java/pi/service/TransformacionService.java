@@ -12,8 +12,9 @@ public interface TransformacionService {
 	public PlantillaTransformacion getLastPlantillaByProducto(String app, int productoId);
 	
 	public List<PlantillaTransformacion> listPlantilla(String app);
+	public List<PlantillaTransformacion> listPlantilla(String app, int productoId);
 	
-	public List<PlantillaTransformacion> listPlantilla(String app, Date inicio, Date fin);
+	public List<PlantillaTransformacion> listPlantilla(String app, Date inicio, Date fin, Integer productoId);
 	
 	public List<PlantillaTransformacionDet> listPlantillaDetalles(String app, int transformacionId);
 	

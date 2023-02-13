@@ -46,25 +46,35 @@ public class CConexion {
             CConexion.strUsr = Server.DB_USR;
             CConexion con = new CConexion(db_name);
             CCONEXIONES.put(app_name, con);
-            System.out.println("conexion creada: " + db_name + " " + db_name);
+            System.out.println("conexion creada: " + app_name + " " + db_name);
         } catch (Exception ex) {
-            System.out.println("conexion no creada: " + db_name + " " + db_name);
+            System.out.println("conexion no creada: " + app_name + " " + db_name);
             ex.printStackTrace();
         }
     }
 
     public CConexion(String db_name) throws SQLException, ClassNotFoundException, NullPointerException, Exception {
+        System.out.println("paso 1");
         Properties props = new Properties();
         props.setProperty("user", strUsr);
+        System.out.println("paso 2");
         props.setProperty("password", strPwd);
+        System.out.println("paso 3");
         props.setProperty("connectTimeout", "10");
+
+        System.out.println("paso 4");
         this.strUrl = "jdbc:postgresql://"+IP_SERVER+":" + port + "/" + db_name;
+        System.out.println("paso 5");
+        System.out.println("urldb: " + this.strUrl);
+        System.out.println("paso 6");
         // this.strUrl = "jdbc:postgresql://localhost:" + port + "/" + db_name;
         // System.out.println(this.strUrl);
         Class.forName(strDriver);
+        System.out.println("paso 7");
         intentos++;
         CONNECTIONS_COUNT++;
         cnConexion = DriverManager.getConnection(strUrl, props);
+        System.out.println("paso 8");
     }
 
     public Connection getConnection() {

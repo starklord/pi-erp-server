@@ -44,16 +44,25 @@ public class TransformacionServiceImpl extends HessianServlet implements Transfo
 
     @Override
     public List<PlantillaTransformacion> listPlantilla(String app) {
-        return listPlantilla(app, null, null);
+        return listPlantilla(app, null, null,null);
     }
 
     @Override
-    public List<PlantillaTransformacion> listPlantilla(String app, Date inicio, Date fin) {
+    public List<PlantillaTransformacion> listPlantilla(String app, int productoId) {
+        return listPlantilla(app, null, null, productoId);
+    }
+
+    @Override
+    public List<PlantillaTransformacion> listPlantilla(String app, Date inicio, Date fin, Integer productoId) {
         String[] require = { "producto" };
 		String filter = "where a.id is not null ";
 		if (inicio != null) {
 			filter += " and fecha between '" + inicio + "' and '" + fin + "'";
 		}
+        if (productoId != null) {
+			filter += " and producto = " + productoId;
+		}
+
 		filter += " order by numero desc";
         List<PlantillaTransformacion> list = new ArrayList<>();
 
@@ -84,10 +93,6 @@ public class TransformacionServiceImpl extends HessianServlet implements Transfo
                 try {
                     Update.beginTransaction(app);
                     if (save) {
-                        PlantillaTransformacion lastByProducto = getLastPlantillaByProducto(app, trans.producto.id);
-                        if(lastByProducto!=null){
-                            throw new Exception("Ya existe una plantilla para el producto: " + trans.producto.getNombre());
-                        }
                         PlantillaTransformacion transLast = getLastPlantilla(app);
                         int numero = transLast == null ? 1 : transLast.numero + 1;
                         trans.numero = numero;

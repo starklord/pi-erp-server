@@ -9,6 +9,7 @@ import pi.service.factory.Numbers;
 import pi.service.model.FormaPago;
 import pi.service.model.Moneda;
 import pi.service.model.almacen.Almacen;
+import pi.service.model.almacen.Articulo;
 import pi.service.model.empresa.Sucursal;
 import pi.service.model.persona.Persona;
 import pi.service.util.Util;
@@ -44,6 +45,7 @@ public class Orden implements Serializable {
     public Almacen almacen_destino;
     public String observaciones;
     public Persona encargado;
+    public Articulo articulo_transformacion;
 
     public String getEstado(){
         String estado = Util.OK;

@@ -366,3 +366,4 @@ ALTER TABLE IF EXISTS logistica.orden
     NOT VALID;
 ALTER TABLE IF EXISTS logistica.articulo ADD COLUMN if not exists almacen integer NOT NULL DEFAULT 1;
 ALTER TABLE IF EXISTS public.impuesto ADD COLUMN if not exists tipo integer NOT NULL DEFAULT 1;
+ALTER TABLE IF EXISTS logistica.orden ADD COLUMN if not exists articulo_transformacion integer;

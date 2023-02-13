@@ -37,6 +37,7 @@ public interface ProductoService{
 	public void importProductsFromTxt(String app) throws Exception;
 	
 	public Articulo getArticuloBySerie(String app, String serie,int productoId, int empresaId) throws Exception;
+	public Articulo getArticuloBySerieCoincidences(String app, String serie);
 	public Articulo getArticuloBySerieCoincidences(String app, String serie,int productoId, int empresaId) throws Exception;
 	public List<Articulo> listArticulosByLote(String app, int cantidad,int productoId, int almacenId) throws Exception;
 	

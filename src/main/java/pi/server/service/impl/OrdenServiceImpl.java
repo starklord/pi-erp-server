@@ -38,7 +38,8 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 "almacen_origen",
                 "almacen_destino",
                 "sucursal",
-                "sucursal.empresa"
+                "sucursal.empresa",
+                "articulo_transformacion"
         };
         String where = "where a.id = " + ordenId + " order by numero desc limit 1";
         try {
@@ -59,7 +60,8 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 "aprobado_por",
                 "atendido_por",
                 "almacen_origen",
-                "almacen_destino"
+                "almacen_destino",
+                "articulo_transformacion"
         };
         String where = "where a.sucursal = " + sucursalId + " and tipo= '" + tipo + "' order by numero desc limit 1";
         try {
@@ -82,6 +84,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 "almacen_origen",
                 "almacen_destino",
                 "sucursal",
+                "articulo_transformacion"
         };
         String where = "where a.fecha between '" + inicio.toString() + "' and '" + fin.toString() + "'";
         where += " and a.tipo = '" + tipo + "'";
@@ -281,6 +284,25 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
         oart.observaciones = "";
         oart.orden = ordenDet.orden;
         atenderOrden(app, ordenDet.orden.id, personaId, oart);
+    }
+    @Override
+    public void atenderArticuloOrdenTransformacion(String app, Orden orden) throws Exception {
+        System.out.println("atendiendo orden");
+        Articulo articulo = orden.articulo_transformacion;
+        OrdenArt oart = new OrdenArt();
+        oart.activo = true;
+        oart.articulo = articulo;
+        oart.cantidad = BigDecimal.ONE;
+        oart.creador = "root";
+        oart.movimiento = Util.MOVIMIENTO_ENTRADA;
+        oart.observaciones = "";
+        oart.orden = orden;
+        CRUD.save(app, oart);
+        List<OrdenDet> dets = listDets(app, orden.id);
+        for (OrdenDet det : dets) {
+                char movimiento = Util.MOVIMIENTO_SALIDA;
+                atenderOrdenRapida(app, det, null, null, null, orden.encargado.id, movimiento);
+        }
     }
 
     @Override
