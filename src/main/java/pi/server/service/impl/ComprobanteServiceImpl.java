@@ -176,6 +176,7 @@ public class ComprobanteServiceImpl extends HessianServlet implements Comprobant
             Update.beginTransaction(app);
             CRUD.save(app, cab);
             for (ComprobanteDet det : dets) {
+                det.id = null;
                 det.comprobante = cab;
                 CRUD.save(app, det);
             }
