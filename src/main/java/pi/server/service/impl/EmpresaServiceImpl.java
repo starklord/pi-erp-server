@@ -34,7 +34,7 @@ public class EmpresaServiceImpl extends HessianServlet implements EmpresaService
 		List<Empresa> list = CRUD.list(app, table, required);
 		empresa = list.isEmpty() ? null : list.get(0);
 		return empresa;
-	}
+	} 
 
 	@Override
 	public List<Empresa> listActive(String app) throws Exception {
