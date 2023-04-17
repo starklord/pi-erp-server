@@ -17,7 +17,7 @@ public class AlmacenServiceImpl extends HessianServlet implements AlmacenService
 	public List<Almacen> list(String app, int empresaId) {
 		List<Almacen> list = new ArrayList<>(); 
 		try{
-			String[] req={"sucursal","sucursal.empresa"};
+			String[] req={"sucursal","sucursal.empresa"}; 
 		list = CRUD.list(app,Almacen.class,req,"where c.id = " + empresaId);
 		}catch(Exception ex){
 			ex.printStackTrace();

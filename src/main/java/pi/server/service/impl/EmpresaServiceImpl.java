@@ -1,16 +1,14 @@
 package pi.server.service.impl;
 
-import java.io.InputStream;
 import java.util.List;
 
-import pi.service.EmpresaService;
-import pi.App;
-import pi.server.db.server.CRUD;
-import pi.service.model.empresa.Empresa;
-import pi.service.util.Util;
+import javax.servlet.annotation.WebServlet;
 
 import com.caucho.hessian.server.HessianServlet;
-import javax.servlet.annotation.WebServlet;
+
+import pi.server.db.server.CRUD;
+import pi.service.EmpresaService;
+import pi.service.model.empresa.Empresa;
 
 @WebServlet("pi/EmpresaService")
 public class EmpresaServiceImpl extends HessianServlet implements EmpresaService {
@@ -26,6 +24,7 @@ public class EmpresaServiceImpl extends HessianServlet implements EmpresaService
 
 	@Override
 	public Empresa get(String app) throws Exception {
+		System.out.println("EmpresaService: "+ app);
 		//para actualizar los datos iniciales de la empresa...
 		updateDB(app);
 		//Fin de actualizacion de datos iniciales de la empresa.
@@ -34,7 +33,7 @@ public class EmpresaServiceImpl extends HessianServlet implements EmpresaService
 		List<Empresa> list = CRUD.list(app, table, required);
 		empresa = list.isEmpty() ? null : list.get(0);
 		return empresa;
-	} 
+	}
 
 	@Override
 	public List<Empresa> listActive(String app) throws Exception {
