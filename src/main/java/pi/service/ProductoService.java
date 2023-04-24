@@ -38,6 +38,7 @@ public interface ProductoService{
 	
 	public Articulo getArticuloBySerie(String app, String serie,int productoId, int empresaId) throws Exception;
 	public Articulo getArticuloBySerieCoincidences(String app, String serie);
+	public Articulo getArticuloByProductoLoteFecha(String app,int productoId, String lote, Date fecha_vencimiento, int almacenId) throws Exception;
 	public Articulo getArticuloBySerieCoincidences(String app, String serie,int productoId, int empresaId) throws Exception;
 	public List<Articulo> listArticulosByLote(String app, int cantidad,int productoId, int almacenId) throws Exception;
 	

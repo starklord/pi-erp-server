@@ -13,6 +13,7 @@ import pi.service.model.Impuesto;
 import pi.service.model.Moneda;
 import pi.service.model.almacen.Almacen;
 import pi.service.model.almacen.Articulo;
+import pi.service.model.almacen.ConteoInventario;
 import pi.service.model.almacen.Kardex;
 import pi.service.model.almacen.Linea;
 import pi.service.model.almacen.Marca;
@@ -160,14 +161,14 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 		List<Producto> listProductos = list(app, marcaId, lineaId, ver, txt);
 		List<Articulo> listArticulos = Services.getOrden().listArticulosLight(app, almacenId);
 		List<ProductoModel> list = new ArrayList<>();
-		for(Producto p : listProductos){
+		for (Producto p : listProductos) {
 			ProductoModel m = new ProductoModel();
 			m.producto = p;
 			m.stock = BigDecimal.ZERO;
 			m.articulos = new ArrayList<>();
-			for(Articulo a : listArticulos){
-				if(a.producto.id.intValue() == p.id){
-					
+			for (Articulo a : listArticulos) {
+				if (a.producto.id.intValue() == p.id) {
+
 					m.articulos.add(a);
 					m.stock = m.stock.add(a.stock);
 				}
@@ -180,7 +181,8 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 	@Override
 	public void importProductsFromTxt(String app) throws Exception {
 
-		readFileProductos(app);
+		// readFileProductos(app);
+		atenderByConteoInventario(app);
 	}
 
 	private void readFileProductos(String app) throws Exception {
@@ -189,8 +191,7 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 			// String iso = "ISO-8859-1";
 			String utf = "UTF-8";
 			// File file = new File("D:/empresas/juanmacedo/productos.txt");
-			File file = new
-			File("/Users/starklord/empresas/prolimp/productos.txt");
+			File file = new File("/Users/starklord/empresas/prolimp/productos.txt");
 			Scanner scan = new Scanner(file, utf);
 
 			scan.useDelimiter("\n");
@@ -214,13 +215,13 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 				Scanner scanLine = new Scanner(line);
 				scanLine.useDelimiter("\t");
 				// lectura de datos
-				String str_codigo 			= scanLine.next().trim();
-				String str_marca 			= scanLine.next().trim().toUpperCase();
-				String str_linea 			= scanLine.next().trim().toUpperCase();
-				String str_nombre 			= scanLine.next().trim();
-				String str_precio 			= scanLine.next().trim();
-				String str_codigo_barras1 	= scanLine.next().trim();
-				String str_stock 			= scanLine.next().trim();
+				String str_codigo = scanLine.next().trim();
+				String str_marca = scanLine.next().trim().toUpperCase();
+				String str_linea = scanLine.next().trim().toUpperCase();
+				String str_nombre = scanLine.next().trim();
+				String str_precio = scanLine.next().trim();
+				String str_codigo_barras1 = scanLine.next().trim();
+				String str_stock = scanLine.next().trim();
 				// fin lectura de datos
 				String str_unidad = "UNIDAD";
 				String str_costo = "0.00";
@@ -257,19 +258,20 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 				producto.cod_dig = "-";
 				producto.registro_sanitario = "-";
 				producto.tipo_control = Util.TIPO_CONTROL_PRODUCTO;
-				 
+
 				CRUD.save(app, producto);
-				listDets.add(createOrdenDetByProducto(producto, new BigDecimal(str_stock), producto.costo_ultima_compra));
+				listDets.add(
+						createOrdenDetByProducto(producto, new BigDecimal(str_stock), producto.costo_ultima_compra));
 			}
 			Orden orden = Services.getOrden().getOrden(app, 1);
-			Services.getOrden().updateOrden(app, orden, listDets,null);
+			Services.getOrden().updateOrden(app, orden, listDets, null);
 			System.out.println("vamos a entrar a los dets: " + listDets.size());
-			for(OrdenDet odet : listDets){
+			for (OrdenDet odet : listDets) {
 				odet.orden = orden;
-				int personaId = 0;
+				int personaId = -1;
 				atenderOrden(app, odet, null, null, null, personaId);
 			}
-			System.out.println(text); 
+			System.out.println(text);
 			scan.close();
 			Update.commitTransaction(app);
 
@@ -277,44 +279,73 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 			ex.printStackTrace();
 			Update.rollbackTransaction(app);
 			throw new Exception(ex.getMessage());
-
 		}
 	}
-	private OrdenDet createOrdenDetByProducto(Producto producto, BigDecimal cant, BigDecimal pu) {
-        OrdenDet det = new OrdenDet();
-        det.activo = true;
-        det.cantidad = cant;
-        det.creador = "root";
-        det.observaciones = "";
-        det.precio_unitario = pu;
-        det.producto = producto;
-        det.total = det.precio_unitario.multiply(det.cantidad);
-        det.unidad = producto.unidad;
-		return det;
-    }
 
-	private void atenderOrden(String app, OrdenDet ordenDet, String serie, String lote, 
-	Date fecha_vencimiento, int personaId) throws Exception {
-		System.out.println("atendiendo orden");
-		Articulo articulo = new Articulo();
-        articulo.activo = true;
-        articulo.almacen = ordenDet.orden.almacen_destino;
-        articulo.creador = "root";
-        articulo.fecha_vencimiento = fecha_vencimiento;
-        articulo.lote = lote;
-        articulo.serie = serie;
-        articulo.producto = ordenDet.producto;
-        OrdenArt oart = new OrdenArt();
-        oart.activo = true;
-        oart.articulo = articulo;
-        oart.cantidad = ordenDet.cantidad;
-        oart.creador = "root";
-        oart.movimiento = Util.MOVIMIENTO_ENTRADA;
-        oart.observaciones = "";
-        oart.orden = ordenDet.orden;
-    	Services.getOrden().atenderOrden(app, ordenDet.orden.id, personaId, oart);
+	private void atenderByConteoInventario(String app) {
+		try {
+			Update.beginTransaction(app);
+			List<OrdenDet> listDets = new ArrayList<>();
+			Orden orden = Services.getOrden().getOrden(app, 1);
+			Services.getOrden().updateOrden(app, orden, listDets, null);
+			System.out.println("vamos a entrar a los dets: " + listDets.size());
+			List<ConteoInventario> listConteos = Services.getConteoInventario().list(app, null, -1, "");
+			System.out.println("tamaño de los conteos: " + listConteos.size());
+			for (ConteoInventario conteo : listConteos) {
+				OrdenDet odet = createOrdenDetByProducto(conteo.producto, conteo.cantidad,
+						conteo.producto.costo_ultima_compra);
+				odet.orden = orden;
+				CRUD.save(app, odet);
+				int personaId = -1;
+				atenderOrden(app, odet, null, conteo.lote, conteo.fecha_vencimiento, personaId);
+			}
+
+			Update.commitTransaction(app);
+		} catch (Exception ex) {
+			Update.rollbackTransaction(app);
+			ex.printStackTrace();
+		}
+
 	}
 
+	private OrdenDet createOrdenDetByProducto(Producto producto, BigDecimal cant, BigDecimal pu) {
+		OrdenDet det = new OrdenDet();
+		det.activo = true;
+		det.cantidad = cant;
+		det.creador = "root";
+		det.observaciones = "";
+		det.precio_unitario = pu;
+		det.producto = producto;
+		det.total = det.precio_unitario.multiply(det.cantidad);
+		det.unidad = producto.unidad;
+		return det;
+	}
+
+	private void atenderOrden(String app, OrdenDet ordenDet, String serie, String lote,
+			Date fecha_vencimiento, int personaId) throws Exception {
+		System.out.println("atendiendo orden");
+		Articulo articulo = Services.getProducto().getArticuloByProductoLoteFecha(app,ordenDet.producto.id, lote, fecha_vencimiento, 1);
+		if (articulo == null) {
+			articulo = new Articulo();
+			articulo.activo = true;
+			articulo.almacen = ordenDet.orden.almacen_destino;
+			articulo.creador = "root";
+			articulo.fecha_vencimiento = fecha_vencimiento;
+			articulo.lote = lote;
+			articulo.serie = serie;
+			articulo.producto = ordenDet.producto;
+		}
+
+		OrdenArt oart = new OrdenArt();
+		oart.activo = true;
+		oart.articulo = articulo;
+		oart.cantidad = ordenDet.cantidad;
+		oart.creador = "root";
+		oart.movimiento = Util.MOVIMIENTO_ENTRADA;
+		oart.observaciones = "";
+		oart.orden = ordenDet.orden;
+		Services.getOrden().atenderOrden(app, ordenDet.orden.id, personaId, oart);
+	}
 
 	private Marca getMarcaByNombre(List<Marca> list, String nombre) {
 		Marca obj = new Marca();
@@ -468,7 +499,7 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 	}
 
 	@Override
-	public Articulo getArticuloBySerieCoincidences(String app, String serie) { 
+	public Articulo getArticuloBySerieCoincidences(String app, String serie) {
 		String[] req = { "producto", "almacen" };
 		String filter = "where a.serie ilike '%" + serie + "%' limit 1";
 		List<Articulo> list = new ArrayList<>();
@@ -488,6 +519,18 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 				+ "order by a.creado limit " + cantidad;
 		List<Articulo> list = CRUD.list(app, Articulo.class, req, filter);
 		return list;
+	}
+
+	@Override
+	public Articulo getArticuloByProductoLoteFecha(String app, int productoId, String lote, Date fecha_vencimiento, int almacenId)
+			throws Exception {
+		String[] req = { "producto", "almacen" };
+		String filter = "where a.almacen = " + almacenId + " and a.lote = '" + lote + "'"
+				+ " and a.fecha_vencimiento = '" + fecha_vencimiento.toString() + "' "
+				+ " and a.producto = " + productoId
+				+ " order by a.id desc limit 1";
+		List<Articulo> list = CRUD.list(app, Articulo.class, req, filter);
+		return list.isEmpty() ? null : list.get(0);
 	}
 
 	@Override
