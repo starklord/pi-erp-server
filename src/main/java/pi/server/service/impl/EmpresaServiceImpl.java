@@ -1,14 +1,17 @@
 package pi.server.service.impl;
 
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.annotation.WebServlet;
 
 import com.caucho.hessian.server.HessianServlet;
 
+import pi.App;
 import pi.server.db.server.CRUD;
 import pi.service.EmpresaService;
 import pi.service.model.empresa.Empresa;
+import pi.service.util.Util;
 
 @WebServlet("pi/EmpresaService")
 public class EmpresaServiceImpl extends HessianServlet implements EmpresaService {
@@ -26,7 +29,7 @@ public class EmpresaServiceImpl extends HessianServlet implements EmpresaService
 	public Empresa get(String app) throws Exception {
 		System.out.println("EmpresaService: "+ app);
 		//para actualizar los datos iniciales de la empresa...
-		updateDB(app);
+		// updateDB(app);
 		//Fin de actualizacion de datos iniciales de la empresa.
 		String[] required = { "documento_tipo_xdefecto" };
 		Empresa empresa = null;
