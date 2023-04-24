@@ -61,16 +61,16 @@ public class EmpresaServiceImpl extends HessianServlet implements EmpresaService
 	}
 
 	private void updateDB(String app) throws Exception {
-		// try {
-		// 	System.out.println("actualizando datos de la empresa...");
-		// 	InputStream is = App.class.getResourceAsStream("/pi/pisqldb.txt");
-		// 	String update = Util.readFile(is);
-		// 	CRUD.execute(app, update);
-		// 	System.out.println("Datos de la empresa actualizados exitosamente.");
-		// } catch (Exception ex) {
-		// 	ex.printStackTrace();
-		// 	throw new Exception("no se pudo cargar los datos de la empresa");
-		// }
+		try {
+			System.out.println("actualizando datos de la empresa...");
+			InputStream is = App.class.getResourceAsStream("/pi/pisqldb.txt");
+			String update = Util.readFile(is);
+			CRUD.execute(app, update);
+			System.out.println("Datos de la empresa actualizados exitosamente.");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new Exception("no se pudo cargar los datos de la empresa");
+		}
 
 	}
 

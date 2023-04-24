@@ -32,7 +32,8 @@ public class App {
     //     }
     // }
 
-    private static void initDB() throws Exception { 
+    private static void initDB() throws Exception {
+
         TimeZone.setDefault(TimeZone.getTimeZone("America/Lima"));
         System.out.println("inicializando datos de la base de datos...");
         Server.DB_USR = "postgres";
@@ -41,12 +42,13 @@ public class App {
         Server.IP_SERVER = Util.EVAS[4];
         // Server.IP_SERVER = "localhost";
         Server.DB_PORT = 7077;
-        CConexion.strDriver = Server.DB_DRIVER;
+        CConexion.strDriver = Server.DB_DRIVER; 
         CConexion.strPwd = Server.DB_PWD; 
-        CConexion.strUsr = Server.DB_USR;     
+        CConexion.strUsr = Server.DB_USR;
         CConexion.IP_SERVER = Server.IP_SERVER;
         CConexion.port = Server.DB_PORT;
         System.out.println("datos de la base de datos cargados exitosamente");
+        
     }
 
 }
