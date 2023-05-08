@@ -39,11 +39,11 @@ public class App {
         Server.DB_USR = "postgres";
         Server.DB_PWD = "evadb7007";
         Server.DB_DRIVER = "org.postgresql.Driver";
-        // Server.IP_SERVER = Util.EVAS[5];
-        Server.IP_SERVER = "localhost";
+        Server.IP_SERVER = Util.EVAS[4];
+        // Server.IP_SERVER = "localhost";
         Server.DB_PORT = 7077;
-        CConexion.strDriver = Server.DB_DRIVER; 
-        CConexion.strPwd = Server.DB_PWD; 
+        CConexion.strDriver = Server.DB_DRIVER;
+        CConexion.strPwd = Server.DB_PWD;
         CConexion.strUsr = Server.DB_USR;
         CConexion.IP_SERVER = Server.IP_SERVER;
         CConexion.port = Server.DB_PORT;
