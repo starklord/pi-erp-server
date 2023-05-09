@@ -63,7 +63,7 @@
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
-      <version>20210307</version>
+      <version>20230227</version>
     </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>
@@ -79,6 +79,11 @@
       <groupId>com.caucho</groupId>
       <artifactId>hessian</artifactId>
       <version>4.0.65</version>
+    </dependency>
+    <dependency>
+      <groupId>one.microstream</groupId>
+      <artifactId>microstream-storage-embedded</artifactId>
+      <version>08.00.00-MS-GA</version>
     </dependency>
 
   </dependencies>

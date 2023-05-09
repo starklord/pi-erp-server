@@ -2,20 +2,12 @@ package pi.server.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-
-
-
-
 import pi.service.util.Util;
 import pi.service.model.almacen.Almacen;
 import pi.service.model.almacen.Kardex;
 import pi.service.model.logistica.TrasladoInternoCab;
 import pi.service.model.logistica.TrasladoInternoDet;
-import pi.server.db.Update;
 import pi.service.TrasladoService;
 import pi.server.db.server.CRUD;
 
