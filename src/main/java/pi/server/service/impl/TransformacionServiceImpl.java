@@ -23,7 +23,7 @@ public class TransformacionServiceImpl extends HessianServlet implements Transfo
         
         try {
             list = CRUD.list(app, PlantillaTransformacion.class, " order by numero desc limit 1");
-        } catch (Exception e) {
+        } catch (Exception e) {//esta es una prueba
             e.printStackTrace();
         }
         return list.isEmpty() ? null : list.get(0);
