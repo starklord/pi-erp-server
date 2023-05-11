@@ -22,10 +22,10 @@ public class Server {
     public static int DB_PORT = 7077; 
     
     private static DocumentBuilderFactory DBF;
-    public static String PATH_WEBAPPS = "/var/lib/tomcat9/webapps/";
+    // public static String PATH_WEBAPPS = "/var/lib/tomcat9/webapps/";
     // public static String PATH_STORAGE = "D:/pi/garage/erp";
-    // public static String PATH_STORAGE = "/home/pi/garage/erp";
-    public static String PATH_STORAGE = "/Users/starklord/garage/erp";
+    public static String PATH_STORAGE = "/home/starklord/pi/garage/erp";
+    // public static String PATH_STORAGE = "/Users/starklord/garage/erp";
 
 
     // para las situaciones en el facturador sunat

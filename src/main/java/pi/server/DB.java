@@ -1,19 +1,21 @@
 package pi.server;
+import java.util.ArrayList;
 import java.util.List;
 
+import one.microstream.reference.Lazy;
 import pi.service.model.logistica.Transformacion;
 
 
 public class DB {
     
-    private List<Transformacion> transformaciones;
+    private Lazy<List<Transformacion>> transformaciones = Lazy.Reference(new ArrayList<>());
     private Integer transformacionNumero;
 
     public List<Transformacion> getTransformaciones() {
-        return transformaciones;
+        return Lazy.get(transformaciones);
     }
 
-    public void setTransformaciones(List<Transformacion> transformaciones) {
+    public void setTransformaciones(Lazy<List<Transformacion>> transformaciones) {
         this.transformaciones = transformaciones;
     }
 
