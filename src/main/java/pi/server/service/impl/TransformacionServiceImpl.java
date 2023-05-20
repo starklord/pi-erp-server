@@ -146,26 +146,27 @@ public class TransformacionServiceImpl extends HessianServlet implements Transfo
 
     @Override
     public Transformacion update(String app, Transformacion entity) {
-        // int index = App.getDB().getTransformaciones().indexOf(entity);
-        // if (index>=0){
-        // App.getDB().getTransformaciones().set(index, entity);
-        // }
-        // App.store(App.getDB().getTransformaciones());
-        int size = App.getDB().getTransformaciones().size();
-        for (int i = size; i < (size + 10000); i++) {
-            System.out.println("iteration: " + i);
-            Transformacion trans = new Transformacion();
-            trans.detalles = new ArrayList<>();
-            trans.detalles.addAll(entity.detalles);
-            trans.creador = "prueba" + i;
-            trans.numero = i;
-            trans.fecha = entity.fecha;
-            trans.observaciones = "nueva observacion " + i + " datos adicionales: " + entity.fecha.toString();
-            trans.setNumero(getNextNumero());
-            App.getDB().getTransformaciones().add(trans);
+        int index = App.getDB().getTransformaciones().indexOf(entity);
+        if (index>=0){
+        App.getDB().getTransformaciones().set(index, entity);
         }
         App.store(App.getDB().getTransformaciones());
         return entity;
+        // int size = App.getDB().getTransformaciones().size();
+        // for (int i = size; i < (size + 10000); i++) {
+        //     System.out.println("iteration: " + i);
+        //     Transformacion trans = new Transformacion();
+        //     trans.detalles = new ArrayList<>();
+        //     trans.detalles.addAll(entity.detalles);
+        //     trans.creador = "prueba" + i;
+        //     trans.numero = i;
+        //     trans.fecha = entity.fecha;
+        //     trans.observaciones = "nueva observacion " + i + " datos adicionales: " + entity.fecha.toString();
+        //     trans.setNumero(getNextNumero());
+        //     App.getDB().getTransformaciones().add(trans);
+        // }
+        // App.store(App.getDB().getTransformaciones());
+        // return entity;
     }
 
     @Override
