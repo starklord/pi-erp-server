@@ -47,5 +47,5 @@ public interface OrdenService {
     public List<Articulo> listArticulosLight(String app, int almacenId);
     public List<Articulo> listArticulos(String app, int almacenId, int marcaId, int lineaId,
             String ver, String txt);
-    
+    public List<OrdenDet> listDetallesServiciosByTransformacion(String app, int sucursalId, int numero)  throws Exception;
 }

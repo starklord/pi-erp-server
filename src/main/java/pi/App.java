@@ -104,7 +104,7 @@ public class App {
     private static void initDB(){
         if(App.DB.getTransformacionNumero()==null){
             App.DB.setTransformacionNumero(0);
-            // App.DB.setTransformaciones(new ArrayList<>());
+            App.DB.setTransformaciones(new ArrayList<>());
             
         }
         App.storeRoot();

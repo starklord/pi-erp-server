@@ -24,8 +24,8 @@ public class Server {
     private static DocumentBuilderFactory DBF;
     // public static String PATH_WEBAPPS = "/var/lib/tomcat9/webapps/";
     // public static String PATH_STORAGE = "D:/pi/garage/erp";
-    public static String PATH_STORAGE = "/home/starklord/pi/garage/erp";
-    // public static String PATH_STORAGE = "/Users/starklord/garage/erp";
+    // public static String PATH_STORAGE = "/home/starklord/pi/garage/erp";
+    public static String PATH_STORAGE = "/Users/starklord/garage/erp";
 
 
     // para las situaciones en el facturador sunat

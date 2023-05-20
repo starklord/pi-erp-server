@@ -33,6 +33,7 @@ import pi.server.service.impl.ProveedorServiceImpl;
 import pi.server.service.impl.StockProductoServiceImpl;
 import pi.server.service.impl.SucursalServiceImpl;
 import pi.server.service.impl.TipoCambioServiceImpl;
+import pi.server.service.impl.TransformacionServiceImpl;
 import pi.server.service.impl.UbigeoServiceImpl;
 import pi.server.service.impl.UnidadServiceImpl;
 import pi.server.service.impl.UtilidadServiceImpl;
@@ -69,6 +70,7 @@ import pi.service.ProveedorService;
 import pi.service.StockProductoService;
 import pi.service.SucursalService;
 import pi.service.TipoCambioService;
+import pi.service.TransformacionService;
 import pi.service.UbigeoService;
 import pi.service.UnidadService;
 import pi.service.UtilidadService;
@@ -108,6 +110,7 @@ public class Services {
     private static SucursalService sucursal                         = new SucursalServiceImpl();
     private static StockProductoService stockProducto               = new StockProductoServiceImpl();
     private static TipoCambioService tipoCambio                     = new TipoCambioServiceImpl();
+    private static TransformacionService transformacion             = new TransformacionServiceImpl();
     private static UbigeoService ubigeo                             = new UbigeoServiceImpl();
     private static UnidadService unidad                             = new UnidadServiceImpl();
     private static UtilidadService utilidad                         = new UtilidadServiceImpl();
@@ -242,6 +245,10 @@ public class Services {
 
     public static TipoCambioService getTipoCambio() {
         return tipoCambio;
+    }
+
+    public static TransformacionService getTransformacion() {
+        return transformacion;
     }
 
     public static UbigeoService getUbigeo() {
