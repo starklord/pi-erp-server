@@ -1,10 +1,12 @@
 package pi.service;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import pi.service.model.logistica.PlantillaTransformacion;
 import pi.service.model.logistica.PlantillaTransformacionDet;
 import pi.service.model.logistica.Transformacion;
+import pi.service.model.logistica.TransformacionDet;
 
 public interface TransformacionService {
 	
@@ -13,7 +15,7 @@ public interface TransformacionService {
     public Transformacion update(String app, Transformacion entity);
     public Transformacion delete(String app, Transformacion entity);
     public List<Transformacion> list(String app, Date inicio, Date fin, String observaciones);
-
+	public List<TransformacionDet> listDetalles(int sucursalId, int numero);
 	public Transformacion getLastTransformacion(String app);
 
 	public PlantillaTransformacion getLastPlantilla(String app);

@@ -13,7 +13,13 @@ import pi.server.db.Update;
 import pi.server.db.server.CRUD;
 import pi.server.factory.Services;
 import pi.service.OrdenService;
+import pi.service.model.Impuesto;
+import pi.service.model.Moneda;
 import pi.service.model.almacen.Articulo;
+import pi.service.model.almacen.Linea;
+import pi.service.model.almacen.Marca;
+import pi.service.model.almacen.Producto;
+import pi.service.model.almacen.Unidad;
 import pi.service.model.efact.Comprobante;
 import pi.service.model.efact.ComprobanteDet;
 import pi.service.model.finanza.Recibo;
@@ -21,6 +27,7 @@ import pi.service.model.logistica.Cotizacion;
 import pi.service.model.logistica.Orden;
 import pi.service.model.logistica.OrdenArt;
 import pi.service.model.logistica.OrdenDet;
+import pi.service.model.logistica.TransformacionDet;
 import pi.service.model.persona.Persona;
 import pi.service.util.Util;
 
@@ -196,23 +203,24 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
     }
 
     @Override
-    public Orden saveOrden(String app,Orden orden,List<OrdenDet> detalles,Integer cotizacionId,Comprobante comprobante,Recibo recibo) throws Exception {
+    public Orden saveOrden(String app, Orden orden, List<OrdenDet> detalles, Integer cotizacionId,
+            Comprobante comprobante, Recibo recibo) throws Exception {
         try {
             Update.beginTransaction(app);
             Orden ordenLast = getLastOrden(app, orden.sucursal.id, orden.tipo);
             int numero = ordenLast == null ? 1 : (ordenLast.numero + 1);
             orden.numero = numero;
-            
+
             CRUD.save(app, orden);
-            if(comprobante!=null) {
+            if (comprobante != null) {
                 Comprobante lastCp = Services.getComprobante().getLastDocumentoPago(app, comprobante.serie);
-                if(lastCp!=null){
+                if (lastCp != null) {
                     comprobante.serie = lastCp.serie;
-                    comprobante.numero = (lastCp.numero+1); 
+                    comprobante.numero = (lastCp.numero + 1);
                 }
                 comprobante.orden = orden;
                 CRUD.save(app, comprobante);
-                for(OrdenDet det : detalles){
+                for (OrdenDet det : detalles) {
                     ComprobanteDet cdet = new ComprobanteDet();
                     cdet.activo = true;
                     cdet.cantidad = det.cantidad;
@@ -227,11 +235,12 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                     CRUD.save(app, cdet);
                 }
             }
-            if(recibo!=null){
+            if (recibo != null) {
                 recibo.numero = 1;
-                Recibo lastRec = Services.getFinanza().getLastRecibo(app, orden.sucursal.id, recibo.movimiento, recibo.caja.id);
-                if(lastRec!=null){
-                    recibo.numero = (lastRec.numero+1);
+                Recibo lastRec = Services.getFinanza().getLastRecibo(app, orden.sucursal.id, recibo.movimiento,
+                        recibo.caja.id);
+                if (lastRec != null) {
+                    recibo.numero = (lastRec.numero + 1);
                 }
                 recibo.orden = orden;
                 CRUD.save(app, recibo);
@@ -285,6 +294,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
         oart.orden = ordenDet.orden;
         atenderOrden(app, ordenDet.orden.id, personaId, oart);
     }
+
     @Override
     public void atenderArticuloOrdenTransformacion(String app, Orden orden) throws Exception {
         System.out.println("atendiendo orden");
@@ -300,8 +310,8 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
         CRUD.save(app, oart);
         List<OrdenDet> dets = listDets(app, orden.id);
         for (OrdenDet det : dets) {
-                char movimiento = Util.MOVIMIENTO_SALIDA;
-                atenderOrdenRapida(app, det, null, null, null, orden.encargado.id, movimiento);
+            char movimiento = Util.MOVIMIENTO_SALIDA;
+            atenderOrdenRapida(app, det, null, null, null, orden.encargado.id, movimiento);
         }
     }
 
@@ -697,7 +707,7 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 + "') " + " ) )";
         String filterMarca = marcaId == -1 ? "" : " and b.marca = " + marcaId;
         String filterLinea = lineaId == -1 ? "" : " and b.linea = " + lineaId;
-        String filterVer = "";
+        String filterVer = ""; 
         if (ver.equals(Util.OCULTAR_ANULADOS)) {
             filterVer = " and b.activo is true ";
         }
@@ -727,6 +737,63 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
             list = CRUD.list(app, Articulo.class, req, filter);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public List<OrdenDet> listDetallesServiciosByTransformacion(String app, int sucursalId, int numero) throws Exception {
+        List<OrdenDet> list = new ArrayList<>();
+        List<TransformacionDet> transformacionesDet = Services.getTransformacion().listDetalles(sucursalId, numero);
+        for (TransformacionDet det : transformacionesDet) {
+            String plantilla = det.plantilla;
+            Producto prod = Services.getProducto().getByCodigo(app, det.articulo.serie);
+            if (prod == null) {
+                prod = new Producto();
+                prod.creador = "root";
+                prod.activo = true;
+                prod.codigo = det.articulo.serie;
+                prod.codigo_interno = 0;
+                prod.codigo_ubicacion = "-"; 
+                prod.nombre = det.getPlantilla();
+                prod.descripcion = det.getPlantilla();
+                prod.marca = new Marca(0, "OTROS");
+                prod.linea = new Linea(0, "OTROS");
+                prod.unidad = new Unidad(0, "OTROS");
+                prod.unidad_conversion = prod.unidad;
+                prod.factor_conversion = BigDecimal.ONE;
+                prod.peso = BigDecimal.ZERO;
+                prod.impuesto = new Impuesto();
+                prod.impuesto.id = 1;
+                prod.tipo_control = Util.TIPO_CONTROL_SERVICIO;
+                prod.stock_minimo = BigDecimal.ZERO;
+                prod.garantia = true;
+                prod.moneda = new Moneda();
+                prod.moneda.id = Util.MONEDA_SOLES_ID;
+                prod.precio = BigDecimal.ZERO;
+                prod.costo_ultima_compra = BigDecimal.ZERO;
+                prod.codigo_barras1 = "-";
+                prod.codigo_barras2 = "-";
+                prod.procedencia = 'N';
+                prod.cod_dig = "-";
+                prod.registro_sanitario = "-";
+                CRUD.save(app, prod);
+            } else {
+                prod.nombre = det.getPlantilla();
+                prod.descripcion = det.getPlantilla();
+            }
+            OrdenDet odet = new OrdenDet();
+            odet.activo = true;
+            odet.cantidad = BigDecimal.ONE;
+            odet.creador = "root";
+            odet.id = prod.id;
+            odet.observaciones = plantilla + " - Nro llanta:"+det.articulo.serie;
+            odet.orden = null;
+            odet.precio_unitario = BigDecimal.ZERO;
+            odet.producto = prod;
+            odet.total = BigDecimal.ZERO;
+            odet.unidad = prod.unidad;
+            list.add(odet);
         }
         return list;
     }

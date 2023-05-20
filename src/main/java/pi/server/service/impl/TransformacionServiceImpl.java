@@ -17,6 +17,7 @@ import pi.service.TransformacionService;
 import pi.service.model.logistica.PlantillaTransformacion;
 import pi.service.model.logistica.PlantillaTransformacionDet;
 import pi.service.model.logistica.Transformacion;
+import pi.service.model.logistica.TransformacionDet;
 
 @WebServlet("pi/TransformacionService")
 public class TransformacionServiceImpl extends HessianServlet implements TransformacionService {
@@ -131,13 +132,9 @@ public class TransformacionServiceImpl extends HessianServlet implements Transfo
     public Transformacion save(String app, Transformacion entity) {
         try {
             entity.setNumero(getNextNumero());
-            List<Transformacion> transformaciones = App.getDB().getTransformaciones();
-            if(transformaciones==null){
-                App.getDB().setTransformaciones(Lazy.Reference(transformaciones=new ArrayList<>()));
-            }
             App.getDB().getTransformaciones().add(entity);
             App.store(App.getDB().getTransformaciones());
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -146,9 +143,23 @@ public class TransformacionServiceImpl extends HessianServlet implements Transfo
 
     @Override
     public Transformacion update(String app, Transformacion entity) {
-        int index = App.getDB().getTransformaciones().indexOf(entity);
-        if (index>=0){
-        App.getDB().getTransformaciones().set(index, entity);
+        // int index = App.getDB().getTransformaciones().indexOf(entity);
+        // if (index>=0){
+        // App.getDB().getTransformaciones().set(index, entity);
+        // }
+        // App.store(App.getDB().getTransformaciones());
+        int size = App.getDB().getTransformaciones().size();
+        for (int i = size; i < (size + 10000); i++) {
+            System.out.println("iteration: " + i);
+            Transformacion trans = new Transformacion();
+            trans.detalles = new ArrayList<>();
+            trans.detalles.addAll(entity.detalles);
+            trans.creador = "prueba" + i;
+            trans.numero = i;
+            trans.fecha = entity.fecha;
+            trans.observaciones = "nueva observacion " + i + " datos adicionales: " + entity.fecha.toString();
+            trans.setNumero(getNextNumero());
+            App.getDB().getTransformaciones().add(trans);
         }
         App.store(App.getDB().getTransformaciones());
         return entity;
@@ -177,17 +188,13 @@ public class TransformacionServiceImpl extends HessianServlet implements Transfo
 
     @Override
     public List<Transformacion> list(String app, Date inicio, Date fin, String observaciones) {
-        List<Transformacion> list = App.getDB().getTransformaciones();
-        if (list == null) {
-            list = new ArrayList<>();
-        }
+        List<Transformacion> list = new ArrayList<>();
         try {
-            list = list.stream().filter(e -> {
+            list = App.getDB().getTransformaciones().stream().filter(e -> {
                 return e.getFecha().after(inicio) &&
                         e.getFecha().before(fin) &&
                         e.getObservaciones().toLowerCase().contains(observaciones.toLowerCase());
             }).collect(Collectors.toList());
-            return list;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -210,6 +217,19 @@ public class TransformacionServiceImpl extends HessianServlet implements Transfo
         App.getDB().setTransformacionNumero(App.getDB().getTransformacionNumero() + 1);
         App.storeRoot();
         return App.getDB().getTransformacionNumero();
+    }
+
+    @Override
+    public List<TransformacionDet> listDetalles(int sucursalId, int numero) {
+        List<Transformacion> list = new ArrayList<>();
+        try {
+            list = App.getDB().getTransformaciones().stream().filter(e -> {
+                return (e.sucursal.id==sucursalId&&e.numero==numero);
+            }).collect(Collectors.toList());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return list.get(0).detalles;
     }
 
 }
