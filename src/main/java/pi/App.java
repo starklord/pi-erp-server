@@ -48,7 +48,7 @@ public class App {
         Server.DB_USR = "postgres";
         Server.DB_PWD = "evadb7007";
         Server.DB_DRIVER = "org.postgresql.Driver";
-        Server.IP_SERVER = Util.EVAS[4];
+        Server.IP_SERVER = Util.EVAS[5];
         // Server.IP_SERVER = "localhost";
         Server.DB_PORT = 7077;
         CConexion.strDriver = Server.DB_DRIVER;
@@ -65,10 +65,10 @@ public class App {
         App.STORAGE = EmbeddedStorage.Foundation(Paths.get(Server.PATH_STORAGE))
                 .onConnectionFoundation(cf -> cf.setClassLoaderProvider(ClassLoaderProvider.New(
                         Thread.currentThread().getContextClassLoader())))
-                .start();
+                .start(); 
         if (STORAGE.root() == null) {
-            STORAGE.setRoot(new DB());
-        }
+            STORAGE.setRoot(new DB());   
+        } 
         App.DB = (DB)STORAGE.root();
         App.initDB();
         
