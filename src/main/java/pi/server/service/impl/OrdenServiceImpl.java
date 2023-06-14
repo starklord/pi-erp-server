@@ -256,13 +256,13 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
                 det.id = null;
                 det.orden = orden;
                 CRUD.save(app, det);
-                if (orden.sucursal.atencion_automatica) {
-                    aprobarOrden(app, orden.id, orden.encargado.id);
-                    char movimiento = (orden.tipo == Util.TIPO_ORDEN_VENTA || orden.tipo == Util.TIPO_ORDEN_SALIDA)
-                            ? Util.MOVIMIENTO_SALIDA
-                            : Util.MOVIMIENTO_ENTRADA;
-                    atenderOrdenRapida(app, det, null, null, null, orden.encargado.id, movimiento);
-                }
+                // if (orden.sucursal.atencion_automatica) {
+                //     aprobarOrden(app, orden.id, orden.encargado.id);
+                //     char movimiento = (orden.tipo == Util.TIPO_ORDEN_VENTA || orden.tipo == Util.TIPO_ORDEN_SALIDA)
+                //             ? Util.MOVIMIENTO_SALIDA
+                //             : Util.MOVIMIENTO_ENTRADA;
+                //     atenderOrdenRapida(app, det, null, null, null, orden.encargado.id, movimiento);
+                // }
             }
             Update.commitTransaction(app);
             return orden;

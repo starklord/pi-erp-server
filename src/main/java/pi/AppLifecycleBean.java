@@ -15,12 +15,12 @@ public class AppLifecycleBean {
 
     void onStart(@Observes StartupEvent ev) {               
         LOGGER.info("The application is starting piru technologies...");
-        App.initStorage();
+        // App.initStorage();
     }
 
     void onStop(@Observes ShutdownEvent ev) {               
         LOGGER.info("The application is stopping piru technolgies...");
-        App.shutDownStorage();
+        // App.shutDownStorage();
     }
 
 }
