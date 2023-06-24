@@ -47,6 +47,64 @@ public class OrdenDet implements Serializable {
         return Numbers.getBD(total,2);
     }
 
+    public String getNumeroStr(){
+        return orden.getNumeroStr();
+    }
+    public String getFechaStr(){
+        return orden.getFechaStr();
+    }
+
+    public String getDocStr(){
+        return "RI";
+    }
+
+    public String getCodProvClieStr(){
+        String[] str = orden.cliente_string.split("-");
+        String cod = "-";
+        if(str.length>=2){
+            cod = str[0];
+        }
+        return cod;
+    }
+
+    public BigDecimal getExonerado(){
+        return getTotal();
+    }
+
+    public String getMonedaStr(){
+        return orden.getMonedaStr();
+    }
+
+    public String getTipoCambioStr(){
+        return "1.00";
+    }
+
+    public String getGlosaStr(){
+        return producto.nombre;
+    }
+
+    public String getRuc(){
+        return getCodProvClieStr();
+    }
+
+    public String getRazonSocialStr(){
+        String[] str = orden.cliente_string.split("-");
+        String cod = orden.cliente_string;
+        if(str.length>=2){
+            cod = str[1];
+        }
+        return cod;
+    }
+
+    public String getTipoStr(){
+        return "DNI";
+    }
+
+    public String getNombreStr(){
+        return getRazonSocialStr();
+    }
+
+
     @Override
     public int hashCode() {
         final int prime = 31;

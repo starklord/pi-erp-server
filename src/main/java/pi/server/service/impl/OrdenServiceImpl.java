@@ -109,6 +109,38 @@ public class OrdenServiceImpl extends HessianServlet implements OrdenService {
     }
 
     @Override
+    public List<OrdenDet> listDets(String app, Date inicio, Date fin, int sucursalId, char tipo) {
+        List<OrdenDet> list = new ArrayList<>();
+        String[] require = {
+                "orden",
+                "orden.proveedor",
+                "orden.cliente",
+                "orden.moneda",
+                "orden.aprobado_por",
+                "orden.atendido_por",
+                "orden.almacen_origen",
+                "orden.almacen_destino",
+                "orden.sucursal",
+                "producto",
+                "orden",
+                "unidad"
+        };
+        String where = "where b.fecha between '" + inicio.toString() + "' and '" + fin.toString() + "'";
+        where += " and b.tipo = '" + tipo + "'";
+        if (sucursalId != -1) {
+            where += " and b.sucursal = " + sucursalId;
+        }
+        where += " order by b.id desc";
+        try {
+            list = CRUD.list(app, OrdenDet.class, require, where);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return list;
+    }
+
+    @Override
     public List<OrdenDet> listDets(String app, int ordenId) {
         List<OrdenDet> list = new ArrayList<>();
         String[] require = {

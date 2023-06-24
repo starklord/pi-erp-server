@@ -16,6 +16,7 @@ public interface OrdenService {
     public Orden getLastOrden(String app, int sucursalId, char tipo);
     public List<Orden> list(String app, Date inicio, Date fin,int sucursalId, char tipo);
     public List<OrdenDet> listDets(String app,int ordenId);
+    public List<OrdenDet> listDets(String app, Date inicio, Date fin,int sucursalId, char tipo);
     public OrdenArt getOrdenArt(String app, int ordenArtId);
     public List<OrdenArt> listOrdenArts(String app,int ordenId);
     public List<OrdenArt> listOrdenArtsByProducto(String app,int ordenId, int productoId);
