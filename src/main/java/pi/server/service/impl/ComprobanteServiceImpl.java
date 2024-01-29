@@ -27,8 +27,7 @@ public class ComprobanteServiceImpl extends HessianServlet implements Comprobant
     public Comprobante getDocumentoPago(String app, int dpId) throws Exception {
         String[] req = { "sucursal",
                 "sucursal.direccion",
-                "direccion_cliente",
-                "direccion_cliente.persona",
+                "cliente",
                 "forma_pago",
                 "impuesto"
         };
@@ -357,8 +356,7 @@ public class ComprobanteServiceImpl extends HessianServlet implements Comprobant
         String[] req = { "resumen_diario",
                 "comprobante",
                 "comprobante.sucursal",
-                "comprobante.direccion_cliente",
-                "comprobante.direccion_cliente.persona",
+                "comprobante.cliente",
             "comprobante.impuesto" };
         String filter = "where resumen_diario = " + rdId;
         return CRUD.list(app, ResumenDiarioDet.class, req, filter);

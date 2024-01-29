@@ -51,7 +51,7 @@ public class ConstanciaServiceImpl extends HessianServlet implements ConstanciaS
     @Override
     public List<ConstanciaBautismo> listConstanciasBautismo(String app, String filtroFecha, Date inicio, Date fin, 
     String serie, Integer numero, String bautizado, String padre, String madre) {
-        String fechaStr = filtroFecha.equals(Util.PARROQUIA_FECHA_BAUTISMO)?"fecha":"fecha_bautismo";
+        String fechaStr = filtroFecha.equals(Util.PARROQUIA_FECHA_BAUTISMO)?"fecha":"fecha_nacimiento";
         String where = "where " +fechaStr+" between '" + inicio.toString() + "' and '" + fin + "' ";
         if(!serie.isEmpty()||numero!=null||!bautizado.isEmpty()||!padre.isEmpty()||!madre.isEmpty()){
             where = "where id is not null";
