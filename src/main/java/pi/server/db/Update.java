@@ -304,7 +304,6 @@ public class Update {
     }
     
     private void initDataObject(Object object) throws Exception {
-        
         this.object = object;
          initTableAndSequenceName();
         if (fieldsPassed != null && fieldsPassed.length == 0) {
