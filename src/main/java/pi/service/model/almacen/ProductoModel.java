@@ -64,7 +64,7 @@ public class ProductoModel implements Serializable {
 	}
 
 	public BigDecimal getCostoTotal(){
-		return Numbers.getBD(producto.precio.multiply(producto.costo_ultima_compra), 2);
+		return Numbers.getBD(stock.multiply(producto.costo_ultima_compra), 2);
 	}
 
 	public String getProcedencia(){

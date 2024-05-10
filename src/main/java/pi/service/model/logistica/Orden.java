@@ -45,7 +45,6 @@ public class Orden implements Serializable {
     public Almacen almacen_destino;
     public String observaciones;
     public Persona encargado;
-    public Articulo articulo_transformacion;
 
     public String getEstado(){
         String estado = Util.OK;

@@ -181,8 +181,8 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 	@Override
 	public void importProductsFromTxt(String app) throws Exception {
 
-		// readFileProductos(app);
-		atenderByConteoInventario(app);
+		readFileProductos(app);
+		//atenderByConteoInventario(app);
 	}
 
 	private void readFileProductos(String app) throws Exception {
@@ -191,7 +191,7 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 			// String iso = "ISO-8859-1";
 			String utf = "UTF-8";
 			// File file = new File("D:/empresas/juanmacedo/productos.txt");
-			File file = new File("/Users/starklord/empresas/prolimp/productos.txt");
+			File file = new File("/home/starklord/empresas/cronosbike/productos.txt");
 			Scanner scan = new Scanner(file, utf);
 
 			scan.useDelimiter("\n");
@@ -200,7 +200,7 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 			LineaServiceImpl lineaService = new LineaServiceImpl();
 			MarcaServiceImpl marcaService = new MarcaServiceImpl();
 			UnidadServiceImpl unidadService = new UnidadServiceImpl();
-			// int codigo = 100001;
+			int codigo = 100001;
 			List<OrdenDet> listDets = new ArrayList<>();
 			Update.beginTransaction(app);
 			System.out.println("entrando 1");
@@ -215,16 +215,15 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 				Scanner scanLine = new Scanner(line);
 				scanLine.useDelimiter("\t");
 				// lectura de datos
-				String str_codigo = scanLine.next().trim();
+				//String str_codigo = scanLine.next().trim();
 				String str_marca = scanLine.next().trim().toUpperCase();
 				String str_linea = scanLine.next().trim().toUpperCase();
 				String str_nombre = scanLine.next().trim();
+				String str_unidad = scanLine.next().trim();
 				String str_precio = scanLine.next().trim();
-				String str_codigo_barras1 = scanLine.next().trim();
+				String str_costo = scanLine.next().trim();
 				String str_stock = scanLine.next().trim();
 				// fin lectura de datos
-				String str_unidad = "UNIDAD";
-				String str_costo = "0.00";
 				Producto prod = productoService.getByNombre(app, str_nombre);
 				if (prod != null) {
 					System.out.println("producto ya existente: " + prod.nombre);
@@ -232,7 +231,7 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 				}
 				Producto producto = new Producto();
 				producto.activo = true;
-				producto.codigo_barras1 = str_codigo_barras1;
+				producto.codigo_barras1 = "-";
 				producto.codigo_barras2 = "-";
 				producto.costo_ultima_compra = new BigDecimal(str_costo);
 				producto.creador = "root";
@@ -247,7 +246,7 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 				producto.precio = new BigDecimal(str_precio);
 				producto.unidad = getUnidad(app, str_unidad);
 				producto.stock_minimo = BigDecimal.ZERO;
-				producto.codigo = str_codigo;
+				producto.codigo = codigo+"";
 				producto.codigo_interno = Integer.parseInt(producto.codigo);
 				producto.codigo_ubicacion = "-";
 				producto.impuesto = new Impuesto();
@@ -262,6 +261,7 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 				CRUD.save(app, producto);
 				listDets.add(
 						createOrdenDetByProducto(producto, new BigDecimal(str_stock), producto.costo_ultima_compra));
+						codigo++;
 			}
 			Orden orden = Services.getOrden().getOrden(app, 1);
 			Services.getOrden().updateOrden(app, orden, listDets, null);
@@ -525,10 +525,14 @@ public class ProductoServiceImpl extends HessianServlet implements ProductoServi
 	public Articulo getArticuloByProductoLoteFecha(String app, int productoId, String lote, Date fecha_vencimiento, int almacenId)
 			throws Exception {
 		String[] req = { "producto", "almacen" };
-		String filter = "where a.almacen = " + almacenId + " and a.lote = '" + lote + "'"
-				+ " and a.fecha_vencimiento = '" + fecha_vencimiento.toString() + "' "
-				+ " and a.producto = " + productoId
-				+ " order by a.id desc limit 1";
+		String filter = "where a.almacen = " + almacenId + " and a.lote = '" + lote + "'";
+		if(fecha_vencimiento==null){
+			filter+= " and a.fecha_vencimiento is null ";
+		}else{
+			filter+= " and a.fecha_vencimiento = '" + fecha_vencimiento.toString() + "' ";
+		}
+				
+				filter+= " and a.producto = " + productoId + " order by a.id desc limit 1";
 		List<Articulo> list = CRUD.list(app, Articulo.class, req, filter);
 		return list.isEmpty() ? null : list.get(0);
 	}
