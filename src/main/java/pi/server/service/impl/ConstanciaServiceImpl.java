@@ -49,23 +49,23 @@ public class ConstanciaServiceImpl extends HessianServlet implements ConstanciaS
     }
 
     @Override
-    public List<ConstanciaBautismo> listConstanciasBautismo(String app, String filtroFecha, Date inicio, Date fin, 
-    String serie, Integer numero, String bautizado, String padre, String madre) {
-        String fechaStr = filtroFecha.equals(Util.PARROQUIA_FECHA_BAUTISMO)?"fecha":"fecha_nacimiento";
-        String where = "where " +fechaStr+" between '" + inicio.toString() + "' and '" + fin + "' ";
-        if(!serie.isEmpty()||numero!=null||!bautizado.isEmpty()||!padre.isEmpty()||!madre.isEmpty()){
+    public List<ConstanciaBautismo> listConstanciasBautismo(String app, String filtroFecha, Date inicio, Date fin,
+            String serie, Integer numero, String bautizado, String padre, String madre) {
+        String fechaStr = filtroFecha.equals(Util.PARROQUIA_FECHA_BAUTISMO) ? "fecha" : "fecha_nacimiento";
+        String where = "where " + fechaStr + " between '" + inicio.toString() + "' and '" + fin + "' ";
+        if (!serie.isEmpty() || numero != null || !bautizado.isEmpty() || !padre.isEmpty() || !madre.isEmpty()) {
             where = "where id is not null";
         }
-        
+
         if (!serie.trim().isEmpty()) {
             where += " and serie ilike '%" + serie + "%' ";
         }
         if (numero != null) {
             where += " and numero = " + numero;
         }
-        where += " and nombres_bautizado ilike '%" + bautizado+"%' ";
-        where += " and nombres_padre ilike '%" + padre+"%' ";
-        where += " and nombres_madre ilike '%" + madre+"%' ";
+        where += " and nombres_bautizado ilike '%" + bautizado + "%' ";
+        where += " and nombres_padre ilike '%" + padre + "%' ";
+        where += " and nombres_madre ilike '%" + madre + "%' ";
         where += " order by id desc";
         List<ConstanciaBautismo> list = new ArrayList<>();
         try {
@@ -106,12 +106,13 @@ public class ConstanciaServiceImpl extends HessianServlet implements ConstanciaS
     }
 
     @Override
-    public List<ConstanciaConfirmacion> listConstanciasConfirmacion(String app, String filtroFecha, Date inicio, Date fin, 
-    String serie, Integer numero, String confirmante, String padre, String madre) {
-        String fechaStr = filtroFecha.equals(Util.PARROQUIA_FECHA_CONFIRMACION)?"fecha":"fecha_bautismo";
+    public List<ConstanciaConfirmacion> listConstanciasConfirmacion(String app, String filtroFecha, Date inicio,
+            Date fin,
+            String serie, Integer numero, String confirmante, String padre, String madre) {
+        String fechaStr = filtroFecha.equals(Util.PARROQUIA_FECHA_CONFIRMACION) ? "fecha" : "fecha_bautismo";
 
-        String where = "where " +fechaStr+" between '" + inicio.toString() + "' and '" + fin + "' ";
-        if(!serie.isEmpty()||numero!=null||!confirmante.isEmpty()||!padre.isEmpty()||!madre.isEmpty()){
+        String where = "where " + fechaStr + " between '" + inicio.toString() + "' and '" + fin + "' ";
+        if (!serie.isEmpty() || numero != null || !confirmante.isEmpty() || !padre.isEmpty() || !madre.isEmpty()) {
             where = "where id is not null";
         }
         if (!serie.trim().isEmpty()) {
@@ -120,9 +121,9 @@ public class ConstanciaServiceImpl extends HessianServlet implements ConstanciaS
         if (numero != null) {
             where += " and numero = " + numero;
         }
-        where += " and nombres_confirmado ilike '%" + confirmante+"%' ";
-        where += " and nombres_padre_confirmado ilike '%" + padre+"%' ";
-        where += " and nombres_madre_confirmado ilike '%" + madre+"%' ";
+        where += " and nombres_confirmado ilike '%" + confirmante + "%' ";
+        where += " and nombres_padre_confirmado ilike '%" + padre + "%' ";
+        where += " and nombres_madre_confirmado ilike '%" + madre + "%' ";
         where += " order by id desc";
         List<ConstanciaConfirmacion> list = new ArrayList<>();
         try {
@@ -163,12 +164,12 @@ public class ConstanciaServiceImpl extends HessianServlet implements ConstanciaS
     }
 
     @Override
-    public List<ConstanciaMatrimonio> listConstanciasMatrimonio(String app, String filtroFecha, Date inicio, Date fin, 
-    String serie, Integer numero, String esposo, String esposa) {
+    public List<ConstanciaMatrimonio> listConstanciasMatrimonio(String app, String filtroFecha, Date inicio, Date fin,
+            String serie, Integer numero, String esposo, String esposa) {
         String fechaStr = "fecha";
 
-        String where = "where " +fechaStr+" between '" + inicio.toString() + "' and '" + fin + "' ";
-        if(!serie.isEmpty()||numero!=null||!esposo.isEmpty()||!esposa.isEmpty()){
+        String where = "where " + fechaStr + " between '" + inicio.toString() + "' and '" + fin + "' ";
+        if (!serie.isEmpty() || numero != null || !esposo.isEmpty() || !esposa.isEmpty()) {
             where = "where id is not null";
         }
         if (!serie.trim().isEmpty()) {
@@ -177,8 +178,8 @@ public class ConstanciaServiceImpl extends HessianServlet implements ConstanciaS
         if (numero != null) {
             where += " and numero = " + numero;
         }
-        where += " and nombres_esposo ilike '%" + esposo+"%' ";
-        where += " and nombres_esposa ilike '%" + esposa+"%' ";
+        where += " and nombres_esposo ilike '%" + esposo + "%' ";
+        where += " and nombres_esposa ilike '%" + esposa + "%' ";
         where += " order by id desc";
         List<ConstanciaMatrimonio> list = new ArrayList<>();
         try {
@@ -187,6 +188,24 @@ public class ConstanciaServiceImpl extends HessianServlet implements ConstanciaS
             e.printStackTrace();
         }
         return list;
+    }
+
+    @Override
+    public void deleteConstanciaBautismo(String app, int id) throws Exception {
+        ConstanciaBautismo cons = getConstanciaBautismo(app, id);
+        CRUD.delete(app, cons);
+    }
+
+    @Override
+    public void deleteConstanciaConfirmacion(String app, int id) throws Exception {
+        ConstanciaConfirmacion cons = getConstanciaConfirmacion(app, id);
+        CRUD.delete(app, cons);
+    }
+
+    @Override
+    public void deleteConstanciaMatrimonio(String app, int id) throws Exception {
+        ConstanciaMatrimonio cons = getConstanciaMatrimonio(app, id);
+        CRUD.delete(app, cons);
     }
 
 }
